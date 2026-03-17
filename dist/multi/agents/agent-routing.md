@@ -12,24 +12,24 @@ This document defines which agent should own a task first, when collaboration is
 
 ## Default entry point
 
-- The default entry point is the `Director (MANAGER)`.
+- The default entry point is the `Director`.
 - If the user asks a specialist directly, that specialist may handle the task if the scope is clearly inside its ownership.
-- If a request spans multiple domains or the owner is ambiguous, route back through the `Director (MANAGER)`.
+- If a request spans multiple domains or the owner is ambiguous, route back through the `Director`.
 
 ## Primary routing table
 
 | Task shape | Primary owner | Typical secondary agents |
 | --- | --- | --- |
-| Scope unclear, priorities unclear, multiple moving parts | Director (MANAGER) | Any |
+| Scope unclear, priorities unclear, multiple moving parts | Director | Any |
 | API bug, schema change, backend integration, auth, jobs, performance on server | Backend Engineer | QA, Frontend Engineer |
 | UI bug, screen build, state bug, accessibility issue, browser behavior | Frontend Engineer | UI/UX Designer, QA, Backend Engineer |
-| User flow design, information architecture, interaction rules, visual system, handoff specs | UI/UX Designer | Frontend Engineer, Director (MANAGER) |
+| User flow design, information architecture, interaction rules, visual system, handoff specs | UI/UX Designer | Frontend Engineer, Director |
 | Bug reproduction, regression checks, release validation, evidence gathering | QA Engineer | Backend Engineer, Frontend Engineer |
-| Multi-surface feature crossing product, backend, frontend, and testing | Director (MANAGER) | Backend Engineer, Frontend Engineer, UI/UX Designer, QA Engineer |
+| Multi-surface feature crossing product, backend, frontend, and testing | Director | Backend Engineer, Frontend Engineer, UI/UX Designer, QA Engineer |
 
 ## Collaboration triggers
 
-### Route to `Director (MANAGER)` when:
+### Route to `Director` when:
 - More than one specialist owns critical parts of the task.
 - The request contains conflicting goals.
 - Scope, priority, or success criteria are unclear.
@@ -57,12 +57,12 @@ This document defines which agent should own a task first, when collaboration is
 
 ## Standard work sequence
 
-1. `Director (MANAGER)` triages if the task is cross-functional or unclear.
+1. `Director` triages if the task is cross-functional or unclear.
 2. `UI/UX Designer` defines behavior first when the UX is not already locked.
 3. `Backend Engineer` establishes contracts and server behavior when required.
 4. `Frontend Engineer` implements user-facing behavior and integrates contracts.
 5. `QA Engineer` validates the highest-risk flows and reports residual risk.
-6. `Director (MANAGER)` closes with integration status, tradeoffs, and next-step recommendation.
+6. `Director` closes with integration status, tradeoffs, and next-step recommendation.
 
 ## Parallel work rules
 
@@ -77,12 +77,12 @@ This document defines which agent should own a task first, when collaboration is
 | --- | --- |
 | Straightforward task in owned area | Stay with current specialist on `gpt-5.1-codex-mini` / low |
 | Ambiguous or unfamiliar area | Same specialist on `gpt-5.1-codex-max` / medium |
-| Hard debugging, concurrency, performance, or major refactor | Same specialist or `Director (MANAGER)` on `gpt-5.3-codex` / high |
+| Hard debugging, concurrency, performance, or major refactor | Same specialist or `Director` on `gpt-5.3-codex` / high |
 | Truly stuck after narrower attempts | `gpt-5.4` / extra high |
 
 ## Exit conditions by owner
 
-- `Director (MANAGER)`: Scope is explicit, owners are assigned, or cross-functional result is integrated.
+- `Director`: Scope is explicit, owners are assigned, or cross-functional result is integrated.
 - `Backend Engineer`: Server-side behavior is implemented or root-caused, with contract impact stated.
 - `Frontend Engineer`: User flow is implemented or root-caused, with UI states and constraints stated.
 - `UI/UX Designer`: Behavior, hierarchy, and states are specified clearly enough to implement and test.

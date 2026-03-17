@@ -20,7 +20,7 @@ Copy a prompt directly to clipboard:
 .\agents\use-agent.ps1 qa -Task "Run a focused release-readiness pass for the settings flow" -Clipboard
 ```
 
-Run the full pack through Director (MANAGER):
+Run the full pack through Director:
 
 ```powershell
 .\agents\use-agent.ps1 system -Task "Investigate and deliver the profile settings feature"
@@ -31,7 +31,7 @@ Run the full pack through Director (MANAGER):
 Start a prompt with one of these:
 
 ```text
-Act as Director (MANAGER). Follow [your-local-repo]\agents\director.agent.md and the shared docs in [your-local-repo]\agents.
+Act as Director. Follow [your-local-repo]\agents\director.agent.md and the shared docs in [your-local-repo]\agents.
 ```
 
 ```text
@@ -52,7 +52,7 @@ Act as QA Engineer. Follow [your-local-repo]\agents\qa-engineer.agent.md and the
 
 ## Best daily pattern
 
-Use `Director (MANAGER)` first for:
+Use `Director` first for:
 - unclear tasks
 - cross-functional work
 - feature delivery
@@ -66,7 +66,7 @@ Use direct specialist activation only when the owner is obvious.
 You can keep short prompt snippets like these in your notes:
 
 ```text
-Use my Director (MANAGER) pack from [your-local-repo]\agents and route this task correctly:
+Use my Director pack from [your-local-repo]\agents and route this task correctly:
 [task]
 ```
 
@@ -81,21 +81,12 @@ Ask Codex like this:
 
 ```text
 Use my multi-agent pack in [your-local-repo]\agents.
-Director (MANAGER) should triage first, then delegate as needed.
+Director should triage first, then delegate as needed.
 Task:
 [task]
 ```
 
 That is the closest practical activation model in this environment.
-
-## Background Agents UI
-
-If you are looking at the Codex app's Background Agents panel, read `background-agents-ui.md`.
-
-Short version:
-- the panel shows runtime agents created by the app
-- repo role files do not auto-register there
-- use `use-agent.ps1` to generate the exact role prompt, then start a thread or background task with it
 
 ## Important note
 

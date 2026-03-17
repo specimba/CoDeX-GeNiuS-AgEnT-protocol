@@ -4,8 +4,6 @@ This pack does not auto-register itself as clickable built-in agents in Codex.
 
 The practical way to use it here is to invoke a role explicitly in your prompt and point Codex at the pack.
 
-If you cloned this repository somewhere else, replace the example absolute path with your own local checkout path.
-
 ## Fastest launcher from this workspace
 
 Use the helper script:
@@ -20,7 +18,7 @@ Copy a prompt directly to clipboard:
 .\agents\use-agent.ps1 qa -Task "Run a focused release-readiness pass for the settings flow" -Clipboard
 ```
 
-Run the full pack through Director (MANAGER):
+Run the full pack through Director:
 
 ```powershell
 .\agents\use-agent.ps1 system -Task "Investigate and deliver the profile settings feature"
@@ -31,28 +29,28 @@ Run the full pack through Director (MANAGER):
 Start a prompt with one of these:
 
 ```text
-Act as Director (MANAGER). Follow [your-local-repo]\agents\director.agent.md and the shared docs in [your-local-repo]\agents.
+Act as Director. Follow C:\Users\speci.000\Documents\Playground\agents\director.agent.md and the shared docs in C:\Users\speci.000\Documents\Playground\agents.
 ```
 
 ```text
-Act as Backend Engineer. Follow [your-local-repo]\agents\backend-engineer.agent.md and the shared docs in [your-local-repo]\agents.
+Act as Backend Engineer. Follow C:\Users\speci.000\Documents\Playground\agents\backend-engineer.agent.md and the shared docs in C:\Users\speci.000\Documents\Playground\agents.
 ```
 
 ```text
-Act as Frontend Engineer. Follow [your-local-repo]\agents\frontend-engineer.agent.md and the shared docs in [your-local-repo]\agents.
+Act as Frontend Engineer. Follow C:\Users\speci.000\Documents\Playground\agents\frontend-engineer.agent.md and the shared docs in C:\Users\speci.000\Documents\Playground\agents.
 ```
 
 ```text
-Act as UI/UX Designer. Follow [your-local-repo]\agents\ui-ux-designer.agent.md and the shared docs in [your-local-repo]\agents.
+Act as UI/UX Designer. Follow C:\Users\speci.000\Documents\Playground\agents\ui-ux-designer.agent.md and the shared docs in C:\Users\speci.000\Documents\Playground\agents.
 ```
 
 ```text
-Act as QA Engineer. Follow [your-local-repo]\agents\qa-engineer.agent.md and the shared docs in [your-local-repo]\agents.
+Act as QA Engineer. Follow C:\Users\speci.000\Documents\Playground\agents\qa-engineer.agent.md and the shared docs in C:\Users\speci.000\Documents\Playground\agents.
 ```
 
 ## Best daily pattern
 
-Use `Director (MANAGER)` first for:
+Use `Director` first for:
 - unclear tasks
 - cross-functional work
 - feature delivery
@@ -66,12 +64,12 @@ Use direct specialist activation only when the owner is obvious.
 You can keep short prompt snippets like these in your notes:
 
 ```text
-Use my Director (MANAGER) pack from [your-local-repo]\agents and route this task correctly:
+Use my Director pack from C:\Users\speci.000\Documents\Playground\agents and route this task correctly:
 [task]
 ```
 
 ```text
-Use my Frontend Engineer pack from [your-local-repo]\agents for this UI task:
+Use my Frontend Engineer pack from C:\Users\speci.000\Documents\Playground\agents for this UI task:
 [task]
 ```
 
@@ -80,22 +78,13 @@ Use my Frontend Engineer pack from [your-local-repo]\agents for this UI task:
 Ask Codex like this:
 
 ```text
-Use my multi-agent pack in [your-local-repo]\agents.
-Director (MANAGER) should triage first, then delegate as needed.
+Use my multi-agent pack in C:\Users\speci.000\Documents\Playground\agents.
+Director should triage first, then delegate as needed.
 Task:
 [task]
 ```
 
 That is the closest practical activation model in this environment.
-
-## Background Agents UI
-
-If you are looking at the Codex app's Background Agents panel, read `background-agents-ui.md`.
-
-Short version:
-- the panel shows runtime agents created by the app
-- repo role files do not auto-register there
-- use `use-agent.ps1` to generate the exact role prompt, then start a thread or background task with it
 
 ## Important note
 

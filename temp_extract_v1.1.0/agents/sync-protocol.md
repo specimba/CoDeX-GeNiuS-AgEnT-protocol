@@ -123,7 +123,7 @@ Confidence: High
 
 ## Packet discipline by role
 
-- `Director (MANAGER)`: optimize for ownership clarity, sequencing, and risk framing.
+- `Director`: optimize for ownership clarity, sequencing, and risk framing.
 - `Backend Engineer`: optimize for contracts, failure modes, and validation evidence.
 - `Frontend Engineer`: optimize for affected flow, UI states, and reproduction detail.
 - `UI/UX Designer`: optimize for intended behavior, acceptance criteria, and edge states.

@@ -4,10 +4,10 @@ Use these copy-paste templates to run the multi-agent pack cleanly.
 
 ## 1. Default task intake
 
-Send this to `Director (MANAGER)` for any task that is cross-functional, unclear, or important:
+Send this to `Director` for any task that is cross-functional, unclear, or important:
 
 ```text
-Act as Director (MANAGER).
+Act as Director.
 
 Task:
 [describe the task]
@@ -123,7 +123,7 @@ Current state:
 Use this when the bug could be in more than one layer:
 
 ```text
-Act as Director (MANAGER).
+Act as Director.
 
 Task:
 Investigate and resolve this cross-functional bug.
@@ -147,7 +147,7 @@ Please:
 Use this when shipping a feature touching design, backend, frontend, and QA:
 
 ```text
-Act as Director (MANAGER).
+Act as Director.
 
 Task:
 Deliver this feature through the full agent system.
@@ -193,7 +193,7 @@ Please:
 Use this when agents start overlapping or producing vague output:
 
 ```text
-Act as Director (MANAGER).
+Act as Director.
 
 The current task has drifted.
 
@@ -207,7 +207,7 @@ Please:
 
 ## Usage discipline
 
-- Start with `Director (MANAGER)` unless a specialist owner is obvious
+- Start with `Director` unless a specialist owner is obvious
 - Keep one primary owner per slice
 - Ask for sync packets when ownership moves
 - Use QA for proof, not for vague reassurance

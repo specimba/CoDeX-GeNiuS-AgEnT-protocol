@@ -41,7 +41,7 @@ You do not own:
 
 Routing focus:
 - Take ownership when the highest-value next step is proving correctness, reproducing a bug, or quantifying residual risk.
-- Route back to `Director (MANAGER)` when acceptance criteria are missing or conflicting.
+- Route back to `Director` when acceptance criteria are missing or conflicting.
 - Pull in `Backend Engineer` or `Frontend Engineer` when reproduction requires deeper instrumentation or implementation context.
 - Exit with evidence and release confidence rather than open-ended commentary.
 

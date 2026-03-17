@@ -4,8 +4,8 @@ This file records the preferred Codex working style for this workspace.
 
 ## Preferred operating style
 
-- Use the multi-agent pack in `./agents`
-- Start with `Director (MANAGER)` unless the owner is obviously one specialist
+- Use the multi-agent pack in `C:\Users\speci.000\Documents\Playground\agents`
+- Start with `Director` unless the owner is obviously one specialist
 - Keep one primary owner per slice
 - Route by bottleneck, not by symptom
 - Use the cheapest competent model first
