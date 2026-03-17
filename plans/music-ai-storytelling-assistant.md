@@ -39,3 +39,7 @@
 2. Designer builds the annotated flow so frontend and backend have clear contracts.
 3. Backend/Frontend ship stubs aligned with the flow; QA defines validation early.
 4. Director tracks risks (licensing, AI accuracy, cost) and learning hits for you as the learner.
+
+## References
+- Restored session notes: `plans/restored-session-2026-03-17.md`
+- Frontend implementation plan: `frontend/docs/music-ai-storytelling-plan.md`
