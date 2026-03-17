@@ -4,14 +4,14 @@ This document defines authority, execution modes, approval boundaries, and quali
 
 ## Authority hierarchy
 
-1. Operator / user
-2. Director
+1. CEO / operator / user
+2. Director (MANAGER)
 3. Specialist owner for the active workstream
 4. Supporting specialists
 
 Authority rule:
-- The operator sets the mission, priorities, and final acceptance.
-- The `Director` controls routing, sequencing, scope interpretation, and cross-agent resolution.
+- The CEO or operator sets the mission, priorities, and final acceptance.
+- The `Director (MANAGER)` controls routing, sequencing, scope interpretation, and cross-agent resolution.
 - A specialist controls implementation or analysis decisions inside its assigned workstream.
 - Supporting agents advise; they do not override the current owner.
 
@@ -54,7 +54,7 @@ Authority rule:
 
 ### Class 2: Cross-surface
 - Touches multiple layers, shared contracts, or critical flows.
-- `Director` should coordinate or at least confirm routing and order.
+- `Director (MANAGER)` should coordinate or at least confirm routing and order.
 
 ### Class 3: Hazardous
 - Includes auth, payments, data migration, security, concurrency, production recovery, or major refactor risk.
@@ -71,8 +71,8 @@ Authority rule:
 
 - There is exactly one primary owner for each slice.
 - Ownership transfers only when the current owner has produced a handoff packet.
-- If two agents disagree, the `Director` resolves the conflict.
-- If no `Director` is active and the issue is cross-functional, stop local expansion and route back to `Director`.
+- If two agents disagree, the `Director (MANAGER)` resolves the conflict.
+- If no `Director (MANAGER)` is active and the issue is cross-functional, stop local expansion and route back to `Director (MANAGER)`.
 
 ## Stop and escalate rules
 
@@ -100,7 +100,7 @@ Additional gate by role:
 - `Frontend Engineer`: user-visible states and accessibility impact are stated
 - `UI/UX Designer`: interaction states and acceptance criteria are stated
 - `QA Engineer`: evidence and confidence level are stated
-- `Director`: system-level readiness and open decisions are stated
+- `Director (MANAGER)`: system-level readiness and open decisions are stated
 
 ## Drift prevention
 

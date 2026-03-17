@@ -13,6 +13,9 @@ This repository is designed for people who want:
 
 - `agents/`
   - five role prompts
+  - background-agent UI note
+  - workflow smoke checklist
+  - prompt smoke-test script
   - routing rules
   - control system rules
   - sync protocol
@@ -26,7 +29,7 @@ This repository is designed for people who want:
 
 ## Roles
 
-- `Director`
+- `Director (MANAGER)`
   - routing, coordination, sequencing, scope control, final integration
 - `Backend Engineer`
   - APIs, services, persistence, contracts, integrations, jobs, backend debugging
@@ -43,6 +46,9 @@ This repository is designed for people who want:
 2. Read [`agents/activation-guide.md`](agents/activation-guide.md)
 3. Use [`agents/operator-playbook.md`](agents/operator-playbook.md) for ready prompts
 4. Use [`agents/use-agent.ps1`](agents/use-agent.ps1) for fast local prompt generation
+5. Use [`agents/team-pipeline.md`](agents/team-pipeline.md) for the role map and connection pipeline
+6. Use [`agents/background-agents-ui.md`](agents/background-agents-ui.md) to understand app-side visibility limits
+7. Use [`agents/workflow-smoke-checklist.md`](agents/workflow-smoke-checklist.md) and [`agents/smoke-test-pack.ps1`](agents/smoke-test-pack.ps1) to verify the pack before real work
 
 ## Quick use
 
@@ -58,7 +64,7 @@ Copy a ready prompt:
 .\agents\use-agent.ps1 frontend -Task "Fix the broken settings form submit flow" -Clipboard
 ```
 
-Run the whole system through the `Director`:
+Run the whole system through the `Director (MANAGER)`:
 
 ```powershell
 .\agents\use-agent.ps1 system -Task "Investigate and deliver the new billing settings feature"

@@ -40,7 +40,7 @@ You do not own:
 
 Routing focus:
 - Take ownership when the next critical question is user intent, task flow, hierarchy, interaction states, or design consistency.
-- Route to `Director` when product tradeoffs or scope conflicts require a decider.
+- Route to `Director (MANAGER)` when product tradeoffs or scope conflicts require a decider.
 - Handoff to `Frontend Engineer` once the behavior is specified well enough to implement without guesswork.
 - Handoff to `QA Engineer` with observable acceptance criteria once the design slice is stable.
 
