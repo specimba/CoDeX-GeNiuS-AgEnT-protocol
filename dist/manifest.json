@@ -1,0 +1,36 @@
+{
+  "name": "multi-agent-pack",
+  "version": "1.1.0",
+  "created_at": "2026-03-17T12:06:47+03:00",
+  "workspace_root": ".",
+  "package_root": "agents",
+  "artifacts": [
+    {
+      "label": "versioned",
+      "path": "dist/multi-agent-pack-v1.1.0.zip",
+      "size_bytes": 28421,
+      "sha256": "6E9632C9C8F6A4259242B61B7CC00E5A0A185083672264276DB82EE1CED75DD1"
+    },
+    {
+      "label": "latest",
+      "path": "dist/multi-agent-pack.zip"
+    }
+  ],
+  "files": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "WORKSTYLE.md",
+    "agents/README.md",
+    "agents/activation-guide.md",
+    "agents/operator-playbook.md",
+    "agents/agent-routing.md",
+    "agents/control-system-rules.md",
+    "agents/sync-protocol.md",
+    "agents/director.agent.md",
+    "agents/backend-engineer.agent.md",
+    "agents/frontend-engineer.agent.md",
+    "agents/qa-engineer.agent.md",
+    "agents/ui-ux-designer.agent.md",
+    "agents/use-agent.ps1"
+  ]
+}
