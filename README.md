@@ -1,40 +1,46 @@
 # CoDeX GeNiuS AgEnT Protocol
 
-Professional Codex-ready agent pack for managed software delivery.
+**Professional Codex-ready agent pack for managed software delivery.**
 
-Built for teams and solo operators who want:
+A manager-led operating system for Codex that turns scattered prompting into a disciplined workflow with clear ownership, compact restarts, and validation-first execution.
 
-- clear ownership instead of role drift
-- low-context startup and restart
-- predictable handoffs
-- QA-backed confidence
-- a reusable pack that feels operational, not experimental
+## The Pitch
 
-## Why This Pack Exists
-
-Most agent workflows break down in the same places:
+Most agent workflows fail in predictable ways:
 
 - too many roles overlap
-- prompts get longer as work gets harder
-- restarts lose task state
-- validation becomes hand-wavy
-- complex tasks turn into noisy coordination
+- prompts get heavier as tasks get harder
+- restarts lose context
+- validation becomes vague
+- complex tasks dissolve into coordination noise
 
-This repo solves that with a manager-led operating model:
+This pack is built to fix that.
+
+It gives you a clean operating chain:
 
 `Operator -> Director (MANAGER) -> specialist owner -> QA -> Director`
 
-The result is a Codex workflow that is faster to restart, easier to trust, and cleaner to run repeatedly.
+That means:
 
-## What You Get
+- one primary owner per slice
+- low-context startup
+- compact handoffs
+- cheaper default model usage
+- stronger proof before claiming confidence
 
-- A five-role agent pack with explicit ownership boundaries
-- One-command conversation bootstrap
-- Task-scoped handoff generation
-- Reader and Director startup prompts
-- Managed task scripts with routing and ledger support
-- Smoke tests, validation helpers, and determinism profiles
-- A structure designed to reduce context waste instead of expanding it
+## Why This Feels Different
+
+Generic prompt packs usually give you more text.
+
+This pack gives you more control:
+
+| Problem | Typical Prompt Pack | CoDeX GeNiuS AgEnT Protocol |
+| --- | --- | --- |
+| Startup | Re-explain everything every time | One-command bootstrap with compact task state |
+| Ownership | Multiple roles blur together | One primary owner per slice |
+| Restarts | Thread history becomes the memory layer | Repo files and task-scoped handoffs become memory |
+| Validation | “Looks good” style confidence | Smoke tests, review packets, validation helpers, QA discipline |
+| Complexity | More docs, more prompt weight | Runtime charter first, broader docs only when needed |
 
 ## Quick Start
 
@@ -56,7 +62,7 @@ Generate a Director prompt directly:
 .\agents\use-agent.ps1 director
 ```
 
-Start a managed task with routing plus ledger tracking:
+Start a managed task with routing and ledger tracking:
 
 ```powershell
 .\agents\start-managed-task.ps1 -Task "Investigate and deliver the feature"
@@ -73,10 +79,17 @@ The default startup path is:
 That command emits a compact handoff prompt containing:
 
 - runtime rules
-- latest task state
 - current branch
+- latest task state
 - next slice
 - fallback guidance only when broader routing is actually needed
+
+This is the intended reading order for a fresh conversation:
+
+1. run `.\START_NEW_CHAT.ps1`
+2. use the emitted handoff prompt as the bootstrap surface
+3. continue from the stated next slice
+4. open broader docs only if routing becomes ambiguous
 
 If you need manual briefing prompts for a fresh reader or Director, use:
 
@@ -90,7 +103,7 @@ If you need manual briefing prompts for a fresh reader or Director, use:
 - `UI/UX Designer`: flow quality, hierarchy, interaction design, handoff clarity
 - `QA Engineer`: reproductions, regression coverage, evidence, release confidence
 
-## How It Works
+## Workflow In Practice
 
 1. Verify the pack
 2. Start or restart with `START_NEW_CHAT.ps1`
@@ -99,7 +112,7 @@ If you need manual briefing prompts for a fresh reader or Director, use:
 5. Validate before stronger claims
 6. Compact or hand off before the thread becomes expensive
 
-## Repo Structure
+## What Is In The Repo
 
 - [`agents/`](agents): prompts, startup helpers, task control, validation scripts
 - [`plans/`](plans): architecture notes, current-state program docs, optimization discipline
@@ -117,14 +130,14 @@ If you need manual briefing prompts for a fresh reader or Director, use:
 - [`agents/new-thread-handoff.ps1`](agents/new-thread-handoff.ps1): task-scoped handoff generator
 - [`agents/startup-prompts.md`](agents/startup-prompts.md): compact prompts for reader agents
 
-## Operating Rules
+## Design Principles
 
-- default to `Director (MANAGER)` when the task is cross-functional or unclear
-- keep exactly one primary owner per slice
-- use repo files as memory instead of long thread restatements
-- prefer the cheapest competent model tier
-- escalate only when the cheaper pass stops producing progress
-- use QA for evidence, not reassurance
+- clear ownership beats collaborative blur
+- compact runtime surfaces beat long startup prose
+- proof beats reassurance
+- cheaper competent models beat expensive defaults
+- file-based memory beats thread-history dependency
+- bounded coordination beats fake parallelism
 
 ## Validation And Confidence
 
@@ -156,6 +169,21 @@ Generated or runtime-only by default:
 - `runs/`
 - `temp_extract_*`
 - caches
+
+## Who This Is For
+
+This repo fits best if you want:
+
+- a serious Codex workflow for software delivery
+- a reusable pack instead of ad hoc prompts
+- stronger restarts across long tasks
+- clearer role discipline for multi-step work
+
+It is not optimized for:
+
+- casual one-off prompting
+- roleplay-heavy agent systems
+- maximal parallelism at any cost
 
 ## Contributing
 
