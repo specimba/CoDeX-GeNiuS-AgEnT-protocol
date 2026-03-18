@@ -1,0 +1,28 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="24" fill="#0B1020"/>
+  <rect x="28" y="24" width="1144" height="712" rx="18" fill="#111827"/>
+  <rect x="28" y="24" width="1144" height="52" rx="18" fill="#1F2937"/>
+  <circle cx="64" cy="50" r="8" fill="#EF4444"/>
+  <circle cx="92" cy="50" r="8" fill="#F59E0B"/>
+  <circle cx="120" cy="50" r="8" fill="#10B981"/>
+  <text x="150" y="56" fill="#D1D5DB" font-family="Consolas, 'Courier New', monospace" font-size="22">CoDeX GeNiuS AgEnT Protocol · one-command startup</text>
+
+  <text x="64" y="128" fill="#93C5FD" font-family="Consolas, 'Courier New', monospace" font-size="28">$ .\START_NEW_CHAT.ps1</text>
+
+  <text x="64" y="186" fill="#E5E7EB" font-family="Consolas, 'Courier New', monospace" font-size="24">Use my multi-agent pack in .\agents.</text>
+  <text x="64" y="226" fill="#F9FAFB" font-family="Consolas, 'Courier New', monospace" font-size="24">Bootstrap rules:</text>
+  <text x="92" y="266" fill="#A7F3D0" font-family="Consolas, 'Courier New', monospace" font-size="22">- open agents\runtime-charter.md first</text>
+  <text x="92" y="302" fill="#A7F3D0" font-family="Consolas, 'Courier New', monospace" font-size="22">- keep one primary owner per slice</text>
+  <text x="92" y="338" fill="#A7F3D0" font-family="Consolas, 'Courier New', monospace" font-size="22">- keep replies short and operational</text>
+  <text x="92" y="374" fill="#A7F3D0" font-family="Consolas, 'Courier New', monospace" font-size="22">- validate before stronger labels</text>
+  <text x="92" y="410" fill="#A7F3D0" font-family="Consolas, 'Courier New', monospace" font-size="22">- open SYSTEM_INDEX.md only if routing is ambiguous</text>
+
+  <text x="64" y="474" fill="#F9FAFB" font-family="Consolas, 'Courier New', monospace" font-size="24">Task state:</text>
+  <text x="92" y="514" fill="#FDE68A" font-family="Consolas, 'Courier New', monospace" font-size="22">- branch: codex/specimba/genius-agent-install-entry</text>
+  <text x="92" y="550" fill="#FDE68A" font-family="Consolas, 'Courier New', monospace" font-size="22">- task id: validate-a-frontend-playback-flow-...</text>
+  <text x="92" y="586" fill="#FDE68A" font-family="Consolas, 'Courier New', monospace" font-size="22">- latest owner: Director (MANAGER)</text>
+  <text x="92" y="622" fill="#FDE68A" font-family="Consolas, 'Courier New', monospace" font-size="22">- latest status: closed</text>
+
+  <text x="64" y="680" fill="#F9FAFB" font-family="Consolas, 'Courier New', monospace" font-size="24">Next slice:</text>
+  <text x="92" y="716" fill="#C4B5FD" font-family="Consolas, 'Courier New', monospace" font-size="22">premium GitHub product pass with compact startup discipline</text>
+</svg>

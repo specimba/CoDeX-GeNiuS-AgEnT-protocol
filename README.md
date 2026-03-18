@@ -87,6 +87,8 @@ The intended entry is:
 .\START_NEW_CHAT.ps1
 ```
 
+![Terminal startup demo](assets/terminal-startup-demo.svg)
+
 That command emits a compact handoff prompt containing:
 
 - the minimum runtime rules
