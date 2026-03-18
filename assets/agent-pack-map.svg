@@ -1,0 +1,33 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" rx="24" fill="#0B1020"/>
+  <text x="60" y="72" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">CoDeX GeNiuS AgEnT Protocol · Role Map</text>
+  <text x="60" y="108" fill="#9CA3AF" font-family="Segoe UI, Arial, sans-serif" font-size="20">Manager-led flow with one primary owner per slice and QA-backed closeout.</text>
+
+  <rect x="460" y="150" width="280" height="92" rx="18" fill="#1D4ED8"/>
+  <text x="600" y="188" text-anchor="middle" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Director (MANAGER)</text>
+  <text x="600" y="218" text-anchor="middle" fill="#DBEAFE" font-family="Segoe UI, Arial, sans-serif" font-size="18">routing · sequencing · scope control</text>
+
+  <rect x="90" y="330" width="230" height="100" rx="18" fill="#0F766E"/>
+  <text x="205" y="372" text-anchor="middle" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Backend</text>
+  <text x="205" y="404" text-anchor="middle" fill="#CCFBF1" font-family="Segoe UI, Arial, sans-serif" font-size="17">APIs · contracts · persistence</text>
+
+  <rect x="355" y="330" width="230" height="100" rx="18" fill="#7C3AED"/>
+  <text x="470" y="372" text-anchor="middle" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Frontend</text>
+  <text x="470" y="404" text-anchor="middle" fill="#EDE9FE" font-family="Segoe UI, Arial, sans-serif" font-size="17">flows · state · browser behavior</text>
+
+  <rect x="620" y="330" width="230" height="100" rx="18" fill="#BE185D"/>
+  <text x="735" y="372" text-anchor="middle" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">UI/UX</text>
+  <text x="735" y="404" text-anchor="middle" fill="#FCE7F3" font-family="Segoe UI, Arial, sans-serif" font-size="17">interaction quality · handoff clarity</text>
+
+  <rect x="885" y="330" width="230" height="100" rx="18" fill="#047857"/>
+  <text x="1000" y="372" text-anchor="middle" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">QA</text>
+  <text x="1000" y="404" text-anchor="middle" fill="#D1FAE5" font-family="Segoe UI, Arial, sans-serif" font-size="17">evidence · regression · confidence</text>
+
+  <path d="M600 242V300" stroke="#93C5FD" stroke-width="4" stroke-linecap="round"/>
+  <path d="M205 330V300H1000V330" stroke="#64748B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1000 430V510H600V574" stroke="#86EFAC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="445" y="574" width="310" height="88" rx="18" fill="#166534"/>
+  <text x="600" y="612" text-anchor="middle" fill="#F9FAFB" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Validated Closeout</text>
+  <text x="600" y="642" text-anchor="middle" fill="#DCFCE7" font-family="Segoe UI, Arial, sans-serif" font-size="18">QA evidence returns to Director for final status</text>
+</svg>

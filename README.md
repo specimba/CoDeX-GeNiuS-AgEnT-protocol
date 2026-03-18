@@ -138,6 +138,8 @@ flowchart LR
     G --> C
 ```
 
+![Agent role map](assets/agent-pack-map.svg)
+
 ---
 
 ## The Pack
@@ -214,6 +216,10 @@ Primary verification command:
 ```powershell
 .\agents\smoke-test-pack.ps1
 ```
+
+Release summary:
+
+- [`RELEASE_NOTES.md`](RELEASE_NOTES.md)
 
 ---
 
