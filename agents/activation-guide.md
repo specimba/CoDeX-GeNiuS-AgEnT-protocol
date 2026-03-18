@@ -1,10 +1,8 @@
 # Activation Guide
 
-This pack does not auto-register itself as clickable built-in agents in Codex.
+Canonical entry is `C:\Users\speci.000\.codex\worktrees\449e\Playground\SYSTEM_INDEX.md`.
 
-The practical way to use it here is to invoke a role explicitly in your prompt and point Codex at the pack.
-
-If you cloned this repository somewhere else, replace the example absolute path with your own local checkout path.
+Use this file for runtime commands only. The scripts are canonical. Prefer them over manual prompt templates.
 
 ## Fastest launcher from this workspace
 
@@ -26,67 +24,39 @@ Run the full pack through Director (MANAGER):
 .\agents\use-agent.ps1 system -Task "Investigate and deliver the profile settings feature"
 ```
 
-## Fastest way
+Start a managed run with task id + ledger entry + Director prompt:
 
-Start a prompt with one of these:
-
-```text
-Act as Director (MANAGER). Follow [your-local-repo]\agents\director.agent.md and the shared docs in [your-local-repo]\agents.
+```powershell
+.\agents\start-managed-task.ps1 -Task "Investigate and deliver the profile settings feature"
 ```
 
-```text
-Act as Backend Engineer. Follow [your-local-repo]\agents\backend-engineer.agent.md and the shared docs in [your-local-repo]\agents.
+Preview the lightweight classification first:
+
+```powershell
+.\agents\triage-task.ps1 -Task "Investigate and deliver the profile settings feature"
 ```
 
-```text
-Act as Frontend Engineer. Follow [your-local-repo]\agents\frontend-engineer.agent.md and the shared docs in [your-local-repo]\agents.
+Close a managed run after Director sign-off:
+
+```powershell
+.\agents\close-managed-task.ps1 -TaskId "investigate-and-deliver-the-profile-set-20260318123000" -Status closed -DeliverableLabel Verified -Note "Released after QA"
 ```
 
-```text
-Act as UI/UX Designer. Follow [your-local-repo]\agents\ui-ux-designer.agent.md and the shared docs in [your-local-repo]\agents.
+Check whether the thread should compact:
+
+```powershell
+.\agents\should-compact.ps1 -ContextPercent 81 -TaskId "[task-id]" -HandoffCount 2
 ```
 
-```text
-Act as QA Engineer. Follow [your-local-repo]\agents\qa-engineer.agent.md and the shared docs in [your-local-repo]\agents.
+Create a task-scoped restart prompt:
+
+```powershell
+.\agents\new-thread-handoff.ps1 -TaskId "[task-id]" -Clipboard -WriteFile
 ```
 
-## Best daily pattern
+## Prompt templates
 
-Use `Director (MANAGER)` first for:
-- unclear tasks
-- cross-functional work
-- feature delivery
-- bug triage
-- coordination and handoffs
-
-Use direct specialist activation only when the owner is obvious.
-
-## Easiest reusable commands
-
-You can keep short prompt snippets like these in your notes:
-
-```text
-Use my Director (MANAGER) pack from [your-local-repo]\agents and route this task correctly:
-[task]
-```
-
-```text
-Use my Frontend Engineer pack from [your-local-repo]\agents for this UI task:
-[task]
-```
-
-## If you want sub-agent style behavior
-
-Ask Codex like this:
-
-```text
-Use my multi-agent pack in [your-local-repo]\agents.
-Director (MANAGER) should triage first, then delegate as needed.
-Task:
-[task]
-```
-
-That is the closest practical activation model in this environment.
+Use `C:\Users\speci.000\.codex\worktrees\449e\Playground\agents\operator-playbook.md` for copy-paste prompts.
 
 ## Background Agents UI
 
@@ -99,9 +69,4 @@ Short version:
 
 ## Important note
 
-These files are operating instructions, not executable plugins. Activation here means:
-- Codex reads the selected role file
-- Codex follows the shared routing, control, and sync rules
-- Codex responds in that role for the task
-
-For ready-made prompts, use `operator-playbook.md`.
+These files are operating instructions, not executable plugins.

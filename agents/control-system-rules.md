@@ -42,6 +42,17 @@ Authority rule:
 - Allowed actions: resolve inconsistencies, summarize impact, list remaining risk or follow-up.
 - Required result: actionable final status.
 
+## Triage fields
+
+Before execution starts, classify the task with:
+
+- `Intent`: explain, review, edit, research, or deploy
+- `SurfaceCount`: one-file, one-module, multi-module, or multi-repo
+- `RiskClass`: low, medium, or high
+- `ValidationNeed`: none, static, runtime, or user-visible
+
+This classification determines routing, proof depth, and whether a worktree is justified.
+
 ## Change classes
 
 ### Class 0: Local and low-risk
@@ -66,6 +77,44 @@ Authority rule:
 - If a root-cause fix requires touching adjacent areas, state why and keep the change bounded.
 - Separate "must change now" from "should improve later."
 - Log deferred work explicitly instead of smuggling it into the current slice.
+
+## Loop control rules
+
+- No slice gets unlimited retries.
+- After two failed or low-evidence attempts on the same slice, the current owner must either re-scope, escalate, or hand back to `Director (MANAGER)`.
+- A completion without concrete evidence does not reset the retry count.
+
+## Research recovery rule
+
+If a research slice produces weak, noisy, or low-value output, the owner must report that honestly.
+
+Required sequence:
+
+1. state whether the research produced usable value
+2. if not, run a short brainstorm on why the result was weak
+3. decide whether to retry narrower or stop
+4. report the decision and reasoning back to the higher role
+
+Use this to prevent fake progress and unnecessary upgrade churn.
+
+## Reasoning-waste detection rule
+
+Treat a slice as reasoning-waste risk when two or more of these are true:
+
+- updates repeat the same conclusion without new evidence
+- the owner keeps widening scope instead of narrowing the question
+- multiple summaries appear without file changes, validation, or concrete findings
+- the owner escalates model tier without a new technical reason
+- research output repeats repo prose instead of inspecting implementation
+
+Required response:
+
+1. stop the current line of expansion
+2. state the exact missing evidence
+3. choose one narrower next action or stop the slice
+4. if the slice continues, keep the next attempt smaller than the failed one
+
+This rule exists to stop summary loops before they consume time and context.
 
 ## Ownership rules
 
@@ -92,8 +141,13 @@ Do not stop for:
 Before a slice is considered complete, the owner must state:
 - What changed or what was discovered
 - What was validated
+- Approval mode used
+- Evidence source
 - What remains unknown, risky, or deferred
+- Known gaps
 - Who should act next, if anyone
+- Deliverable label: `Concept`, `Prototype`, `Verified`, or `Deferred`
+- reasoning-waste status when applicable
 
 Additional gate by role:
 - `Backend Engineer`: contract and failure-path impact are stated
@@ -101,6 +155,17 @@ Additional gate by role:
 - `UI/UX Designer`: interaction states and acceptance criteria are stated
 - `QA Engineer`: evidence and confidence level are stated
 - `Director (MANAGER)`: system-level readiness and open decisions are stated
+
+If reasoning-waste risk was triggered, the owner must put that into either:
+
+- a blocker packet, or
+- a completion packet with explicit downgrade/defer language
+
+## Worktree rule
+
+Use a separate worktree only when parallelism, rollback safety, or branch-level proof justifies the overhead.
+
+Do not default to worktrees for small, bounded, or read-only slices.
 
 ## Drift prevention
 

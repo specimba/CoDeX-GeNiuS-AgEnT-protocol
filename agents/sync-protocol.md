@@ -18,6 +18,7 @@ Fields:
 - `Task`
 - `Owner`
 - `Objective`
+- `Triage`
 - `Scope`
 - `Assumptions`
 - `Immediate next step`
@@ -32,6 +33,16 @@ Fields:
 - `Risks`
 - `Next step`
 
+### 2b. Delta progress packet
+Use after the first full packet on a task when ownership did not change.
+
+Fields:
+- `Status`
+- `New evidence`
+- `Delta since last packet`
+- `New risks`
+- `Next step`
+
 ### 3. Handoff packet
 Use when ownership moves to another agent.
 
@@ -44,6 +55,19 @@ Fields:
 - `Files or surfaces affected`
 - `Validations already done`
 - `Known risks or assumptions`
+- `Attempt count`
+
+### 3b. Delta handoff packet
+Use for later-stage ownership transfer when a prior full handoff already exists.
+
+Fields:
+- `From`
+- `To`
+- `Reason for transfer`
+- `Delta since last packet`
+- `New validations`
+- `New risks or assumptions`
+- `Immediate next step`
 
 ### 4. Blocker packet
 Use when progress cannot continue safely inside the current lane.
@@ -54,16 +78,37 @@ Fields:
 - `What was already tried`
 - `Narrowest unblock needed`
 - `Recommended owner`
+- `Escalation reason`
+- `Reasoning-waste flag` when applicable
+- `Reasoning-waste reason` when applicable
+
+### 4b. Research fallback packet
+Use when research output is weak, noisy, or not actionable.
+
+Fields:
+- `Research verdict`
+- `Why the output was weak`
+- `Brainstormed alternatives`
+- `Decision`
+- `Reason for decision`
+- `Recommended higher owner`
 
 ### 5. Completion packet
 Use when a slice is done.
 
 Fields:
 - `Outcome`
+- `Deliverable label`
+- `Changed files`
 - `Validation`
+- `Approval mode`
+- `Evidence source`
 - `Residual risk`
+- `Known gaps`
 - `Recommended next owner or final status`
 - `Confidence`
+- `Reasoning-waste flag` when applicable
+- `Reasoning-waste reason` when applicable
 
 ## Sync rules
 
@@ -72,6 +117,7 @@ Fields:
 - Every handoff must say what the next owner should do, not only what happened.
 - State assumptions explicitly when they affect correctness.
 - Distinguish verified evidence from inference.
+- Use one full packet first, then prefer delta packets until ownership or risk changes materially.
 
 ## Evidence rules
 
@@ -93,6 +139,7 @@ Fields:
 Task: Fix save flow failure on settings page
 Owner: Frontend Engineer
 Objective: Restore successful save behavior without UI regression
+Triage: Intent=edit; SurfaceCount=one-module; RiskClass=medium; ValidationNeed=user-visible
 Scope: Settings form submit flow and client-side validation only
 Assumptions: Backend endpoint contract is unchanged
 Immediate next step: Trace submit handler and failing request path
@@ -115,10 +162,61 @@ Known risks or assumptions: Inference that backend validation schema changed
 
 ```text
 Outcome: Profile update endpoint now accepts optional timezone field
+Deliverable label: Verified
+Changed files: backend/profile.py, backend/tests/test_profile.py
 Validation: Targeted test passed and manual request replay succeeded
+Approval mode: Director-plus-QA
+Evidence source: targeted backend test plus manual request replay
 Residual risk: Broader profile edit regression not fully exercised
+Known gaps: full profile edit matrix not rerun
 Recommended next owner or final status: QA Engineer for focused regression pass
 Confidence: High
+```
+
+### Blocker packet
+
+```text
+Blocked by: Validation evidence is too weak for the requested Verified label
+Why it blocks progress: Current bundle shows repeated summaries but no new artifact or targeted validation
+What was already tried: Smoke pass, manual readthrough, one escalated planning pass
+Narrowest unblock needed: Produce one validation artifact bundle or downgrade the label
+Recommended owner: QA Engineer
+Escalation reason: Verification target is stronger than the available proof
+Reasoning-waste flag: yes
+Reasoning-waste reason: Two expensive passes repeated the same conclusion without adding new evidence
+```
+
+### Research fallback packet
+
+```text
+Research verdict: Weak output
+Why the output was weak: Sources repeated the same claims without enough implementation detail
+Brainstormed alternatives: Narrow to one repo, inspect source files directly, switch from summaries to concrete artifacts
+Decision: Retry narrower
+Reason for decision: There is still likely value, but only with tighter scope
+Recommended higher owner: Director (MANAGER)
+```
+
+### Research fallback packet - stop case
+
+```text
+Research verdict: Weak output
+Why the output was weak: The repo mainly contained duplicated wrappers and no concrete implementation evidence for the claimed feature
+Brainstormed alternatives: Search for runtime tests, inspect entrypoints directly, narrow to one module, stop and defer
+Decision: Stop and defer
+Reason for decision: Another pass would likely repeat the same weak signals and waste tokens
+Recommended higher owner: Director (MANAGER)
+```
+
+### Research fallback packet - salvage case
+
+```text
+Research verdict: Partial value
+Why the output was weak: Broad repo review mixed useful parser ideas with unproven execution claims
+Brainstormed alternatives: Split support-tool modules from execution modules, salvage validators only, ignore preview layer
+Decision: Retry narrower
+Reason for decision: The support-tool lane still has bounded reusable value
+Recommended higher owner: Director (MANAGER)
 ```
 
 ## Packet discipline by role

@@ -1,0 +1,10 @@
+{
+  "name": "strict",
+  "viewport": { "width": 1280, "height": 720 },
+  "locale": "en-US",
+  "timezone": "Europe/Istanbul",
+  "random_seed": 7,
+  "retry_limit": 0,
+  "network_mode": "offline-preferred",
+  "time_budget_seconds": 60
+}

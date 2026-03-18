@@ -29,12 +29,12 @@ Use it when you want to remember who owns what and how work should move.
 ## Connection pipeline
 
 1. `CEO / Operator` sets the mission and constraints.
-2. `Director (MANAGER)` classifies the task, sets scope, and assigns the first primary owner.
+2. `Director (MANAGER)` classifies the task with `Intent`, `SurfaceCount`, `RiskClass`, and `ValidationNeed`, then sets scope and assigns the first primary owner.
 3. `UI/UX Designer` defines behavior first when the flow or interaction intent is not already locked.
 4. `Backend Engineer` defines or updates the contracts, persistence, and service behavior when needed.
 5. `Frontend Engineer` implements the user-facing flow against the agreed design and contracts.
 6. `QA Engineer` validates the integrated path, reports evidence, and states residual risk.
-7. `Director (MANAGER)` integrates the outputs, resolves gaps, and returns final status to the `CEO / Operator`.
+7. `Director (MANAGER)` integrates the outputs, resolves gaps, enforces the deliverable label, and returns final status to the `CEO / Operator`.
 
 ## Ownership rule
 
@@ -49,3 +49,10 @@ Use it when you want to remember who owns what and how work should move.
 - API, persistence, contract, or service behavior: `Backend Engineer`
 - UI implementation, state, or browser behavior: `Frontend Engineer`
 - Bugs, regressions, evidence, or release readiness: `QA Engineer`
+
+## Operating guardrails
+
+- Default to the cheapest competent model tier.
+- Use separate worktrees only when the slice justifies the overhead.
+- Stop retry loops after two weak-evidence attempts and re-route through `Director (MANAGER)`.
+- No slice is complete without a deliverable label and validation evidence.
