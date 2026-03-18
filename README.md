@@ -4,6 +4,11 @@
 
 A manager-led operating system for Codex that turns scattered prompting into a disciplined workflow with clear ownership, compact restarts, and validation-first execution.
 
+![Codex Ready](https://img.shields.io/badge/Codex-Ready-0f172a?style=for-the-badge)
+![Manager Led](https://img.shields.io/badge/Workflow-Manager--Led-1d4ed8?style=for-the-badge)
+![Validation First](https://img.shields.io/badge/Validation-QA--Backed-047857?style=for-the-badge)
+![Startup](https://img.shields.io/badge/Startup-One--Command-7c3aed?style=for-the-badge)
+
 ## The Pitch
 
 Most agent workflows fail in predictable ways:
@@ -95,6 +100,27 @@ If you need manual briefing prompts for a fresh reader or Director, use:
 
 - [`agents/startup-prompts.md`](agents/startup-prompts.md)
 
+Example emitted startup shape:
+
+```text
+Use my multi-agent pack in ...\agents.
+
+Bootstrap rules:
+- open ...\agents\runtime-charter.md first
+- keep one primary owner per slice
+- keep replies short and operational
+- open SYSTEM_INDEX.md only if routing is ambiguous
+
+Task state:
+- branch: [current branch]
+- task id: [latest task]
+- latest owner: [owner]
+- latest status: [status]
+
+Next slice:
+[next step]
+```
+
 ## The Agent Pack
 
 - `Director (MANAGER)`: routing, sequencing, scope control, integration
@@ -139,6 +165,20 @@ If you need manual briefing prompts for a fresh reader or Director, use:
 - file-based memory beats thread-history dependency
 - bounded coordination beats fake parallelism
 
+## Best For
+
+- long-running Codex work that needs clean restarts
+- multi-step engineering work with routing and proof needs
+- people who want reusable agent operations instead of ad hoc prompts
+- teams that care about ownership, validation, and low-context execution
+
+## Not For
+
+- casual one-off prompting with no workflow structure
+- maximum-agent fan-out with loose coordination
+- roleplay-heavy agent systems
+- repos where generated artifacts are intended to stay as the main product surface
+
 ## Validation And Confidence
 
 The pack includes:
@@ -170,20 +210,17 @@ Generated or runtime-only by default:
 - `temp_extract_*`
 - caches
 
-## Who This Is For
+## Pack Philosophy
 
-This repo fits best if you want:
+The point of this pack is not to sound more agentic.
 
-- a serious Codex workflow for software delivery
-- a reusable pack instead of ad hoc prompts
-- stronger restarts across long tasks
-- clearer role discipline for multi-step work
+The point is to make Codex work feel:
 
-It is not optimized for:
-
-- casual one-off prompting
-- roleplay-heavy agent systems
-- maximal parallelism at any cost
+- tighter
+- more recoverable
+- easier to trust
+- cheaper to run
+- less dependent on thread memory
 
 ## Contributing
 
