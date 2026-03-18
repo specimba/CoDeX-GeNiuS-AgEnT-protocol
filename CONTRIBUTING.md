@@ -40,7 +40,5 @@ Avoid changes that:
 
 ## Packaging
 
-If you update the repo meaningfully:
-- rebuild the release zip
-- refresh `dist/manifest.json`
-- refresh `dist/SHA256SUMS.txt`
+If you use release packaging helpers, treat `dist/` output as generated artifacts.
+Do not rely on generated files as the source of truth for normal development.

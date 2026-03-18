@@ -1,55 +1,62 @@
 # CoDeX GeNiuS AgEnT Protocol
 
-Codex-optimized multi-agent operating pack for managed software delivery.
+Professional Codex-ready agent pack for managed software delivery.
 
-This repository is built for people who want a professional Codex workflow with:
+Built for teams and solo operators who want:
 
-- one clear manager-led control path
-- explicit role ownership
+- clear ownership instead of role drift
 - low-context startup and restart
-- QA-backed validation instead of vague confidence
-- reusable prompts, scripts, and proof helpers
+- predictable handoffs
+- QA-backed confidence
+- a reusable pack that feels operational, not experimental
 
-Reference map:
-- [`SYSTEM_INDEX.md`](SYSTEM_INDEX.md)
+## Why This Pack Exists
 
-## What This Repo Is
+Most agent workflows break down in the same places:
 
-This is a ready-to-use multi-agent pack for running software work through a disciplined chain:
+- too many roles overlap
+- prompts get longer as work gets harder
+- restarts lose task state
+- validation becomes hand-wavy
+- complex tasks turn into noisy coordination
+
+This repo solves that with a manager-led operating model:
 
 `Operator -> Director (MANAGER) -> specialist owner -> QA -> Director`
 
-It is designed to make Codex sessions faster, cleaner, and more repeatable by reducing prompt waste, keeping one primary owner per slice, and turning repo files into working memory.
+The result is a Codex workflow that is faster to restart, easier to trust, and cleaner to run repeatedly.
 
-## Why Use It
+## What You Get
 
-- Clear ownership: one primary owner per slice, no co-owned implementation loops.
-- Faster startup: one-command conversation bootstrap with compact task state.
-- Lower context burn: runtime charter, task-scoped handoff, early compaction rules.
-- Better proof: smoke checks, validation helpers, bounded review packets, QA discipline.
-- Cleaner reuse: startup prompts, managed task scripts, determinism profiles, golden data.
+- A five-role agent pack with explicit ownership boundaries
+- One-command conversation bootstrap
+- Task-scoped handoff generation
+- Reader and Director startup prompts
+- Managed task scripts with routing and ledger support
+- Smoke tests, validation helpers, and determinism profiles
+- A structure designed to reduce context waste instead of expanding it
 
 ## Quick Start
 
-Run the pack verification:
+Verify the pack:
 
 ```powershell
 .\agents\smoke-test-pack.ps1
 ```
 
-Start a new compact Codex conversation:
+Start a new compact conversation:
 
 ```powershell
 .\START_NEW_CHAT.ps1
 ```
 
-Generate a role prompt directly:
+Generate a Director prompt directly:
 
 ```powershell
 .\agents\use-agent.ps1 director
 ```
 
-Start a managed task with routing and ledger tracking:
+Start a managed task with routing plus ledger tracking:
 
 ```powershell
 .\agents\start-managed-task.ps1 -Task "Investigate and deliver the feature"
@@ -63,63 +70,63 @@ The default startup path is:
 .\START_NEW_CHAT.ps1
 ```
 
-That command emits a compact handoff prompt with:
+That command emits a compact handoff prompt containing:
 
 - runtime rules
-- current branch
 - latest task state
+- current branch
 - next slice
-- fallback guidance only when broader routing is needed
+- fallback guidance only when broader routing is actually needed
 
-If the next conversation needs a manual briefing prompt, use:
+If you need manual briefing prompts for a fresh reader or Director, use:
 
 - [`agents/startup-prompts.md`](agents/startup-prompts.md)
 
-## Agent Pack
+## The Agent Pack
 
-- `Director (MANAGER)`: routing, scope control, sequencing, final integration
+- `Director (MANAGER)`: routing, sequencing, scope control, integration
 - `Backend Engineer`: APIs, persistence, contracts, jobs, backend debugging
 - `Frontend Engineer`: UI flows, components, state, browser behavior, accessibility
-- `UI/UX Designer`: interaction flows, hierarchy, design guidance, handoff clarity
-- `QA Engineer`: validation strategy, reproductions, regression confidence, release proof
+- `UI/UX Designer`: flow quality, hierarchy, interaction design, handoff clarity
+- `QA Engineer`: reproductions, regression coverage, evidence, release confidence
 
-## Core Workflow
+## How It Works
 
-1. Verify the pack with `.\agents\smoke-test-pack.ps1`
-2. Start or restart with `.\START_NEW_CHAT.ps1`
+1. Verify the pack
+2. Start or restart with `START_NEW_CHAT.ps1`
 3. Route through `Director (MANAGER)` unless a specialist owner is obvious
 4. Keep one primary owner per slice
-5. Validate before stronger labels or release claims
-6. Compact or hand off before the thread gets expensive
+5. Validate before stronger claims
+6. Compact or hand off before the thread becomes expensive
 
-## Key Files
+## Repo Structure
 
-- [`THREAD_BOOTSTRAP.md`](THREAD_BOOTSTRAP.md): minimal startup rule for a fresh conversation
-- [`SYSTEM_INDEX.md`](SYSTEM_INDEX.md): full system map and internal reference surface
+- [`agents/`](agents): prompts, startup helpers, task control, validation scripts
+- [`plans/`](plans): architecture notes, current-state program docs, optimization discipline
+- [`profiles/`](profiles): determinism presets for repeatable validation
+- [`golden/`](golden): bounded seed data for smoke and proof checks
+- `runs/`: runtime state and archived validation artifacts
+- `dist/`: generated release artifacts when packaging is used
+
+## Key Entry Files
+
 - [`START_NEW_CHAT.ps1`](START_NEW_CHAT.ps1): one-command compact restart
+- [`THREAD_BOOTSTRAP.md`](THREAD_BOOTSTRAP.md): minimal startup rule for fresh conversations
+- [`SYSTEM_INDEX.md`](SYSTEM_INDEX.md): full internal reference map
 - [`agents/runtime-charter.md`](agents/runtime-charter.md): minimum runtime contract
 - [`agents/new-thread-handoff.ps1`](agents/new-thread-handoff.ps1): task-scoped handoff generator
-- [`agents/startup-prompts.md`](agents/startup-prompts.md): compact prompts for new reader agents
-
-## Repository Structure
-
-- [`agents/`](agents): role prompts, startup helpers, task control scripts, validation helpers
-- [`plans/`](plans): current-state program docs, architecture notes, optimization discipline
-- [`profiles/`](profiles): determinism presets for repeatable proof runs
-- [`golden/`](golden): bounded seed data for smoke and proof checks
-- `dist/`: generated release artifacts
-- `runs/`: runtime state and archived review artifacts
+- [`agents/startup-prompts.md`](agents/startup-prompts.md): compact prompts for reader agents
 
 ## Operating Rules
 
-- default to `Director (MANAGER)` when scope is cross-functional or unclear
-- keep one primary owner per slice
+- default to `Director (MANAGER)` when the task is cross-functional or unclear
+- keep exactly one primary owner per slice
 - use repo files as memory instead of long thread restatements
 - prefer the cheapest competent model tier
 - escalate only when the cheaper pass stops producing progress
-- use QA for evidence and release confidence
+- use QA for evidence, not reassurance
 
-## Validation
+## Validation And Confidence
 
 The pack includes:
 
@@ -129,7 +136,7 @@ The pack includes:
 - task ledger summaries and snapshots
 - determinism profiles
 
-Primary validation command:
+Primary verification command:
 
 ```powershell
 .\agents\smoke-test-pack.ps1
@@ -141,7 +148,7 @@ Authoritative by default:
 
 - `agents/`
 - `plans/`
-- root policy and startup files
+- root startup and policy files
 
 Generated or runtime-only by default:
 
@@ -154,9 +161,15 @@ Generated or runtime-only by default:
 
 Use [`CONTRIBUTING.md`](CONTRIBUTING.md) for contribution guidance.
 
-If you extend the pack:
+Good changes keep the pack:
 
-- keep startup surfaces compact
-- preserve the one-owner rule
-- update smoke coverage when adding new helpers
-- prefer cleaner workflow over more documentation
+- clearer
+- cheaper to run
+- easier to route
+- easier to validate
+
+## Reference Map
+
+For the full internal system map, use:
+
+- [`SYSTEM_INDEX.md`](SYSTEM_INDEX.md)
