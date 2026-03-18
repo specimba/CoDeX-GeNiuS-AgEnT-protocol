@@ -1,0 +1,10 @@
+{
+  "name": "ci",
+  "viewport": { "width": 1440, "height": 900 },
+  "locale": "en-US",
+  "timezone": "UTC",
+  "random_seed": 17,
+  "retry_limit": 1,
+  "network_mode": "controlled",
+  "time_budget_seconds": 120
+}

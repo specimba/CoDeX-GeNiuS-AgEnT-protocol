@@ -1,0 +1,8 @@
+dist/
+runs/
+temp_extract_aoa_v2/
+temp_extract_v1.0.1/
+temp_extract_v1.1.0/
+CURRENT_THREAD_HANDOFF.txt
+__pycache__/
+*.pyc

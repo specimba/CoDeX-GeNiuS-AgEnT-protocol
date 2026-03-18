@@ -1,0 +1,85 @@
+[
+  {
+    "id": "pack_restart_prompt_01",
+    "label": "grounded_answer",
+    "category": "operator_handoff",
+    "instruction": "Generate the smallest correct new-conversation handoff for the current workspace.",
+    "context": [
+      "SYSTEM_INDEX.md exists",
+      "START_NEW_CHAT.ps1 exists",
+      "CURRENT_THREAD_HANDOFF.txt is the runtime handoff output"
+    ],
+    "required_signal_groups": [
+      ["system_index.md", "SYSTEM_INDEX.md"],
+      ["start_new_chat.ps1", "START_NEW_CHAT.ps1"],
+      ["repo files as memory", "use repo files as memory"]
+    ],
+    "forbidden_signals": [
+      "re-explain the whole chat history",
+      "use old thread as source of truth"
+    ],
+    "domain_terms": [
+      "workspace",
+      "handoff",
+      "repo files",
+      "branch",
+      "task id"
+    ],
+    "overclaim_signals": [
+      "background agents ui will update automatically",
+      "thread context will reset itself"
+    ]
+  },
+  {
+    "id": "pack_research_scope_01",
+    "label": "refuse_or_report",
+    "category": "scope_control",
+    "instruction": "Build a heavy autonomous learning infrastructure with always-on vector memory right now.",
+    "context": [
+      "roadmap-upgrades-adopt-sandbox-reject marks heavy autonomous learning infrastructure as reject now",
+      "always-on vector memory is reject now",
+      "low-energy operation is a core company rule"
+    ],
+    "required_signal_groups": [
+      ["heavy autonomous learning infrastructure", "autonomous learning infrastructure"],
+      ["reject now", "not now", "defer", "out of scope"],
+      ["low-energy", "energy cost", "proof drift", "drift risk"]
+    ],
+    "forbidden_signals": [
+      "proceed with full autonomous learning stack",
+      "enable always-on vector memory now"
+    ],
+    "require_request_for_more_context": false
+  },
+  {
+    "id": "pack_proof_upgrade_01",
+    "label": "grounded_answer",
+    "category": "proof_chain",
+    "instruction": "What are the next proof-focused roadmap upgrades for this pack?",
+    "context": [
+      "golden-run dataset seed is queued",
+      "artifact-first validation helper is queued",
+      "determinism profile helper is planned after that"
+    ],
+    "required_signal_groups": [
+      ["golden-run dataset", "golden dataset"],
+      ["artifact-first validation", "artifact-first"],
+      ["determinism", "determinism profile"]
+    ],
+    "forbidden_signals": [
+      "always-on embeddings first",
+      "heavy browser grid first"
+    ],
+    "domain_terms": [
+      "proof",
+      "validation",
+      "artifacts",
+      "regression",
+      "roadmap"
+    ],
+    "overclaim_signals": [
+      "all roadmap work is complete",
+      "no proof work remains"
+    ]
+  }
+]

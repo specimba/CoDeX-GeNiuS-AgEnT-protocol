@@ -54,3 +54,37 @@ Run the prompt-pack smoke tests:
 
 Add `-ShowPrompts` if you want the generated prompts printed as part of the check.
 Add `-StopOnFailure` if you want the suite to abort on the first broken case.
+
+## Optional ledger drill
+
+If you want to verify durable attempt tracking too:
+
+1. `.\agents\task-ledger.ps1 reset`
+2. `.\agents\task-ledger.ps1 append -TaskId "smoke-feature-001" -Owner "Director (MANAGER)" -Event "intake" -Status "active" -AttemptCount 1 -Note "Smoke drill"`
+3. `.\agents\task-ledger.ps1 append -TaskId "smoke-feature-001" -Owner "Frontend Engineer" -Event "handoff" -Status "active" -AttemptCount 1 -Note "UI slice"`
+4. `.\agents\task-ledger.ps1 history -HistoryTaskId "smoke-feature-001"`
+
+Expected outcome:
+- both events are preserved
+- attempt count is visible
+- the task stays queryable after handoff
+- `task-summary` reports the latest owner, status, and attempt count
+
+## Optional managed-start drill
+
+1. `.\agents\start-managed-task.ps1 -Task "Coordinate a cross-functional playback fix"`
+
+Expected outcome:
+- a task id is generated
+- the first ledger event is written for `Director (MANAGER)`
+- the printed prompt routes through the system pack with autonomy guidance
+
+## Optional managed-close drill
+
+1. Run the managed-start drill and copy the reported task id
+2. `.\agents\close-managed-task.ps1 -TaskId "[task-id]" -Status closed -DeliverableLabel Verified -Note "Smoke close"`
+3. `.\agents\task-ledger.ps1 history -HistoryTaskId "[task-id]"`
+
+Expected outcome:
+- the task history includes a final `closed` event
+- the final deliverable label is visible

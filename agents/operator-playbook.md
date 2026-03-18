@@ -1,6 +1,6 @@
 # Operator Playbook
 
-Use these copy-paste templates to run the multi-agent pack cleanly.
+Use these copy-paste templates only when the scripts are not enough. Prefer `use-agent.ps1`, `start-managed-task.ps1`, and `new-thread-handoff.ps1` first.
 
 ## 1. Default task intake
 
@@ -19,11 +19,35 @@ Constraints:
 [time, stack, scope, no-go rules]
 
 Please:
-1. classify the task shape
+1. classify the task as Intent, SurfaceCount, RiskClass, and ValidationNeed
 2. assign the primary owner
 3. identify any secondary agents needed
 4. return an intake packet and execution order
 5. keep the cheapest competent model tier unless escalation is justified
+```
+
+Shortcut:
+
+```powershell
+.\agents\start-managed-task.ps1 -Task "[describe the task]"
+```
+
+Fast triage:
+
+```powershell
+.\agents\triage-task.ps1 -Task "[describe the task]"
+```
+
+Bounded review request:
+
+```powershell
+.\agents\prepare-review-packet.ps1 -TaskId "[task-id]" -Reviewer "QA Engineer" -ScopeSummary "[what to review]" -DeliverableLabel "[Concept|Prototype|Verified|Deferred]" -ApprovalMode "[Director-autonomous|Director-plus-QA|CEO-confirm]" -EvidenceSource "[what evidence exists]"
+```
+
+Closeout:
+
+```powershell
+.\agents\close-managed-task.ps1 -TaskId "[task-id]" -Status closed -DeliverableLabel Verified -Note "[final outcome]"
 ```
 
 ## 2. Direct backend task
@@ -167,6 +191,7 @@ Please:
 3. define the execution order
 4. keep model usage economical by default
 5. require a completion packet before each ownership transfer
+6. stop and re-scope if any slice loops twice without stronger evidence
 ```
 
 ## 9. Release readiness check
@@ -212,3 +237,24 @@ Please:
 - Ask for sync packets when ownership moves
 - Use QA for proof, not for vague reassurance
 - Escalate model tier only when the cheaper pass stops producing useful progress
+- Prefer script-generated prompts over long manual templates
+- Use `task-ledger.ps1` when a task needs durable attempt history across handoffs
+- Use `start-managed-task.ps1` when you want Director routing plus immediate ledger tracking
+- Use `close-managed-task.ps1` when Director confirms the final state and wants a durable close event
+- Use `permission-and-autonomy.md` to decide when Director can act alone and when higher confirmation is required
+- Use `prepare-review-packet.ps1` when a second agent should review a narrow slice without inheriting the full thread
+- Use `role-model-policy.md` when choosing the cheapest competent model for a role
+- Use `spawn-control.md` before opening more subagents
+- Use `should-compact.ps1` before the thread becomes expensive
+- Keep two active agents total as the normal operating point; close completed agents instead of parking them open
+
+## 11. Fresh conversation reset
+
+Use this when context is too large:
+
+```powershell
+.\START_NEW_CHAT.ps1
+```
+
+Reference:
+- `C:\Users\speci.000\.codex\worktrees\449e\Playground\NEXT_THREAD.md`
