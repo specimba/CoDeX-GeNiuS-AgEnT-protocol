@@ -5,7 +5,7 @@ game‑development agents so they produce fair, comparable, high‑quality build
 hand those builds to the external evaluator (`benchmark/`).
 
 The single most important file here is
-[`AGENT_CHALLENGE_BRIEF.md`](AGENT_CHALLENGE_BRIEF.md): the one prompt each agent receives.
+[`BATTLE_PROMPT.md`](BATTLE_PROMPT.md): the one prompt each agent receives.
 **Both agents receive the identical brief.** That equality is what makes the comparison
 fair.
 
@@ -14,7 +14,7 @@ fair.
 ## 1. Fairness contract (non‑negotiable)
 
 1. **Identical brief.** Agent 1 and Agent 2 get byte‑for‑byte the same
-   `AGENT_CHALLENGE_BRIEF.md` and the same `GAME_SPEC.md`. Any divergence (different
+   `BATTLE_PROMPT.md` and the same `GAME_SPEC.md`. Any divergence (different
    wording, extra hints, different time budget) biases the comparison.
 2. **Isolated environments.** Each agent works in its own clean workspace with no access
    to the other's build, the other's logs, or the benchmark evaluation files.
@@ -46,7 +46,7 @@ grep over the build.
 
 ```
 1. Provision two isolated workspaces (fresh, no shared state).
-2. Drop AGENT_CHALLENGE_BRIEF.md + GAME_SPEC.md into each workspace.
+2. Drop BATTLE_PROMPT.md + GAME_SPEC.md into each workspace.
 3. Launch agent 1  (time budget T, e.g. 60 min). Record start/stop timestamps + build log.
 4. Launch agent 2  (time budget T). Record timestamps + build log.
 5. Collect each build (runnable artifact + minimal README). Hash them.
@@ -83,7 +83,7 @@ about how the game was made.
 
 ## 7. Key files
 
-- **`AGENT_CHALLENGE_BRIEF.md`** — the single challenge prompt (identical for both agents).
+- **`BATTLE_PROMPT.md`** — the single challenge prompt (identical for both agents).
   Fully self‑contained: it embeds the entire game spec. Includes the **Graphical Ambition**
   callout and the **no‑environment‑sniffing** anti‑behavior.
 - **`LAUNCH_PROTOCOL.md`** — how to launch fairly when repo access is heterogeneous, how to

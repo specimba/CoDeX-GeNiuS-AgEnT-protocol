@@ -15,7 +15,7 @@ challenge** when repo access differs, and **how to guarantee no exploits / score
 
 There is exactly **one authoritative challenge**, and it is **fully self‑contained**:
 
-> **`challenge/AGENT_CHALLENGE_BRIEF.md`** — embeds the complete game spec, engineering
+> **`challenge/BATTLE_PROMPT.md`** — embeds the complete game spec, engineering
 > standards, anti‑behaviors, self‑QA, deliverables, and definition of done. Nothing else is
 > required.
 
@@ -23,8 +23,8 @@ There are **two delivery channels**, and they carry the **same bytes** of instru
 
 | Agent has repo access? | How you deliver |
 |---|---|
-| **Yes** | Give it an isolated workspace provisioned by `launch_challenge.py setup` (contains `AGENT_CHALLENGE_BRIEF.md`, `GAME_SPEC.md`, `DEVELOPER_SELF_QA.md`). The agent reads the brief file. |
-| **No** | Give it the **entire contents** of `AGENT_CHALLENGE_BRIEF.md` as one opening message. `launch_challenge.py single-prompt` emits a paste‑ready `SINGLE_PROMPT.md` for exactly this. |
+| **Yes** | Give it an isolated workspace provisioned by `launch_challenge.py setup` (contains `BATTLE_PROMPT.md`, `GAME_SPEC.md`, `DEVELOPER_SELF_QA.md`). The agent reads the brief file. |
+| **No** | Give it the **entire contents** of `BATTLE_PROMPT.md` as one opening message. `launch_challenge.py single-prompt` emits a paste‑ready `SINGLE_PROMPT.md` for exactly this. |
 
 Because the brief is self‑contained, the agent that never sees the repo knows **everything**
 the repo‑access agent knows about *what to build*. Repo access changes **nothing** about the
@@ -90,7 +90,7 @@ most often fall short**, yet capable agents on long, well‑scoped runs do produ
 HTML games. To make this the thing we actually test, the brief and rubric now explicitly
 reward it:
 
-- The brief's new **Graphical Ambition** section (in `AGENT_CHALLENGE_BRIEF.md`) instructs
+- The brief's new **Graphical Ambition** section (in `BATTLE_PROMPT.md`) instructs
   agents to build original, richly detailed, procedural visuals and to spend real effort on
   the visual identity — not primitive shapes or empty rooms.
 - The rubric gained **V0 — Graphical originality, visual richness & complexity**, with clear

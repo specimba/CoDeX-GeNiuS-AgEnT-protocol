@@ -12,12 +12,24 @@ Bradley–Terry / Elo ranking with bootstrap confidence intervals.
 | `game_A.json` | Evidence for Game A (the head‑to‑head favorite). |
 | `game_B.json` | Evidence for Game B (the more original but structurally broken build). |
 | `pairs.json` | 78 synthetic pairwise votes across four labels (A, B, C, D) for the BT ranking. |
-| `RESULTS_demo.txt` | Captured output of the command below (so you can read it without running). |
+| `h2h_pairs.json` | Clean head‑to‑head (A vs B only) pairwise votes for the decision block. |
+| `RESULTS_demo.txt` | Captured `aggregate_scores.py --bt` output (readable without running). |
+| `DECISION_demo.txt` | Captured one‑page decision block (readable without running). |
+| `run_head_to_head.py` | One command that runs the whole pipeline (scores + BT + decision block). |
 
 ## Run it yourself
 
+Everything, in one shot:
+
+```bash
+python run_head_to_head.py
+```
+
+Or step by step:
+
 ```bash
 python ../../ops/aggregate_scores.py . --bt --pairs pairs.json --seed 7 --n-boot 800
+python ../../ops/decision_block.py . --pairs h2h_pairs.json
 ```
 
 ## What the demo shows
@@ -35,6 +47,10 @@ python ../../ops/aggregate_scores.py . --bt --pairs pairs.json --seed 7 --n-boot
 - **Both‑orderings tie handling.** `pairs.json` includes 4 explicit `"winner":"tie"` rows;
   these are expanded into two half‑weight directional votes inside `add_vote`, so ties
   correctly count as draws instead of corrupting the ranking with a bogus "tie" label.
+- **One‑page decision block.** `decision_block.py` applies the benchmark/08 decision rules
+  and prints a DECISION: here **Game A wins** on the hard‑failure gate (B hit CEIL‑1), while
+  explicitly reporting that **B leads on raw graphical originality (V0 = 5 vs 3)** — the
+  reliability‑vs‑creative separation is visible in a single page.
 
 ## Reproducibility
 

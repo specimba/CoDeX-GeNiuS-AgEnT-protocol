@@ -44,12 +44,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # Challenge files shipped into every workspace (byte-for-byte identical).
-BRIEF = Path(__file__).resolve().parent / "AGENT_CHALLENGE_BRIEF.md"
+# BATTLE_PROMPT.md is the canonical, self-contained one-shot prompt; it embeds the full
+# game spec, so it is the single source of truth for both repo-access and no-repo agents.
+BRIEF = Path(__file__).resolve().parent / "BATTLE_PROMPT.md"
 SPEC = Path(__file__).resolve().parent.parent / "GAME_SPEC.md"
 SELFQA = Path(__file__).resolve().parent / "DEVELOPER_SELF_QA.md"
 
 CHALLENGE_FILES = {
-    "AGENT_CHALLENGE_BRIEF.md": BRIEF,
+    "BATTLE_PROMPT.md": BRIEF,
     "GAME_SPEC.md": SPEC,
     "DEVELOPER_SELF_QA.md": SELFQA,
 }
@@ -140,7 +142,7 @@ def cmd_single_prompt(args) -> None:
         "# ASHEN DESCENT — AGENT CHALLENGE (single self-contained prompt)\n"
         "# Deliver this entire message to the agent. It is fully self-contained; the agent\n"
         "# does not need any repository access. (Identical content is also shipped to agents\n"
-        "# that DO have repo access, as AGENT_CHALLENGE_BRIEF.md.)\n\n"
+        "# that DO have repo access, as BATTLE_PROMPT.md.)\n\n"
         + brief_text
         + "\n\n# -- end of challenge brief --\n"
     )

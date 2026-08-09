@@ -38,3 +38,15 @@ Python 3.8+ standard library only (no numpy/scipy required).
 > The math here mirrors the LMArena methodology (Bradley–Terry → Elo‑like ratings with
 > bootstrap confidence intervals), adapted for game‑quality evidence rather than chat
 > preference votes.
+
+## `decision_block.py` — one‑page head‑to‑head decision
+
+Applies `benchmark/08` decision rules (hard‑failure gate, OVERALL margin, pairwise signal)
+and prints a concise DECISION block for a Game A vs Game B comparison, with the
+reliability‑vs‑creative separation.
+
+```
+python decision_block.py <evidence_dir> [--pairs h2h_pairs.json]
+```
+
+Runnable demo: `benchmark/examples/synthetic/run_head_to_head.py`.
