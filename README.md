@@ -37,7 +37,9 @@ This repository has **two sides** of the same arena:
 | [`GAME_SPEC.md`](GAME_SPEC.md) | The shared spec both agents build against (reference for the test plan's objective list). |
 | [`challenge/README.md`](challenge/README.md) | Orchestration: fairness contract, containment audit, end‑to‑end runbook for the two builds. |
 | [`challenge/AGENT_CHALLENGE_BRIEF.md`](challenge/AGENT_CHALLENGE_BRIEF.md) | **The challenge prompt given to each game‑dev agent** (identical for both). |
+| [`challenge/LAUNCH_PROTOCOL.md`](challenge/LAUNCH_PROTOCOL.md) | Launching the challenge with heterogeneous repo access: identical single prompt, repo‑sharing containment, no‑exploit guarantees, equal circumstances. |
 | [`challenge/DEVELOPER_SELF_QA.md`](challenge/DEVELOPER_SELF_QA.md) | Internal build‑verification checklist agents run (distinct from the external rubric). |
+| [`challenge/launch_challenge.py`](challenge/launch_challenge.py) | Harness helper: provisions 2 isolated workspaces, emits a single self‑contained prompt, records time budget + build hashes, audits containment. |
 | [`benchmark/00-problem-analysis.md`](benchmark/00-problem-analysis.md) | Deep analysis of why one‑shot game evaluations fail, and the design responses. |
 | [`benchmark/01-one-shot-arena-prompt.md`](benchmark/01-one-shot-arena-prompt.md) | **The one‑shot arena prompt** to give to an evaluation agent (primary deliverable). |
 | [`benchmark/02-scoring-rubric.md`](benchmark/02-scoring-rubric.md) | Formal rubric: scales, anchors, weights, defect penalties, score ceilings. |
@@ -48,6 +50,7 @@ This repository has **two sides** of the same arena:
 | [`benchmark/07-operational-automated.md`](benchmark/07-operational-automated.md) | Concise operational protocol for large‑scale automated use. |
 | [`benchmark/08-selection-and-final-decision.md`](benchmark/08-selection-and-final-decision.md) | **How to select the better game** from the scores (decision rules, reliability vs creative separation). |
 | [`benchmark/examples/example-evaluation-report.md`](benchmark/examples/example-evaluation-report.md) | Worked example report on synthetic evidence (format + aggregation demonstration). |
+| [`benchmark/examples/synthetic/`](benchmark/examples/synthetic/README.md) | Runnable synthetic evidence bundle demoing `aggregate_scores.py --bt` (OVERALL, pillars, Bradley–Terry ranking + CIs). |
 | [`benchmark/ops/evidence_schema.json`](benchmark/ops/evidence_schema.json) | Machine‑readable evidence schema for automated aggregation. |
 | [`benchmark/ops/aggregate_scores.py`](benchmark/ops/aggregate_scores.py) | Reference aggregator: category scores, hard‑failure penalties, Bradley–Terry fit, confidence intervals. |
 

@@ -181,6 +181,19 @@ lighting, fog, vignette, layered depth; no combat clutter. **Readability over de
 glance. Use original CSS/Canvas/SVG/procedural visuals (no copied game assets). If any
 external asset is used, license it appropriately and include a clear local fallback.
 
+> ### 📐 Graphical ambition (read carefully — this is a real differentiator)
+>
+> The evaluators reward **originality and visual richness/complexity**, not bare effect
+> counts and not primitive shapes. A build made of flat‑colored rectangles, empty rooms,
+> and a generic UI — even if it works — will be scored as visually weak. Invest real effort
+> in a **distinctive, original art identity** and in *sophisticated procedural detail*:
+> layered light and fog, textured stone/paper surfaces, particle and ember systems, subtle
+> camera composition, cohesive palettes, animated environmental dressing. Push toward the
+> polish of a near‑commercial game. The visual identity must hold up across the **entire
+> run** — every room, enemy, and screen — not just a hero title screen. Keep readability
+> high: ambition must never come at the cost of the player being able to read attacks,
+> hazards, and the player character at a glance.
+
 ### 4.13 Animation & juice
 
 Screen shake; hit‑stop (a few frames); damage flash/tint; enemy squash‑and‑stretch;
@@ -309,6 +322,11 @@ Do **NOT**:
   polished game. A small, complete, excellent game wins.
 - Prioritize spectacle over readability or over reliability.
 - Fake anything: no hidden autoplay that makes a demo look better; the game must be honest.
+- **Sniff or change behavior based on the player's environment.** The game must behave
+  identically for every player regardless of device, viewport, user‑agent, browser, or
+  input method. No "if mobile then auto‑win", no "if headless then unlock everything", no
+  detection that inflates apparent quality. It must be a genuinely good game on its own.
+  (Evaluators re‑run key scenarios in different environments and flag any divergence.)
 
 ## 8. Self‑QA checklist (you run this before you deliver)
 

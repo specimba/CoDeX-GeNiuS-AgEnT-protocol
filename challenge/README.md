@@ -80,3 +80,37 @@ grep over the build.
 Hand over: the frozen build, a way to run it, blind label, the shared spec (for reference),
 and the evidence schema. Withhold: agent identity, build logs, the brief, and any claim
 about how the game was made.
+
+## 7. Key files
+
+- **`AGENT_CHALLENGE_BRIEF.md`** — the single challenge prompt (identical for both agents).
+  Fully self‑contained: it embeds the entire game spec. Includes the **Graphical Ambition**
+  callout and the **no‑environment‑sniffing** anti‑behavior.
+- **`LAUNCH_PROTOCOL.md`** — how to launch fairly when repo access is heterogeneous, how to
+  keep the evaluation out of the agents' reach, and the "assume the rubric is public" no‑
+  exploit guarantee.
+- **`DEVELOPER_SELF_QA.md`** — internal build‑verification checklist (incl. environment
+  consistency and graphical‑originality sections).
+- **`launch_challenge.py`** — harness helper: `setup` (provision 2 isolated workspaces with
+  the identical brief + hash), `single-prompt` (emit a paste‑ready self‑contained prompt
+  for no‑repo agents), `finalize` (record end time + build hashes + elapsed), `audit`
+  (containment scan for benchmark tokens), `status` (show manifest).
+
+## 8. Quick start
+
+```bash
+# 1. Create two isolated workspaces with the identical brief (hashed into the manifest)
+python launch_challenge.py setup --out runs/round1 --agents 2 --budget-min 60
+
+# 2a. repo-access agent: build inside runs/round1/agent1 (and agent2)
+# 2b. no-repo agent:       python launch_challenge.py single-prompt --out runs/round1
+#                          then send the entire runs/round1/SINGLE_PROMPT.md
+
+# 3. when both report done
+python launch_challenge.py finalize --out runs/round1 --agents 2
+
+# 4. containment-audit the delivered game builds (not the workspace scaffolding)
+python launch_challenge.py audit runs/round1/agent1/game runs/round1/agent2/game
+
+# 5. copy only the frozen game builds to the evaluation side; blind-label A/B; evaluate.
+```

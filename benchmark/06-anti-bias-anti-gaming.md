@@ -34,6 +34,31 @@ self‑preference bias, order‑counterbalancing, Bradley–Terry aggregation) a
 | **Embedded scores/telemetry** | **Containment rule**: any in‑game score/telemetry/eval logic is a Critical CONTAINMENT defect and that channel is barred; games are frozen builds. |
 | **Self‑report / documentation** | Never read code, README, or dev notes; scores from experience only. |
 | **Optimizing a single rubric number** | Overall is a weighted composite + penalties + ceilings + confidence intervals; no single knob dominates; per‑criterion evidence is required. |
+| **Environment sniffing / demo mode** (react to device, viewport, user‑agent, input to inflate perceived quality) | **Environment‑consistency rule**: the game must behave identically in every player environment. Evaluators re‑run key scenarios (a fight, a room transition, a boss) across desktop/mobile/portrait/landscape/headless and compare; any divergence is a defect (see probe **P‑EnvConsistency**). |
+| **Generic visuals** (flat rectangles, empty rooms, no identity) | **V0 — Graphical originality & complexity** is an explicit, weighted sub‑criterion with low/medium/high anchors; plain visuals score low regardless of other polish. |
+
+## 6.3 The rubric is public — assume agents read it
+
+In many deployments (including this repo, if the agents have access), the agent **can read
+the entire rubric**. We therefore design the benchmark to be **public‑safe**: knowing the
+rubric must not confer an advantage. That assumption is enforced by making the score depend
+on things that cannot be fabricated:
+
+- **Experience‑over‑compliance** — features must actually work and be reachable; an agent
+  cannot claim credit for a rubric item it doesn't ship.
+- **Hard ceilings for structural failures** — a main‑path soft‑lock caps OVERALL no matter
+  how the agent tuned other scores.
+- **Evidence‑gated sub‑scores** — every ≥3 sub‑score needs timestamped, reproducible
+  evidence; the agent cannot manufacture that.
+- **Long sessions + multi‑seed** — no single number is decidable from a short, gamed surface.
+- **Blind labels + judge ensembles** — the agent cannot tailor to one judge's preferences,
+  and it doesn't know which build it is.
+- **Environment consistency** — the build cannot present one face to a "demo" and another to
+  a real player.
+
+Consequence: even a rubric‑literate agent gains nothing beyond building a genuinely good
+game. This is the strongest guarantee against score‑tricking when repo access is
+heterogeneous.
 
 ## 6.3 Enforcement rules (hard)
 

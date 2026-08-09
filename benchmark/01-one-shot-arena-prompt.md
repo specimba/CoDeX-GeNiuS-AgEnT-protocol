@@ -69,7 +69,9 @@ probes is in `03-long-session-test-plan.md`; the objective list is derived from
   S6 Edge & boundary: resize mid‑combat, orientation change, tab blur/focus, browser
      back button, pause fully freezes (verify timers/particles stop), high‑score
      persistence after reload, corrupt‑storage injection (see protocol), repeated‑action
-     stress (mashing attack/dodge), corner‑push / stuck detection.
+     stress (mashing attack/dodge), corner‑push / stuck detection, and P‑EnvConsistency
+     (re‑run a fixed scenario across desktop/mobile/portrait/landscape/headless and confirm
+     identical rules — no environment sniffing / demo mode).
   S7 Accessibility: keyboard‑only menus, visible focus, high contrast, color‑not‑only
      signal check, reduced‑motion effectiveness, legible text at small sizes, touch
      buttons within reach / not blocked by safe areas.
@@ -96,6 +98,8 @@ sub‑criteria × 2 (range 0–10).
   G  Gameplay & Player Exp      (weight 18%)  — sub‑criteria in rubric §G
   F  Game Flow & Coherence      (weight 14%)  — sub‑criteria in rubric §F
   V  Visual & Presentation      (weight 12%)  — sub‑criteria in rubric §V
+     (note: V0 = graphical originality, visual richness & complexity — weigh it explicitly;
+     a build of plain shapes/empty rooms scores low here even if everything works)
   A  Atmosphere & Immersion     (weight 10%)  — sub‑criteria in rubric §A
   X  Accessibility & Inclusion  (weight  8%)  — sub‑criteria in rubric §X
 

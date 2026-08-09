@@ -79,11 +79,20 @@ Category score = `round( mean(sub_criteria) × 2, 1 )` → 0–10.
 ### V — Visual & Presentation · weight 12%
 | # | Sub‑criterion | SUBJ |
 |---|---------------|------|
+| V0 | **Graphical originality, visual richness & complexity** — how original and how sophisticated/detailed the visuals are. Rewards a distinctive identity and real artistic/technical complexity (procedural gothic detail, layered lighting, rich surfaces); penalizes generic geometric shapes, plain colored rectangles, empty rooms, or visual sameness. Must be sustained across the whole game, not a single hero screen. | SUBJ |
 | V1 | Art direction & visual coherence (gothic dark identity, consistent palette) | SUBJ |
 | V2 | Readability of gameplay entities under combat (attacks, hazards, player, rewards) | |
 | V3 | Animation & juice quality (squash‑stretch, trails, afterimages, particles) | |
 | V4 | Lighting, atmosphere, effects, depth (fog, vignette, layered) — without clutter | SUBJ |
 | V5 | UI clarity & polish (menus, HUD, legibility, no broken buttons) | |
+
+> **V0 anchors (0–5).** 0 = no visuals/placeholder. 1–2 = basic primitive shapes, flat
+> colors, little to no visual identity. 3 = coherent but simple/derivative; recognizable
+> theme, minimal detail. 4 = genuinely original, detailed, and consistent; strong
+> artistic identity with visible craft. 5 = near‑commercial level: rich procedural detail,
+> confident composition, distinctive and beautiful across the entire run. V0 rewards
+> *originality and complexity*, not raw effect count — effects that hurt readability are
+> penalized under V2.
 
 ### A — Atmosphere & Immersion · weight 10%
 | # | Sub‑criterion | SUBJ |

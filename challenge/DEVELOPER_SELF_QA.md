@@ -109,3 +109,21 @@ player experience will reflect it regardless.
 - [ ] No placeholder screens, "under construction", dead ends, or broken buttons.
 - [ ] Everything claimed in the README actually works and is reachable.
 - [ ] No telemetry, analytics, hidden reporting, or embedded "quality score."
+
+## O. Environment consistency (no demo mode)
+
+- [ ] The game plays the same on desktop and mobile, and in portrait and landscape.
+- [ ] It does not change difficulty, give bonuses, or unlock content based on device,
+      viewport, user‑agent, or input method.
+- [ ] A headless / automated run sees the same rules as a human keyboard run.
+- [ ] There is no hidden autoplay, no environment detection, no "looks good in a demo"
+      path that differs from a real player's path.
+
+## P. Graphical originality (this is weighted)
+
+- [ ] Visuals are original, not primitive shapes or generic flat rectangles.
+- [ ] There is a distinctive, consistent art identity across rooms, enemies, UI, and menus.
+- [ ] Procedural detail exists: lighting, fog, texture, particles, embers, dressing — not an
+      empty room with a rectangle player.
+- [ ] The visual identity holds across the whole run, not just the title screen.
+- [ ] Rich visuals do NOT hurt readability: attacks, hazards, and the player stay obvious.

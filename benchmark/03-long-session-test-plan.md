@@ -61,6 +61,8 @@ These probes are run during S6/S8 and whenever suspicion arises.
 
 **P‑Seeds (procedural).** If seeds are supported, play 2 distinct seeds fully. Verify layout reachability, no impossible enemy placement, clear exits, no duplication‑collapse (all rooms identical).
 
+**P‑EnvConsistency (no demo mode).** Run the same fixed scenario (e.g., the first combat room, a specific enemy, a boss phase) in multiple environments and confirm identical behavior: desktop vs mobile, portrait vs landscape, different user‑agents/viewports, touch vs keyboard, and a headless/automated run. Any divergence in difficulty, drops, enemy HP, reward rates, or game rules is a defect (class LOGIC/STATE or BALANCE, "environment sniffing"). Also confirms the game is not secretly degrading quality on lower‑spec devices in a way that hides performance problems.
+
 ## 3.4 Handling of hard cases
 
 | Case | Handling |

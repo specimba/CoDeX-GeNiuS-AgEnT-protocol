@@ -25,8 +25,9 @@
 - **Game B** has a far stronger visual identity and atmosphere — memorable art, better
   audio integration, and a distinctive mood. But it is structurally weaker: one main‑path
   soft‑lock, flaky high‑score persistence, and visible FPS decay in the long session.
-- **Verdict:** Game A is the better complete game (reliability + gameplay + flow), despite
-  B's creative superiority.
+- **Verdict:** Game A is the better complete game (reliability + gameplay + flow).
+  B leads on **raw graphical originality** (V0 5 vs 3) — the dimension short demos most
+  often miss — but its structural failures cap it.
 
 ## 2. Testing coverage
 
@@ -54,12 +55,12 @@ scores reflect the soft‑lock.
 | M | 4,5,4,4,4,5 | 8.7 | Readable, great feel, decent depth, fair, meaningful choices, strong feedback |
 | G | 4,4,4,4,4,4 | 8.0 | Clear onboarding, clear goals, good rewards, fair curve, good variety, engaging |
 | F | 4,4,4,4,3,4 | 7.7 | Good first 5/30 min; some mid‑session repetition on floor 3 (F5=3) |
-| V | 5,5,5,5,4 | 9.6 | Coherent gothic art; excellent readability; good juice; atmospheric; clean UI |
+| V | 3,5,5,5,5,4 | 9.0 | Solid art; **excellent readability**; good juice; atmospheric; clean UI. Originality is solid but conventional (V0=3). |
 | A | 5,4,5,5,4 | 9.2 | Moody; good audio; strong sense of place; consistent theme; immersive |
 | X | 5,5,4,5,4 | 9.2 | Keyboard nav; reduced‑motion; high contrast; touch safe; audio fail safe |
 
-**Game A:** OVERALL_raw 86.1 · HARD_PENALTY 0 · OVERALL_adj 86.1 · ceilings none ·
-**OVERALL = 86.1** · pillars: tech 90.2, creative 93.8, gameplay 83.5, flow 80.6, defect 99.4.
+**Game A:** OVERALL_raw 85.4 · HARD_PENALTY 0 · OVERALL_adj 85.4 · ceilings none ·
+**OVERALL = 85.4** · pillars: tech 90.2, creative 91.1, gameplay 83.5, flow 80.6, defect 99.4.
 *(Verified: `python ops/aggregate_scores.py` reproduces these exactly.)*
 
 ### Game B
@@ -70,12 +71,12 @@ scores reflect the soft‑lock.
 | M | 4,4,3,3,4,4 | 7.3 | Clear, good feel, moderate depth, some unfairness on boss, good choices, good feedback |
 | G | 3,4,3,3,3,3 | 6.3 | Decent onboarding; clear goals; rewards weak on repeat; curve jagged; variety good; engagement dips |
 | F | 3,3,3,3,3,2 | 5.7 | Good first 5; flatter first 30; mid‑session drag; transitions fine; some padding; **end‑to‑end broken (soft‑lock)** |
-| V | 5,4,4,5,4 | 8.8 | **Striking** art; good readability; good juice; great atmosphere; solid UI |
+| V | 5,5,4,4,5,4 | 9.0 | **Striking, original art** (V0=5) — strong visual identity; good readability; good juice; great atmosphere; solid UI |
 | A | 5,4,5,4,4 | 8.8 | Strong mood; better music integration; strong place; consistent; immersive until breaks |
 | X | 4,4,4,4,4 | 8.0 | Keyboard nav; reduced‑motion; high contrast; touch OK; audio fail safe |
 
-**Game B:** OVERALL_raw 69.6 · HARD_PENALTY 4 (1 critical) · OVERALL_adj 65.6 ·
-ceilings **[CEIL‑1]** → **OVERALL = 55.0** · pillars: tech 65.9, creative 86.8, gameplay 68.0,
+**Game B:** OVERALL_raw 69.9 · HARD_PENALTY 4 (1 critical) · OVERALL_adj 65.9 ·
+ceilings **[CEIL‑1]** → **OVERALL = 55.0** · pillars: tech 65.9, creative 87.7, gameplay 68.0,
 flow 64.4, defect 96.0.
 *(Verified: `python ops/aggregate_scores.py` reproduces these exactly.)*
 
@@ -124,11 +125,12 @@ Independent scores (finalized before comparison):
 
 | | A | B |
 |---|--:|--:|
-| OVERALL | 86.1 | 55.0 |
+| OVERALL | 85.4 | 55.0 |
 | Tech reliability | 90.2 | 65.9 |
-| Creative | 93.8 | 86.8 |
+| Creative | 91.1 | 87.7 |
 | Gameplay | 83.5 | 68.0 |
 | Flow | 80.6 | 64.4 |
+| *Originality (V0)* | *3* | *5* |
 
 Pairwise preference (both orderings, ensemble): **A wins** (confidence 0.9, both orderings
 agreed). The pairwise agrees with the OVERALL ranking. Bradley–Terry on this single pair
@@ -145,25 +147,29 @@ aggregates Elo ratings and CIs.
 
 ## 11. Final decision
 
-**Game A is the better complete game.** Although Game B has the stronger visual identity
-and atmosphere, it is structurally compromised: a reproducible main‑path soft‑lock caps its
-score, its high‑score persistence fails, and it degrades over long sessions. Game A is
-complete, reliable, well‑paced, and plays great across many seeds. On the balance of
-reliability + gameplay + flow — the core of "which game can a player actually complete and
-enjoy" — A wins clearly. If the benchmark were about *presentation alone*, B would win; the
-decision block below makes that separation explicit.
+**Game A is the better complete game.** Game B wins on **raw graphical originality**
+(V0 = 5 vs 3 — it is the more distinctive and artistically ambitious build), and this is
+the very dimension one‑shot benchmarks most often fail to reward. But B is structurally
+compromised: a reproducible main‑path soft‑lock caps its score, its high‑score persistence
+fails, and it degrades over long sessions. Game A is complete, reliable, well‑paced, and
+plays great across many seeds, and its *overall* presentation is actually slightly ahead of
+B's because its readability and polish make up for its more conventional style. On the
+balance of reliability + gameplay + flow — the core of "which game can a player actually
+complete and enjoy" — A wins clearly. The decision block below makes the originality‑vs‑
+reliability separation explicit.
 
 ```
 DECISION: Game A wins
-OVERALL:    A = 86.1 | B = 55.0   (margin 31.1; B capped by CEIL-1)
+OVERALL:    A = 85.4 | B = 55.0   (margin 30.4; B capped by CEIL-1)
 Reliability: A better (90.2 vs 65.9; B hit CEIL-1 + persistence failure)
-Creative:    B better (86.8 vs 93.8)*   [*B's presentation sub-scores higher]
+Creative:    A better overall (91.1 vs 87.7)
+             but B leads on raw originality (V0: 5 vs 3) and atmosphere
 Gameplay:    A better (83.5 vs 68.0)
 Flow:        A better (80.6 vs 64.4)
 Pairwise:    A wins (confidence 0.9, both orderings agreed)
 Confidence:  HIGH
 Rationale:   A is a complete, reliable, well-flowing roguelike across multiple seeds;
-             B has stronger presentation but is structurally compromised (main-path
-             soft-lock caps it; persistence fails; long-session FPS decay). A is the
-             better complete game.
+             B is the more originally drawn game (V0=5) but is structurally compromised
+             (main-path soft-lock caps it; persistence fails; long-session FPS decay).
+             A is the better complete game.
 ```

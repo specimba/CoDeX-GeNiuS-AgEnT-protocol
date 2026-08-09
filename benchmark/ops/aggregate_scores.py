@@ -49,7 +49,9 @@ CRITERIA = {
     "M": [f"M{i}" for i in range(1, 7)],
     "G": [f"G{i}" for i in range(1, 7)],
     "F": [f"F{i}" for i in range(1, 7)],
-    "V": [f"V{i}" for i in range(1, 6)],
+    # V0 is graphical originality & visual richness/complexity (the differentiator
+    # most one-shot benchmarks miss); V1..V5 are the other visual sub-criteria.
+    "V": ["V0"] + [f"V{i}" for i in range(1, 6)],
     "A": [f"A{i}" for i in range(1, 6)],
     "X": [f"X{i}" for i in range(1, 6)],
 }
@@ -215,19 +217,35 @@ def bootstrap_ci(comparisons: list[tuple[str, str, float]], n_boot: int = 1000,
                  seed: int = 0) -> dict[str, tuple[float, float]]:
     """Bootstrap 95% CI on Elo ratings (order-independent fit per resample)."""
     rng = random.Random(seed)
-    ratings = []
+    labels = sorted({lbl for a, b, _ in comparisons for lbl in (a, b)})
+    ratings = []                      # list of {label: elo}
     n = len(comparisons)
     for _ in range(n_boot):
         sample = [rng.choice(comparisons) for _ in range(n)]
-        logp = fit_bt(sample)
-        elo = bt_to_elo(logp)
-        ratings.append(elo)
-    labels = sorted(ratings[0].keys())
+        ratings.append(bt_to_elo(fit_bt(sample)))
     out = {}
     for lbl in labels:
-        vals = sorted(r[lbl] for r in ratings)
-        out[lbl] = (vals[int(0.025 * n_boot)], vals[int(0.975 * n_boot)])
+        vals = sorted(r[lbl] for r in ratings if lbl in r)
+        if len(vals) < 2:
+            out[lbl] = (1500.0, 1500.0)
+        else:
+            lo, hi = vals[max(0, int(0.025 * len(vals)) - 1)], vals[min(len(vals) - 1, int(0.975 * len(vals)))]
+            out[lbl] = (lo, hi)
     return out
+
+
+def add_vote(comparisons: list, x: str, y: str, winner: str) -> None:
+    """Record a pairwise result between labels x and y.
+    winner is 'x', 'y', or 'tie'. A tie becomes two half-weight directional entries so the
+    Bradley-Terry fit counts it as a draw rather than a bogus 'tie' label."""
+    if winner == "tie":
+        comparisons.append((x, y, 0.5))
+        comparisons.append((y, x, 0.5))
+    elif winner == x:
+        comparisons.append((x, y, 1.0))
+    elif winner == y:
+        comparisons.append((y, x, 1.0))
+
 
 
 # ---------- I/O ----------
@@ -249,13 +267,13 @@ def load_evidence(dirpath: str) -> tuple[list[dict], list[tuple[str, str, float]
             pv = obj.get("pairwise_verdict") or {}
             winner = pv.get("winner")
             if winner in ("A", "B", "tie"):
-                comparisons.append((winner, ("B" if winner == "A" else "A"), 0.5 if winner == "tie" else 1.0))
+                add_vote(comparisons, "A", "B", winner)
         elif isinstance(obj, dict) and "game_a" in obj and "game_b" in obj:
             games.extend([obj["game_a"], obj["game_b"]])
             pw = obj.get("pairwise") or {}
             w = pw.get("winner")
             if w in ("A", "B", "tie"):
-                comparisons.append((w, ("B" if w == "A" else "A"), 0.5 if w == "tie" else 1.0))
+                add_vote(comparisons, "A", "B", w)
     return games, comparisons
 
 
@@ -272,10 +290,10 @@ def main() -> None:
     if args.pairs:
         with open(args.pairs) as f:
             for row in json.load(f):
-                w = row.get("winner")
-                if w in ("A", "B", "tie"):
-                    other = row["b"] if w == "A" else row["a"] if w == "B" else (row["a"] if random.random() < 0.5 else row["b"])
-                    comparisons.append((w, other, 0.5 if w == "tie" else 1.0))
+                x, y, w = row.get("a"), row.get("b"), row.get("winner")
+                if x and y and w in ("A", "B", "tie"):
+                    # rows may use arbitrary labels (e.g. C, D); normalize the vote
+                    add_vote(comparisons, x, y, w)
 
     results = {g["game"]: aggregate_game(g) for g in games}
 
