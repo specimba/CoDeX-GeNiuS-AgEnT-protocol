@@ -13,6 +13,8 @@ ships inside a game; scores are computed from external evidence only (containmen
 | `05-reporting-template.md` | Final report structure (executive, categories, defects, verdict, confidence). |
 | `06-anti-bias-anti-gaming.md` | Every bias vector, gaming vector, and their defenses + enforcement rules. |
 | `07-operational-automated.md` | Concise end‑to‑end runbook for large‑scale automated use. |
+| `08-selection-and-final-decision.md` | Decision rules for choosing the better game; separates "better overall" from "more reliable." |
+| `examples/example-evaluation-report.md` | Worked example report on synthetic evidence (format + aggregation demo). |
 | `ops/evidence_schema.json` | Machine‑readable evidence contract for automated aggregation. |
 | `ops/aggregate_scores.py` | Reference aggregator: OVERALL, pillars, penalties, ceilings, Bradley–Terry + bootstrap CIs. |
 
