@@ -1,8 +1,15 @@
-dist/
-runs/
-temp_extract_aoa_v2/
-temp_extract_v1.0.1/
-temp_extract_v1.1.0/
-CURRENT_THREAD_HANDOFF.txt
+# Evaluation scratch / evidence (never commit raw evidence or captures)
+evidence/
+captures/
+*.log
+*.png
+*.jpg
+*.mp4
+*.webm
+
+# Language / tooling
 __pycache__/
 *.pyc
+node_modules/
+dist/
+.venv/

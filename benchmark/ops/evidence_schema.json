@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ashen Descent Arena — Game Evidence Record",
+  "description": "Structured evidence emitted by one evaluator for one game. One object per game per evaluation session set.",
+  "type": "object",
+  "required": ["game", "meta", "sessions", "sub_scores", "defects", "coverage", "pairwise_verdict"],
+  "properties": {
+    "game": { "type": "string", "enum": ["A", "B"] },
+    "meta": {
+      "type": "object",
+      "required": ["hardware", "browser_matrix", "evaluator", "ordering", "judge_family", "rubric_version", "prompt_version"],
+      "properties": {
+        "hardware": { "type": "string" },
+        "browser_matrix": { "type": "string" },
+        "evaluator": { "type": "string" },
+        "ordering": { "type": "string", "enum": ["A-first", "B-first"] },
+        "judge_family": { "type": "string" },
+        "rubric_version": { "type": "string" },
+        "prompt_version": { "type": "string" },
+        "build_hash": { "type": "string" },
+        "start_ts": { "type": "string" },
+        "end_ts": { "type": "string" }
+      }
+    },
+    "sessions": {
+      "type": "object",
+      "description": "Keyed by archetype id S1..S8.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["duration_seconds", "objective_met"],
+        "properties": {
+          "duration_seconds": { "type": "integer" },
+          "objective_met": { "type": "boolean" },
+          "seed": { "type": ["string", "null"] },
+          "perf_samples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["at_min", "fps", "jank_pct", "memory_note"],
+              "properties": {
+                "at_min": { "type": "integer" },
+                "fps": { "type": "number" },
+                "jank_pct": { "type": "number" },
+                "memory_note": { "type": "string" }
+              }
+            }
+          },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "sub_scores": {
+      "type": "object",
+      "description": "Sub-criterion scores 0-5 per category. Categories: T,M,G,F,V,A,X.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "T": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+          "M": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+          "G": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+          "F": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+          "V": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+          "A": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+          "X": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } }
+        }
+      },
+      "additionalItems": false
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Mapping of sub-criterion id (e.g. G6) to evidence strings.",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    },
+    "defects": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/defect" }
+    },
+    "ceilings": { "type": "array", "items": { "type": "string", "enum": ["CEIL-1","CEIL-2","CEIL-3","CEIL-4"] } },
+    "coverage": {
+      "type": "object",
+      "description": "Which categories have full vs partial coverage.",
+      "additionalProperties": { "type": "string", "enum": ["FULL", "PARTIAL", "NOT_SCORED"] }
+    },
+    "pairwise_verdict": {
+      "type": "object",
+      "required": ["winner", "confidence", "both_orderings_agree"],
+      "properties": {
+        "winner": { "type": "string", "enum": ["A", "B", "tie"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "both_orderings_agree": { "type": "boolean" }
+      }
+    }
+  },
+  "definitions": {
+    "defect": {
+      "type": "object",
+      "required": ["id", "severity", "class", "title", "reproduction", "blocks_progress", "recoverable", "score_channel"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "severity": { "type": "string", "enum": ["Blocker","Critical","Major","Minor","Trivial"] },
+        "class": { "type": "string" },
+        "description": { "type": "string" },
+        "reproduction": { "type": "array", "items": { "type": "string" } },
+        "frequency": { "type": "string" },
+        "reproductions_confirmed": { "type": "integer" },
+        "context": { "type": "object" },
+        "blocks_progress": { "type": "boolean" },
+        "recoverable": { "type": "string", "enum": ["restart","reload","self_resolved","none"] },
+        "immersion_damage": { "type": "string", "enum": ["low","medium","high"] },
+        "polish_only": { "type": "boolean" },
+        "evidence": { "type": "array", "items": { "type": "string" } },
+        "score_channel": { "type": "string", "enum": ["HARD_PENALTY","CATEGORY","DEFECT_SEVERITY","CONTAINMENT"] },
+        "assigned_to_categories": { "type": "array", "items": { "type": "string" } },
+        "resolved_as_harness": { "type": "boolean" }
+      }
+    }
+  }
+}

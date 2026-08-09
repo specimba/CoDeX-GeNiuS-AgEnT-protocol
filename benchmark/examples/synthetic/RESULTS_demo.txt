@@ -1,0 +1,19 @@
+=== PER-GAME SCORES ===
+
+Game A  OVERALL=85.4  (raw 85.4, pen 0.0, adj 85.4, ceilings none)
+  category: T=8.6  M=8.7  G=8.0  F=7.7  V=9.0  A=9.2  X=9.2
+  pillars : technical_reliability=90.2  creative_presentation=91.1  gameplay=83.5  flow_engagement=80.6  defect_severity=99.4
+  defects : blocker=0  critical=0  major=0  minor=1  trivial=1
+
+Game B  OVERALL=55.0  (raw 69.9, pen 4.0, adj 65.9, ceilings ['CEIL-1'])
+  category: T=5.7  M=7.3  G=6.3  F=5.7  V=9.0  A=8.8  X=8.0
+  pillars : technical_reliability=65.9  creative_presentation=87.7  gameplay=68.0  flow_engagement=64.4  defect_severity=96.0
+  defects : blocker=0  critical=1  major=0  minor=0  trivial=0
+
+=== PAIRWISE / BRADLEY-TERRY (Elo-like, 95% CI bootstrap) ===
+  A: Elo 2510.2  (CI 2460.1–2570.1)  n=66
+  B: Elo 2269.4  (CI 2167.5–2339.7)  n=57
+  C: Elo 610.2  (CI 594.5–635.4)  n=20
+  D: Elo 610.2  (CI 594.5–635.4)  n=15
+
+  Ranking: A > B (margin 240.8 Elo)

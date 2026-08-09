@@ -1,0 +1,392 @@
+[
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "tie"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "tie"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "tie"
+  },
+  {
+    "a": "A",
+    "b": "B",
+    "winner": "tie"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "C",
+    "b": "A",
+    "winner": "A"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "B",
+    "b": "C",
+    "winner": "B"
+  },
+  {
+    "a": "D",
+    "b": "C",
+    "winner": "C"
+  },
+  {
+    "a": "D",
+    "b": "C",
+    "winner": "C"
+  },
+  {
+    "a": "D",
+    "b": "C",
+    "winner": "C"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "A",
+    "b": "D",
+    "winner": "A"
+  },
+  {
+    "a": "D",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "D",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "D",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "D",
+    "b": "B",
+    "winner": "B"
+  },
+  {
+    "a": "D",
+    "b": "B",
+    "winner": "B"
+  }
+]
