@@ -1,31 +1,41 @@
-# Benchmark Package Index
+# Benchmark Package Index — One-Shot Game Development Agent Creation
 
-External, read‑only evaluation system for the **Ashen Descent Agent Arena**. Nothing here
-ships inside a game; scores are computed from external evidence only (containment rule).
+External, read-only evaluation system for **One-Shot Game Development Agent Creation Benchmark**.
+Agent is **developer**, not player. Nothing here ships inside a game; scores computed from external evidence only (containment).
 
 | File | Purpose |
 |------|---------|
-| `00-problem-analysis.md` | Why naive one‑shot evaluations fail + the design response for each failure mode. Read this first. |
-| `01-one-shot-arena-prompt.md` | **The evaluator prompt** — verbatim text handed to each evaluation agent/human for one head‑to‑head. |
-| `02-scoring-rubric.md` | Formal rubric: sub‑criteria, anchors, weights, hard‑failure penalties, ceilings, pillar scores. |
-| `03-long-session-test-plan.md` | Standardized session archetypes (S1–S8), probes, conditions, and hard‑case handling. |
-| `04-defect-taxonomy.md` | Defect classes, severities, and the canonical defect record schema. |
-| `05-reporting-template.md` | Final report structure (executive, categories, defects, verdict, confidence). |
-| `06-anti-bias-anti-gaming.md` | Every bias vector, gaming vector, and their defenses + enforcement rules. |
-| `07-operational-automated.md` | Concise end‑to‑end runbook for large‑scale automated use. |
-| `08-selection-and-final-decision.md` | Decision rules for choosing the better game; separates "better overall" from "more reliable." |
-| `examples/example-evaluation-report.md` | Worked example report on synthetic evidence (format + aggregation demo). |
-| `examples/synthetic/` | Runnable synthetic bundle: `run_head_to_head.py` = one command for scores + BT ranking + decision block. |
-| `ops/evidence_schema.json` | Machine‑readable evidence contract for automated aggregation. |
-| `ops/aggregate_scores.py` | Reference aggregator: OVERALL, pillars, penalties, ceilings, Bradley–Terry + bootstrap CIs. |
-| `ops/decision_block.py` | One‑page head‑to‑head decision generator (applies `08` decision rules). |
+| `00-problem-analysis.md` | Why naive game creation benchmarks fail (template bias, first-prototype bias) + design responses |
+| `01-one-shot-arena-prompt.md` | **Human jury evaluation prompt** — verbatim text for head-to-head comparison of two created games |
+| `02-scoring-rubric.md` | Formal rubric: code quality, creative originality, long-session execution, design judgment, visual ambition (heavily weighted), human-perceived quality — scales, anchors, weights, ceilings |
+| `03-long-session-test-plan.md` | Verification plan for development process and final game (S1-S9 including S9 Creative Probe), probes, hard-case handling |
+| `04-defect-taxonomy.md` | Defect classes, severities, schema |
+| `05-reporting-template.md` | Jury report template |
+| `06-anti-bias-anti-gaming.md` | Anti-bias, anti-gaming strategy for human jury |
+| `07-operational-automated.md` | Operational runbook |
+| `08-selection-and-final-decision.md` | Decision rules: which created game human jury would choose |
+| `deploy/01-deploy-prompt.txt` | Deployable evaluator prompt (only evaluator instructions) |
+| `deploy/ARENA_DEPLOY.md` | Deployment guide, CEIL rules, anti-sniffing |
+| `examples/example-evaluation-report.md` | Worked example report |
+| `examples/synthetic/` | Synthetic bundle: run_head_to_head.py scores + BT ranking + decision block |
+| `ops/evidence_schema.json` | Evidence contract |
+| `ops/aggregate_scores.py` | Aggregator: category scores, penalties, Bradley-Terry, CIs |
+| `ops/decision_block.py` | Decision generator |
+
+## Evaluation philosophy
+
+- Agent is developer, not player contestant
+- Unlimited creativity: no restriction to 2D/2.5D/3D, genre, rendering style, engine, input, narrative, level structure, realism, procedural vs authored
+- Code quality + long-session execution matter: plan → prototype → test → debug → iterate → polish
+- Visual ambition weighted heavily: push beyond simple box gradient colored enemies / flash-game approach
+- Human jury chooses memorable authored game over generic functional template
+- Automated checks verify launch, input, pause, restart, persistence, no telemetry; human jury judges authorship
 
 ## Quick start
 
-1. Read `00-problem-analysis.md`, then `06-anti-bias-anti-gaming.md` for the rationale.
-2. Freeze both game builds (no edits during evaluation); audit containment.
-3. Run each evaluator with `01-one-shot-arena-prompt.md`, supplying `02`, `03`, `04`, `05`,
-   and `ops/evidence_schema.json` as read‑only references.
-4. Collect evidence JSON per game, then run:
-   `python ops/aggregate_scores.py <evidence_dir> --bt`
-5. Write the report per `05-reporting-template.md`.
+1. Read `00-problem-analysis.md` then `06-anti-bias-anti-gaming.md`
+2. Freeze both game builds (no edits), audit containment
+3. Run automated launch checks
+4. Run human jury with `01-one-shot-arena-prompt.md` supplying `02,03,04,05` and `ops/evidence_schema.json` as references
+5. Collect evidence JSON, run `python ops/aggregate_scores.py <evidence_dir> --bt`
+6. Write report per `05-reporting-template.md`

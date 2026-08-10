@@ -1,181 +1,163 @@
-# 02 — Formal Scoring Rubric
+# 02 — Formal Scoring Rubric: One-Shot Game Development Agent Creation
 
-Transparent, evidence‑gated, multi‑criteria rubric. Every category is the weighted mean of
-explicit sub‑criteria (each 0–5 with behavioral anchors), so a single number is auditable
-back to observed behavior. No hidden bonuses. No score for features not experienced. No
-double‑counting defects.
+Transparent, evidence-gated, multi-criteria rubric for **creator agents**, not player agents.
+Every category weighted mean of explicit sub-criteria (0–5 behavioral anchors), auditable back to observed behavior.
+No hidden bonuses. No score for features not experienced. No double-counting defects.
+Rewards code quality, creative originality, long-session execution, design judgment, visual ambition, human-perceived quality.
 
 ## 2.1 Scoring language
 
-Each sub‑criterion is scored on an integer 0–5 scale:
+Each sub-criterion 0–5:
 
 | Score | Anchor |
 |------:|--------|
-| 0 | Absent, broken, or **not experienced** (treat as absent). |
-| 1 | Poor — present but actively harms play. |
-| 2 | Below average — clearly weak or unreliable. |
-| 3 | Adequate — functional, meets minimum, unremarkable. |
-| 4 | Good — above average, well executed. |
-| 5 | Excellent — among the best; memorable positive. |
+| 0 | Absent, broken, or not experienced (treat as absent) |
+| 1 | Poor — present but harms experience / structure |
+| 2 | Below average — clearly weak or unreliable |
+| 3 | Adequate — functional, meets minimum, unremarkable |
+| 4 | Good — above average, well executed |
+| 5 | Excellent — among best, memorable positive, would discuss after playing |
 
-**Evidence rule.** A sub‑score ≥ 3 must have a timestamped note / capture / reproduction
-steps. A sub‑score 0–1 must state whether it was *absent/broken* or *not experienced*.
-Any sub‑score that cannot be supported is downgraded to "insufficient evidence" and treated
-as not scored (excluded from the category mean, and the category marked PARTIAL‑COVERAGE).
+Evidence rule: sub-score ≥3 must have timestamped note / capture / reproduction steps / code pointer (for code quality). Sub-score 0–1 must state whether absent/broken or not experienced. Any sub-score cannot be supported is downgraded to insufficient evidence and treated as not scored (excluded from mean, category marked PARTIAL-COVERAGE).
 
-**Subjectivity rule.** Sub‑criteria with a `SUBJ` tag are taste‑dependent; they must pair an
-emotional rating with a behavioral observation (`SUBJ` score + `OBS` evidence). Their
-weight is lower and they are reported with dispersion.
+Subjectivity rule: SUBJ tag = taste-dependent; must pair emotional rating with behavioral observation (SUBJ score + OBS evidence). Weight lower and reported with dispersion.
 
-## 2.2 Categories, weights, and sub‑criteria
+## 2.2 Categories, weights, and sub-criteria
 
-Category score = `round( mean(sub_criteria) × 2, 1 )` → 0–10.
+Category score = `round(mean(sub_criteria) × 2, 1)` → 0–10
+Weights sum 100: designed to heavily weight visual ambition and human-perceived quality over safe generic implementation.
 
-### T — Technical Stability · weight 20%
-| # | Sub‑criterion | SUBJ |
+### T — Technical / Code Quality · weight 16%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
-| T1 | Cold launch & fresh‑load reliability (no crash/blank/console‑loop on load) | |
-| T2 | Crash / freeze / runtime‑error frequency during normal play | |
+| T1 | Cold launch & fresh-load reliability (no crash/blank/console-loop) | |
+| T2 | Crash / freeze / runtime-error frequency during normal play | |
 | T3 | Restart & state reset integrity (instant restart, run state fully reset) | |
-| T4 | Persistence reliability (high scores saved/loaded; corrupt‑storage handled) | |
-| T5 | Input responsiveness & frame‑rate independence (buffering, focus/visibility safety) | |
-| T6 | Performance consistency over time (FPS stability, jank, memory growth, high load) | |
-| T7 | Environmental robustness (resize, orientation, tab blur, DPR) | |
+| T4 | Persistence reliability if applicable (save/load, corrupt-storage handled) or explicit no-persistence by design | |
+| T5 | Input responsiveness & frame-rate independence (buffering, focus/visibility safety, no scroll/zoom leak) | |
+| T6 | Performance consistency over time (FPS stability, jank, memory growth, pooling, capping, DPR handling) | |
+| T7 | Code structure & maintainability (separation state/input/loop/rendering/collision/audio, centralized tunables, no scattered magic numbers, evidence of iteration/refactor) | |
 
-### M — Core Mechanics · weight 18%
-| # | Sub‑criterion | SUBJ |
+### M — Core Mechanics & Code Craft · weight 17%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
-| M1 | Clarity of rules & learnability of the core combat loop | |
-| M2 | Game feel & responsiveness (hit‑stop, shake, input buffering, timing) | SUBJ |
-| M3 | Mechanical depth & variety (emergence, viable approaches, not one‑trick) | |
-| M4 | Balance & fairness (no unfair kills; timing windows fair; scaling sane) | |
+| M1 | Clarity of rules & learnability of core loop (<1 min) | |
+| M2 | Game feel & responsiveness (hit-stop, shake, buffering, timing, feedback) | SUBJ |
+| M3 | Mechanical depth & variety (emergence, viable approaches, not one-trick) | |
+| M4 | Balance & fairness (no unfair kills, timing windows fair, scaling sane) | |
 | M5 | Meaningful player choice & agency (risk/reward, tactical decisions) | |
-| M6 | Feedback quality (intent telegraphs, damage numbers, hit/miss/crit, sounds) | |
+| M6 | Feedback quality (telegraphs, numbers, hit/miss/crit, sound/visual) | |
+| M7 | Creative mechanical twist (original system not in brief that preserves readability but adds depth) | SUBJ |
 
-### G — Gameplay & Player Experience · weight 18%
-| # | Sub‑criterion | SUBJ |
+### G — Gameplay & Human-Perceived Quality · weight 17%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
-| G1 | Onboarding & tutorial quality (understand goal in first minute, no manual needed) | |
+| G1 | Onboarding & tutorial quality (understand goal in first minute, no manual) | |
 | G2 | Clarity of goals & progression (know what to do, why, where) | |
-| G3 | Reward structure & motivation (coins, relics, upgrades feel earned & impactful) | |
+| G3 | Reward structure & motivation (progression feels earned & impactful, visible) | |
 | G4 | Challenge curve & pacing of difficulty | |
-| G5 | Variety of encounters/activities (enemy mix, room types, events, boss) | |
+| G5 | Variety of encounters/activities (mix, types, events, climax) | |
 | G6 | Fun & sustained engagement / replayability | SUBJ |
+| G7 | Player story (at 30 min, can player tell story about their run that differs from another player's story? Emergent narrative) | SUBJ |
 
-### F — Game Flow & Coherence · weight 14%
-| # | Sub‑criterion | SUBJ |
+### F — Game Flow & Coherence · weight 12%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
-| F1 | Quality of the first 5 minutes | |
-| F2 | Quality of the first 30 minutes | |
-| F3 | Mid‑session pacing & sustained interest | SUBJ |
-| F4 | Transitions between activities (rooms, floors, states, menus) | |
-| F5 | Absence of repetition, padding, and dead time | |
-| F6 | Coherence of the end‑to‑end experience (beginning → complete run) | |
+| F1 | Quality of first 5 minutes | |
+| F2 | Quality of first 30 minutes | |
+| F3 | Mid-session pacing & sustained interest | SUBJ |
+| F4 | Transitions between activities (rooms/levels/states/menus) | |
+| F5 | Absence of repetition, padding, dead time | |
+| F6 | Coherence of end-to-end experience (beginning → complete run, feels authored) | |
 
-> **Flow gating.** No F3/F6 score above 3 without ≥30 min of live play evidence. If a game
-> has no explicit ending, F6 is scored on completing its intended run loop on the run's own
-> terms (not penalized for lacking a credits screen).
+> Flow gating: No F3/F6 score above 3 without ≥30 min live play evidence.
 
-### V — Visual & Presentation · weight 12%
-| # | Sub‑criterion | SUBJ |
+### V — Visual & Presentation (Ambition Weighted Heavily) · weight 20%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
-| V0 | **Graphical originality, visual richness & complexity** — how original and how sophisticated/detailed the visuals are. Rewards a distinctive identity and real artistic/technical complexity (procedural gothic detail, layered lighting, rich surfaces); penalizes generic geometric shapes, plain colored rectangles, empty rooms, or visual sameness. Must be sustained across the whole game, not a single hero screen. | SUBJ |
-| V1 | Art direction & visual coherence (gothic dark identity, consistent palette) | SUBJ |
-| V2 | Readability of gameplay entities under combat (attacks, hazards, player, rewards) | |
-| V3 | Animation & juice quality (squash‑stretch, trails, afterimages, particles) | |
+| V0 | **Graphical originality, visual richness & complexity** — how original and sophisticated/detailed visuals are. Rewards distinctive identity and real technical/artistic complexity (layered lighting, fog, textured surfaces, particle systems, camera composition, cohesive palette, dressing). Penalizes generic geometric shapes, plain colored rectangles, empty rooms, simple box gradient colored enemies, visual sameness, flash-game look. Must be sustained across whole game, not single hero screen. Anchor: 0=no visuals/placeholder, 1=primitive shapes/flat colors OR simplistic box gradient enemies, 2=competent but generic (including competent gothic clone with no personal touch OR simple box with gradients), 3=coherent but derivative, recognizable theme minimal detail, 4=genuinely original detailed consistent strong artistic identity with visible craft across entire run, 5=near-commercial + authored point of view, pushes limits beyond template. | SUBJ |
+| V1 | Art direction & visual coherence (consistent palette, intentional direction) | SUBJ |
+| V2 | Readability of gameplay entities under combat/action (attacks, hazards, player, rewards obvious) | |
+| V3 | Animation & juice quality (squash-stretch, trails, afterimages, particles, feedback) | |
 | V4 | Lighting, atmosphere, effects, depth (fog, vignette, layered) — without clutter | SUBJ |
 | V5 | UI clarity & polish (menus, HUD, legibility, no broken buttons) | |
+| V6 | Rendering robustness & graceful fallback (WebGPU→WebGL→Canvas2D, no white screen, gameplay intact) | |
+| V7 | Visual consistency across environments (desktop/mobile/portrait/landscape/DPR1/DPR2, no clipped UI, identity coherent) | |
+| V8 | **Surprise & inversion** — one coherent original mechanic/room/narrative/visual twist not in brief that remains learnable and enhances sustained engagement. 0=no surprise / random noise, 1-2=gimmick harms flow, 3=modest twist works, 4=memorable twist changes approach, 5=would talk about after playing — original integral | SUBJ |
 
-> **V0 anchors (0–5).** 0 = no visuals/placeholder. 1–2 = basic primitive shapes, flat
-> colors, little to no visual identity. 3 = coherent but simple/derivative; recognizable
-> theme, minimal detail. 4 = genuinely original, detailed, and consistent; strong
-> artistic identity with visible craft. 5 = near‑commercial level: rich procedural detail,
-> confident composition, distinctive and beautiful across the entire run. V0 rewards
-> *originality and complexity*, not raw effect count — effects that hurt readability are
-> penalized under V2.
+> V0 explicitly penalizes simple box gradient colored enemies / flash-game approach. A deliberate minimalism that is expressive and highly polished can score 4-5 if intentional and coherent.
 
-### A — Atmosphere & Immersion · weight 10%
-| # | Sub‑criterion | SUBJ |
+### A — Atmosphere & World Invention · weight 12%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
 | A1 | Mood & emotional impact | SUBJ |
-| A2 | Audio & music quality (sounds fitting, music integrates with intensity) | |
+| A2 | Audio & music quality (sounds fitting, music integrates with intensity, or convincing visual-only fallback) | |
 | A3 | Environmental storytelling & sense of place | SUBJ |
 | A4 | Thematic consistency (mechanics, visuals, terms, lore cohere) | |
-| A5 | Ability to sustain immersion (no jolts/breaks that destroy the mood) | SUBJ |
+| A5 | Ability to sustain immersion (no jolts/breaks destroying mood) | SUBJ |
+| A6 | World invention & narrative voice (consistent voice beyond generic, original world you remember) | SUBJ |
 
-### X — Accessibility & Inclusion · weight 8%
-| # | Sub‑criterion | SUBJ |
+### X — Accessibility & Inclusion · weight 6%
+| # | Sub-criterion | SUBJ |
 |---|---------------|------|
 | X1 | Keyboard menu navigation & visible focus states | |
-| X2 | Reduced‑motion mode actually reduces shake/flash/particles | |
-| X3 | High contrast & non‑color‑only information encoding | |
-| X4 | Touch/desktop responsiveness & safe areas / text legibility at small sizes | |
+| X2 | Reduced-motion mode actually reduces shake/flash/particles | |
+| X3 | High contrast & non-color-only encoding | |
+| X4 | Touch/desktop responsiveness & safe areas / legibility at small sizes | |
 | X5 | Audio failure does not block gameplay; sound toggle present | |
+
+Weights: T16 M17 G17 F12 V20 A12 X6 = 100 (V heavily weighted to punish simple box gradient enemies, reward visual pushing limits).
 
 ## 2.3 Aggregation
 
 ```
-CATEGORY_c  = round( mean(sub_criteria_c) × 2 , 1 )            # 0–10
-OVERALL_raw = Σ_c  WEIGHT_c × CATEGORY_c                        # 0–100 (weights sum to 100)
+CATEGORY_c = round(mean(sub_criteria_c) × 2, 1)  # 0-10
+OVERALL_raw = Σ_c WEIGHT_c × CATEGORY_c  # 0-100
+HARD_PENALTY = (blocker×6.0)+(critical×4.0)
+HARD_PENALTY = min(30)
+OVERALL_adj = max(0, OVERALL_raw − HARD_PENALTY)
+Ceilings override OVERALL_adj (take min):
+CEIL-1 55 main-path crash/soft-lock
+CEIL-2 65 primary loop unreachable
+CEIL-3 60 core controls broken >30%
+CEIL-4 70 persistence fails on fresh browser
+Final OVERALL = min(OVERALL_adj, ceilings) rounded 0.1
 ```
 
-**Hard‑failure penalty.** Compute the penalty from the defect register (each defect counted
-once; see §2.5 for what counts):
+## 2.4 Pillars (for reporting)
 
 ```
-HARD_PENALTY = (blocker_count × 6.0) + (critical_count × 4.0)
-HARD_PENALTY = min(HARD_PENALTY, 30)                            # cap so it can't zero a score
-OVERALL_adj  = max(0, OVERALL_raw − HARD_PENALTY)
+TECHNICAL_QUALITY = round(0.50×T +0.30×(100−normalized_hard_failures)+0.20×M,1)×10? Simplified:
+TECHNICAL_RELIABILITY = 0.70×CATEGORY_T +0.30×(100−normalized_hard_failures)
+CREATIVE_PRESENTATION = 0.45×CATEGORY_V +0.40×CATEGORY_A +0.15×CATEGORY_X ×10
+GAMEPLAY = 0.50×M+0.50×G ×10
+FLOW = 0.60×F+0.20×A+0.20×G ×10
+CODE_QUALITY = T7 + M centralization + pooling evidence
+VISUAL_AMBITION = V0×10, plus V8
+HUMAN_JURY = G6 + F + V0 + A
+DEFECT_SEVERITY = max(0,100−HARD_PENALTY−minor×0.5−trivial×0.1)
+ORIGINALITY_BONUS = (V0+V8+A6+M7)/4 ×2 up to +3 tie-breaker, reported outside OVERALL, requires no CEIL and V8≥3 sustained evidence
 ```
 
-**Ceilings override** `OVERALL_adj` (take the minimum):
+Headline OVERALL is canonical comparison, but pillars answer "more technically reliable" vs "more creative" vs "visually pushing limits".
 
-| Ceiling | Value | Trigger |
-|---|---|---|
-| CEIL‑1 | 55 | Reproducible main‑path crash or soft‑lock (progress blocked, no recovery but full restart). |
-| CEIL‑2 | 65 | Main completion loop cannot be completed (victory/ending or intended run loop unreachable). |
-| CEIL‑3 | 60 | Core controls unresponsive/broken on >30% of deliberate attempts (primary input path). |
-| CEIL‑4 | 70 | Persistence fails on a fresh normal browser (data lost on reload, no error condition). |
+## 2.5 Defect severity & no-double-counting
 
-Final: `OVERALL = min(OVERALL_adj, applicable ceilings)`, then `round(OVERALL,1)`.
+Blocker = main-path soft-lock, unreachable finish, control unusable, loop cannot proceed — counts toward HARD_PENALTY and ceilings
+Critical = crash, save loss, major mechanic broken, accessibility path broken — counts toward HARD_PENALTY
+Major = secondary feature broken, needs workaround, significant immersion break — category scores only
+Minor = cosmetic glitch, occasional jank, minor readability — category +0.5 DEFECT_SEVERITY
+Trivial = nitpick — 0.1 DEFECT_SEVERITY
 
-## 2.4 Pillar scores (for reporting, not the headline)
+No-double-count: every defect logged once, counted once. Category scores already reflect experienced quality. HARD_PENALTY only for Blocker/Critical.
 
-These separate creative quality from reliability, per the arena requirement.
+## 2.6 Transparency
 
-```
-TECHNICAL_RELIABILITY   = round( 0.70×CATEGORY_T + 0.30×(100−normalized_hard_failures) , 1 )
-                          # normalized_hard_failures = min(100, HARD_PENALTY/30×100) as a 0–100 defect index
-CREATIVE_PRESENTATION   = round( 0.45×CATEGORY_V + 0.40×CATEGORY_A + 0.15×CATEGORY_X , 1 ) ×10
-GAMEPLAY_SCORE          = round( 0.50×CATEGORY_M + 0.50×CATEGORY_G , 1 ) ×10
-FLOW_ENGAGEMENT_SCORE   = round( 0.60×CATEGORY_F + 0.20×CATEGORY_A + 0.20×CATEGORY_G , 1 ) ×10
-DEFECT_SEVERITY_SCORE   = round( max(0, 100 − HARD_PENALTY − (minor_count×0.5) − (trivial_count×0.1) ) , 1 )
-```
+Weights fixed public, no hidden bonuses, no credit unexperienced, report PARTIAL-COVERAGE when sub-criterion not experienced, report confidence, distinguish hard failures objective vs subjective SUBJ.
 
-> The headline `OVERALL` is the canonical comparison number. Pillars are reported to answer
-> "which is more technically reliable" vs "which is the better overall game."
+## 2.7 Visual ambition anchoring (explicit anti-flash-game)
 
-## 2.5 Defect severity & no‑double‑counting
-
-| Severity | Examples | Hard‑failure weight |
-|---|---|---|
-| **Blocker** | main‑path soft‑lock; unreachable finish; control unusable; core loop cannot proceed | counts toward HARD_PENALTY and ceilings |
-| **Critical** | crash, save/HS loss, major mechanic broken, accessibility path broken | counts toward HARD_PENALTY |
-| **Major** | secondary feature broken, needs workaround, significant immersion break | penalty via category scores only |
-| **Minor** | cosmetic glitch, occasional jank, minor readability | penalty via category scores + 0.5 in DEFECT_SEVERITY |
-| **Trivial** | nitpick, negligible | 0.1 in DEFECT_SEVERITY only |
-
-**No‑double‑count rule.** Every defect is logged exactly once in the register and counted
-once. Category scores already reflect the experienced quality (so a Major visual bug lowers
-V, a broken mechanic lowers M/G). The `HARD_PENALTY` is applied **only** for Blocker and
-Critical defects — the failures that are objective brokenness rather than taste — so a
-single defect is never subtracted twice from the same score. Minor/Trivial defects affect
-the `DEFECT_SEVERITY_SCORE` and their category, not `OVERALL`.
-
-## 2.6 Transparency requirements
-
-- Weights are fixed and public (`T20 M18 G18 F14 V12 A10 X8`).
-- No hidden bonuses; no credit for unexperienced features.
-- Report `PARTIAL‑COVERAGE` categories when any sub‑criterion was not experienced.
-- Report confidence level per game and per pairwise verdict (see `05` and `07`).
-- Distinguish hard failures (objective) from subjective weaknesses (flagged `SUBJ`).
+- To score V0 ≥3, game must show intentional art identity sustained across entire run, not just hero screen, with at least two of: layered lighting, procedural texture, fog/vignette, particle system, camera composition, cohesive palette, dressing.
+- To score V0 ≥4, must be clearly beyond simple box gradient colored enemies, empty rooms, generic UI — must have point of view and visible craft pushing limits.
+- Simple box gradient enemies with no dressing: V0 max 1 regardless of functionality. This is intentional to push limits rather than simple shitty flash game approaches.
+- Deliberate minimalism (e.g., precise monochrome with exquisite timing, or single mechanic with perfect feedback) can score 4-5 if expressive, highly polished, coherent — evidence: intentional constraint documented in README director statement, and polish observable across entire run.

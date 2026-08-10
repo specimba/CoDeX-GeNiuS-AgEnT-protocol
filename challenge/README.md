@@ -1,116 +1,83 @@
-# Challenge Orchestration — Running the Two Agent Builds
+# Challenge Orchestration — One-Shot Game Development Agent Creation
 
-This is the **production side** of the arena: how to launch the two autonomous
-game‑development agents so they produce fair, comparable, high‑quality builds — and then
-hand those builds to the external evaluator (`benchmark/`).
+Production side: how to launch two autonomous game-dev agents so they produce fair, comparable, high-quality original games — and hand builds to external human jury.
 
-The single most important file here is
-[`BATTLE_PROMPT.md`](BATTLE_PROMPT.md): the one prompt each agent receives.
-**Both agents receive the identical brief.** That equality is what makes the comparison
-fair.
+Single most important file: `BATTLE_PROMPT.md`: one prompt each agent receives. Both receive identical brief (same bytes). Equality makes comparison fair. Brief is open-ended, unlimited creativity: agent chooses format (2D/3D/browser/simulation/narrative/strategy/experimental) that wins human jury.
 
 ---
 
-## 1. Fairness contract (non‑negotiable)
+## 1. Fairness contract (non-negotiable)
 
-1. **Identical brief.** Agent 1 and Agent 2 get byte‑for‑byte the same
-   `BATTLE_PROMPT.md` and the same `GAME_SPEC.md`. Any divergence (different
-   wording, extra hints, different time budget) biases the comparison.
-2. **Isolated environments.** Each agent works in its own clean workspace with no access
-   to the other's build, the other's logs, or the benchmark evaluation files.
-3. **No rubric in reach.** Neither agent ever sees the evaluation rubric, weights,
-   ceilings, defect taxonomy, or the evaluator prompt. They get only the spec + brief.
-   This is the containment rule: the score must never be inside the build.
-4. **Equal time budget.** Both agents get the same wall‑clock budget (default 1 working
-   session / 60 min of agent build time, configurable). Do not give one agent more.
-5. **Freeze.** Once an agent reports done, the build is frozen and hashed. No edits during
-   evaluation. No "one more fix."
-6. **Blind labeling downstream.** The evaluator sees only `Game A` / `Game B`; never which
-   agent built which. The assignment A/B ↔ agent 1/2 is random and secret until after
-   scoring.
+1. Identical brief: Agent1 and Agent2 get byte-for-byte same `BATTLE_PROMPT.md` + `GAME_SPEC.md`. Any divergence biases comparison.
+2. Isolated environments: each agent works in own clean workspace with no access to other's build, logs, or benchmark evaluation files.
+3. No rubric in reach: neither agent ever sees evaluator rubric, weights, ceilings, defect taxonomy, evaluator prompt. They get only brief + spec. Score must never be inside build.
+4. Equal time budget in a given battle: default 1 working session / 60 min of agent build time, configurable, but same for both. For unlimited creativity battles, budget may be extended to 90-120 min or more — but equal.
+5. Freeze: once agent reports done, build frozen and hashed. No edits during evaluation.
+6. Blind labeling downstream: evaluator sees only Game A / Game B; never which agent built which. Assignment A/B random secret until after scoring.
 
 ## 2. Containment audit (before evaluation)
 
-Before any evaluation, scan each frozen build for benchmark leakage:
+Scan each frozen build for benchmark leakage:
+- Strings from rubric (weight, ceiling, hard_penalty, category codes T1..X5, CEIL-, OVERALL, Bradley, Elo) — must NOT appear
+- Any telemetry, analytics, network call, hidden reporting, self-rating UI
+- Any in-game quality score / benchmark score / eval score
 
-- Strings from the rubric (`weight`, `ceiling`, `hard_penalty`, the category codes
-  `T1..X5`, `CEIL‑`, `OVERALL`, `Bradley`, `Elo`) — these must NOT appear.
-- Any telemetry, analytics, network call, hidden reporting, or self‑rating UI.
-- Any in‑game "quality score / benchmark score / eval score."
+Any hit logged as Critical CONTAINMENT defect and that channel barred (see benchmark/04-defect-taxonomy.md).
 
-Any hit is logged as a **Critical CONTAINMENT defect** and that game's in‑game score
-channel is barred (see `benchmark/04-defect-taxonomy.md`). Audit tooling is a simple
-grep over the build.
-
-## 3. End‑to‑end runbook
+## 3. End-to-end runbook
 
 ```
 1. Provision two isolated workspaces (fresh, no shared state).
 2. Drop BATTLE_PROMPT.md + GAME_SPEC.md into each workspace.
-3. Launch agent 1  (time budget T, e.g. 60 min). Record start/stop timestamps + build log.
-4. Launch agent 2  (time budget T). Record timestamps + build log.
+3. Launch agent 1 (time budget T, e.g. 60-120 min). Record start/stop timestamps + build log.
+4. Launch agent 2 (time budget T). Record timestamps + build log.
 5. Collect each build (runnable artifact + minimal README). Hash them.
 6. Containment audit both builds (grep for rubric/telemetry strings).
-7. Build a static host for each (no server required by the game; serve folder if needed).
+7. Build static host for each (no server required by the game; serve folder if needed).
 8. Assign blind labels Game A / Game B (random, secret).
-9. Launch evaluator(s) per benchmark/01-one-shot-arena-prompt.md + 03 test plan.
-10. Aggregate per benchmark/ops/aggregate_scores.py; select per benchmark/08.
+9. Automated checks: launch, no crash loop, responds to input, pause/restart/persistence safe.
+10. Human jury per benchmark/01-one-shot-arena-prompt.md + 03 test plan.
+11. Aggregate per benchmark/ops/aggregate_scores.py; select per benchmark/08.
 ```
 
 ## 4. Guardrails to mention to neither agent (kept internal)
 
-- Agents will tend to **front‑load polish** into the title/start/room‑1. The evaluator is
-  explicitly instructed to weight late‑session and repeated‑run quality, so this does not
-  inflate their score. Do not tell them this.
-- Agents may try to **tick spec boxes** shallowly. The rubric scores experience, not
-  checklist compliance; unusable features get zero credit. Do not tell them the rubric.
-- The brief's *transparency* section tells the agent the truth at a high level
-  ("independent playtesters who never read your code") — enough to steer them toward
-  robust, feel‑good builds without handing them the scoring formula.
+- Agents will tend to front-load polish into title/start/room1 and produce simple box gradient enemies as placeholder. Evaluator explicitly instructed to weight late-session, sustained visual ambition, code quality, and to penalize simple box gradient approach as low V0.
+- Agents may try to tick spec boxes shallowly. Rubric scores experience, not checklist compliance; unusable features get zero credit.
+- Brief's transparency section tells agent truth at high level ("human judges who never read your code, review finished game for authorship, memorability") — enough to steer toward reliable, authored, visually ambitious builds without handing scoring formula.
 
-## 5. Time‑budget tuning
+## 5. Time-budget tuning (unlimited creativity focus)
 
-- **Default:** 60 minutes per agent (single one‑shot session).
-- **Longer budget** (better builds, more cost): 90–120 min.
-- Keep both agents at the same budget within a given comparison. If you change the budget,
-  change it for both, and record it in the runbook so confidence reporting is honest.
+- Default: 60 min per agent (single one-shot session)
+- Longer budget (better builds, more cost, more long-session signal): 90-120 min or unlimited within fair compute
+- Keep both agents at same budget within a given comparison. If you change budget, change it for both, record in runbook.
 
-## 6. What we hand to the evaluator (and what we withhold)
+## 6. What we hand to evaluator and what we withhold
 
-Hand over: the frozen build, a way to run it, blind label, the shared spec (for reference),
-and the evidence schema. Withhold: agent identity, build logs, the brief, and any claim
-about how the game was made.
+Hand over: frozen build, way to run it, blind label, shared spec (for reference), evidence schema. Withhold: agent identity, build logs, brief, any claim about how game was made.
 
 ## 7. Key files
 
-- **`BATTLE_PROMPT.md`** — the single challenge prompt (identical for both agents).
-  Fully self‑contained: it embeds the entire game spec. Includes the **Graphical Ambition**
-  callout and the **no‑environment‑sniffing** anti‑behavior.
-- **`LAUNCH_PROTOCOL.md`** — how to launch fairly when repo access is heterogeneous, how to
-  keep the evaluation out of the agents' reach, and the "assume the rubric is public" no‑
-  exploit guarantee.
-- **`DEVELOPER_SELF_QA.md`** — internal build‑verification checklist (incl. environment
-  consistency and graphical‑originality sections).
-- **`launch_challenge.py`** — harness helper: `setup` (provision 2 isolated workspaces with
-  the identical brief + hash), `single-prompt` (emit a paste‑ready self‑contained prompt
-  for no‑repo agents), `finalize` (record end time + build hashes + elapsed), `audit`
-  (containment scan for benchmark tokens), `status` (show manifest).
+- `BATTLE_PROMPT.md` — single challenge prompt (identical for both). Fully self-contained, open-ended, unlimited creativity: agent chooses 2D/3D/experimental format that wins human jury. Includes graphical ambition heavily weighted and no environment-sniffing anti-behavior.
+- `LAUNCH_PROTOCOL.md` — how to launch fairly when repo access heterogeneous, keep evaluation out of agents' reach, assume rubric public no-exploit guarantee
+- `DEVELOPER_SELF_QA.md` — internal build-verification checklist (launch, controls, feel, loop, rewards, persistence, states, robustness, accessibility, performance, audio, environment consistency, visual ambition)
+- `launch_challenge.py` — harness helper: setup (provision 2 isolated workspaces with identical brief + hash), single-prompt (emit paste-ready self-contained prompt for no-repo agents), finalize (record end time + build hashes + elapsed), audit (containment scan), status (show manifest)
 
 ## 8. Quick start
 
 ```bash
-# 1. Create two isolated workspaces with the identical brief (hashed into the manifest)
+# 1. Create two isolated workspaces with identical brief (hashed into manifest)
 python launch_challenge.py setup --out runs/round1 --agents 2 --budget-min 60
 
 # 2a. repo-access agent: build inside runs/round1/agent1 (and agent2)
 # 2b. no-repo agent:       python launch_challenge.py single-prompt --out runs/round1
-#                          then send the entire runs/round1/SINGLE_PROMPT.md
+#                          then send entire runs/round1/SINGLE_PROMPT.md
 
 # 3. when both report done
 python launch_challenge.py finalize --out runs/round1 --agents 2
 
-# 4. containment-audit the delivered game builds (not the workspace scaffolding)
+# 4. containment-audit delivered game builds (not workspace scaffolding)
 python launch_challenge.py audit runs/round1/agent1/game runs/round1/agent2/game
 
-# 5. copy only the frozen game builds to the evaluation side; blind-label A/B; evaluate.
+# 5. copy only frozen game builds to evaluation side; blind-label A/B; evaluate via human jury
 ```

@@ -1,221 +1,139 @@
-# Ashen Descent — Game Specification
+# Game Creation Brief — One-Shot Game Development Agent
 
-This is the **shared, frozen specification** handed to both game‑development agents.
-Both builds are evaluated against the *player experience* this spec describes — not
-against this text as a checklist. It defines the intended scope, the objective list used
-by the test plan, and the terms/mechanics expected to exist.
+This is the **shared, open-ended brief** handed to both game-development agents in arena.ai battles.
+Both agents receive identical bytes. They are treated as **developers, not players**.
 
-> **Note for evaluators.** This spec describes what the game *should* be. During play you
-> judge what the game *actually is*. A build that implements the spec's letter but feels
-> dead, or one that deviates while feeling great, is judged on experience. See the
-> "experience over compliance" rule in the rubric.
+There is no pre-existing game to play for score. The agent must **create** a complete, original, compelling game.
+The benchmark evaluates the game's quality and the agent's development process — code quality, creative originality,
+long-session execution, design judgment, visual ambition, and human-perceived quality.
+
+> **For evaluators / human jury:** Judge what the agent *actually created*. Do not penalize dimensionality, genre,
+> or style merely for being different. A simple but deliberate, expressive, highly polished game beats a technically
+> complex but incoherent one. Look for authorship, intentionality, and sustained quality over a long session.
 
 ---
 
-## 1. Product goal
+## 1. Product Goal
 
-A complete, immediately‑fun browser game: fast action controls, tactical turn‑based
-decision beats, short replayable roguelike runs, strong audiovisual feedback, clear
-risk/reward progression, excellent desktop and mobile usability, portfolio‑grade
-polish. Fully self‑contained — no external services, authentication, or backend.
+A complete, immediately understandable, playable game that feels authored and intentional — not necessarily commercially large,
+but clearly more sophisticated than a basic demonstration or template.
 
-## 2. Core concept
+- Fast to understand, strong first impression
+- Playable loop with clear feedback
+- Original idea or memorable twist on familiar idea
+- Coherent visual and interactive identity
+- Portfolio-grade polish in at least one dimension (visual, mechanical, narrative, technical)
+- Fully self-contained — no external services, auth, backend
 
-Control a lone dungeon delver descending through procedurally assembled rooms. Combat
-alternates real‑time movement with tactical *resolution beats*:
+## 2. Core Freedoms (Unlimited)
 
-- Move, dodge, attack, and interact in real time.
-- Attacking, dodging, using an ability, or entering dangerous enemy range briefly enters
-  a tactical resolution phase.
-- During this phase, enemy **intent indicators** become visible and the player makes a
-  deliberate decision.
-- Actions resolve quickly enough to preserve momentum (action combat with readable
-  tactical pauses — **not** a slow turn‑based RPG).
-- First encounter begins almost immediately after starting a run; core loop learnable in
-  under one minute.
+**Do NOT restrict:**
 
-## 3. Core loop
+- Dimensionality or camera (2D, 2.5D, 3D, first-person, top-down, side, isometric, text, etc.)
+- Genre (action, puzzle, strategy, simulation, narrative, experimental, etc.)
+- Rendering style (Canvas, WebGL, WebGPU, Three.js, CSS, SVG, ASCII, etc.)
+- Engine/framework (vanilla JS fine, or light framework bundled as static build)
+- Input method (keyboard, mouse, touch, gamepad, etc.)
+- Narrative structure (linear, branching, emergent, environmental, none)
+- Level structure (hand-authored, procedural, single-room, open world slice)
+- Visual realism or abstraction
+- Degree of experimentation
 
-1. Start a run from the title screen.
-2. Enter a compact dungeon room.
-3. Move with keyboard or touch.
-4. Fight enemies (basic attack, dodges, ≥1 special ability).
-5. Read telegraphs and tactical intent markers.
-6. Collect coins, relics, healing items, temporary buffs.
-7. Choose between branching room paths.
-8. Encounter combat / elite / treasure / healing / event rooms.
-9. Defeat a miniboss or progress through multiple floors.
-10. Die or complete the run.
-11. Compute score; record in local high‑score table.
-12. Instant restart without refreshing the page.
+Agent chooses approach appropriate to brief and environment. Constraints focus on fairness (time, compute, permitted assets,
+deliverables) not on forcing same kind of game.
 
-Speed **and** careful play both rewarded; "wait and attack" must never be optimal.
+## 3. What Agent Must Decide (Authorship)
 
-## 4. Player controls
+- Game concept and creative direction — what is the emotional core?
+- Core loop and mechanics — what does player do, why is it interesting second, tenth time?
+- Visual style and presentation — palette, lighting, composition, animation, particle, dressing
+- Audio and feedback — attack/hit/reward sounds, music, visual-only fallback if needed
+- World/level/encounter design — pacing, difficulty curve, variety, surprise
+- Technical implementation — state management, input, loop, collision, generation, audio, particles, persistence
+- UI and onboarding — start, how-to-play, pause, game-over/victory, high-score or progress, legibility
+- Performance, stability, polish — delta-time, pooling, capping, DPR handling, resize, visibility pause
 
-**Desktop:** `WASD`/arrows move · `Space` dodge/dash · `J`/LMB basic attack ·
-`K`/RMB special ability · `E` interact/open/reward select · `P`/`Esc` pause · number
-keys for tactical options if useful. Centralized configurable input; browser defaults
-prevented where appropriate.
+## 4. Minimal Kernel (for comparability, not creativity limit)
 
-**Mobile/touch:** left virtual joystick or drag pad; large right‑side attack/dodge/
-ability buttons; optional tap‑to‑interact; thumb‑sized buttons; visual press states and
-haptic feedback where supported; no accidental scroll/zoom/selection/navigation.
+Every submission must satisfy Kernel to be comparable on reliability, regardless of creative direction:
 
-**Input quality:** input buffering for attacks/dodges; short dodge grace window;
-frame‑rate‑independent controls; clear feedback when an action is unavailable;
-focus‑safe when the tab loses focus; auto‑pause on mobile visibility changes.
+- **Launches reliably:** fresh load starts, no blank screen, no infinite spinner, no console error loop
+- **Playable immediately:** new player can understand objective, move/interact, achieve something, and restart without manual
+- **Input works:** primary actions respond, no page scroll on game keys, touch does not trigger scroll/zoom/navigation, buttons show press states
+- **Core loop complete:** start → gameplay → reward/progression → end condition (win or lose) → restart without refresh
+- **States isolated:** pause fully freezes simulation/timers/particles/logic; resume continues; no input leaks into menus
+- **Persistence (if applicable):** if game has progress/high-score, it survives reload, sorted, handles corrupt storage safely, reset behind confirmation — or explicitly has no persistence by design (document it)
+- **Robustness:** instant restart fully resets state; resize/orientation mid-game don't break layout or hide info; tab blur/focus safe; mashing inputs doesn't corrupt; audio failure doesn't block gameplay
+- **Self-contained:** runs offline from static folder or single HTML via trivial `python -m http.server`; no backend, no network calls, no auth, no build step player must run; only original or appropriately-licensed assets with local fallback
+- **No forbidden behaviors:** no backend, telemetry, analytics, hidden reporting, embedded meta-quality score, environment sniffing (behaves identically desktop/mobile/portrait/landscape/headless), no placeholder screens/dead ends/broken buttons, no hidden autoplay that fakes quality
 
-## 5. Combat
+If Kernel fails, hard ceilings apply (see rubric). Shell beyond Kernel is unlimited creativity.
 
-- **Basic attack:** short wind‑up, readable hitbox, recovery, directional targeting,
-  hit‑stop on impact, proportional screen shake, damage numbers, distinct hit/miss/crit.
-- **Dodge:** brief i‑frames, directional, cooldown/stamina cost, afterimage/motion trail,
-  satisfying sound/particles, fair timing window.
-- **Special ability** (≥1): charged arc, short‑range shockwave, throwable spectral blade,
-  time‑slow pulse, or defensive parry — limited by cooldown/energy/resource.
-- **Tactical resolution:** intent icons/colors/projected attack zones; world briefly
-  slowed/paused; choose attack/dodge/reposition/defend/ability; predictable resolution;
-  deterministic, learnable enemy behavior; no excessive menus or long animations.
+## 5. Scope Guidance (not restriction)
 
-## 6. Enemies
+Prioritize a **polished vertical slice** with excellent feel and reliable functionality over oversized feature list.
 
-1. **Gravebound** — basic melee; slow approach; clear wind‑up attack.
-2. **Cinder Wisp** — ranged; delayed projectiles; encourages movement/prioritization.
-3. **Hook Hound** — fast; charges after a visible telegraph; punishes standing still.
-4. **Mourning Knight** — armored elite; blocks frontal attacks; requires dodging,
-   repositioning, or punishing a committed strike.
-5. **Floor Boss** — multi‑phase; ≥3 recognizable patterns; strong telegraphs; clear
-   vulnerability window; dramatic entrance and defeat.
+Suggested build order to survive long session:
 
-Each needs idle/move/attack/hit/defeat states, health/damage values, collision and attack
-ranges, intent indicators, audio+visual feedback, and behavior scaling with depth.
+1. **Core loop first:** movement/interaction, one challenge, health/fail, restart, title — get 10-second loop feeling right
+2. **Verify core** against self-QA before adding breadth
+3. **Layer systems:** second mechanic, progression, score, persistence
+4. **World structure:** levels/rooms/encounters, branching, variety, boss or climax
+5. **Polish & visual identity:** particles, shake, hit-stop, transitions, audio, camera, lighting/fog/texture/dressing/palette — push beyond simple box gradient enemies
+6. **Robustness & accessibility:** pause freeze, persistence + corrupt storage, reduced-motion, resize, mobile, performance, seeds if procedural
+7. **Final self-QA pass:** fix broken, cut breadth never reliability — tight complete beats broad broken
 
-## 7. Dungeon generation
+Save time for iteration: prototype quickly, test via actual interaction, identify weaknesses, debug, rethink, improve — reward is for recognizing weak early approach and revising, not merely generating large code.
 
-Deterministic seeded procedural generation. Each run contains a start room, several
-combat rooms, ≥1 reward/treasure room, optional healing/event rooms, a miniboss/boss
-room, and branching path choices. Guarantees reachable layouts, no impossible enemy
-placements, clear exits, reasonable combat space, predictable progression, balanced
-risk/reward. Display the seed optionally on the game‑over screen.
+## 6. Visual and Interactive Ambition (weighted heavily)
 
-## 8. Rewards & progression
+Evaluators and human jury reward **originality and visual richness/complexity**, not bare effect counts and not primitive shapes.
+A build of flat-colored rectangles, empty rooms, generic UI — even if functional — scores low on presentation.
 
-Run‑based: coins (in‑run), temporary relics/blessings, weapon modifiers, passive stat
-upgrades, healing opportunities, risk/reward choices. Example relics: +damage after a
-perfect dodge; heal after elite kill; bonus score for combos; attack‑speed below half
-health; secondary projectile; coins → temporary armor. Clear descriptions, visible
-impact, no heavy inventory management.
+Invest real effort in distinctive, original art identity and sophisticated procedural detail:
+- Layered light and fog, textured surfaces, particle systems, subtle camera composition, cohesive palettes, animated dressing
+- Squash-and-stretch, trails, afterimages, sparks/dust, collection arcs, floating feedback, celebration, entrance/defeat, smooth transitions, directional look-ahead
+- Configurable + reduced-motion mode
 
-## 9. Score system
+Push toward near-commercial polish across entire run — not just hero title screen. Keep readability high: ambition must never hurt ability to read actions/hazards/player at a glance.
 
-Rewards: enemy defeats, elite/boss kills, floor progression, combo streaks, fast room
-clears, perfect dodges, no‑damage encounters, coins, relic rarity, remaining health.
-Multipliers for skilled play; understandable. Displays: current score, combo/momentum
-meter, best score, run duration, floor number, optional style/rank evaluation.
+**Simple ≠ bad:** Visually simple game not penalized merely for being simple if simplicity is deliberate, expressive, highly polished. Technical complexity should not receive automatic credit if it doesn't improve player experience.
 
-## 10. High‑score table
+## 7. Audio (if applicable)
 
-Local browser storage, top 5–10 runs (score, name/default, floor reached, date), sorted
-descending; handles corrupt/unavailable storage; reset behind confirmation; visible from
-start and game‑over screens. No server.
+Menu/game/reward/boss sounds, ambient loop, intensity changes, stingers — or convincing visual-only feedback with modular audio integration.
+Master toggle; safe fallback if autoplay blocked; user-initiated activation from start screen. Audio failure must never block gameplay.
 
-## 11. Game states
+## 8. Performance
 
-Boot/loading · start screen · how‑to‑play overlay · active gameplay · tactical
-resolution · pause · reward selection · floor transition · game over · victory ·
-high‑score display. Input isolated per state (no gameplay input leaking into menus).
-Pause must fully freeze simulation, timers, particles, enemy behavior, and logic‑affecting
-animations.
+Target 60 FPS desktop + mobile. Delta-time, pool particles/floating text/projectiles/transients, cap counts, avoid layout thrash, minimize re-renders, Canvas or suitable layer for gameplay, separate UI from high-frequency rendering, handle DPR, reduce resolution on low-power devices, pause rendering/sim when hidden, clean resize/orientation, lightweight debug indicator for development.
 
-- **Start screen:** title, subtitle, Start Run, How to Play, High Scores, audio toggle,
-  cohesive visual theme.
-- **Pause:** Resume, Restart Run, Controls summary, audio toggle, Return to Title.
-- **Game over:** cause of defeat, final score, floor reached, enemies defeated, run
-  duration, best‑score comparison, Instant Restart, Return to Title.
+## 9. Architecture
 
-## 12. Visual direction
+Clear separation: game state, input, simulation/update loop, rendering, collision/AI if needed, generation, audio, particles, UI screens, persistence, config/balance. Centralize tunables (speed, cooldowns, durations, health/damage, reward rates, multipliers). No scattered magic numbers.
 
-Dark painterly gothic dungeon atmosphere; warm ember‑orange highlights against deep
-charcoal/violet/desaturated blue; high contrast between entities and background;
-stylized readable silhouettes; subtle paper/stone/smoke/parchment texture; strong
-lighting, fog, vignette, layered depth; no combat clutter. Readability over decoration —
-attacks, hazards, player position, actions, rewards obvious at a glance. Original
-CSS/Canvas/SVG/procedural visuals (no copied game assets).
+## 10. Responsive Layout
 
-## 13. Animation & juice
+Desktop widescreen, laptop, tablet, mobile portrait and landscape. Preserve aspect ratio without hiding important information; scale playfield; controls within thumb reach; avoid safe areas/notches; support mouse+touch; visible focus/pressed states; legible small typography.
 
-Screen shake, hit‑stop (a few frames), damage flash/tint, enemy squash‑and‑stretch,
-weapon trails, dash afterimages, sparks/dust, coin bursts and collection arcs, floating
-damage numbers, combo popups, room‑clear celebration, reward reveal, boss entrance/defeat,
-smooth room/floor transitions, camera easing and directional look‑ahead. Configurable +
-**reduced‑motion mode** disabling/reducing shake, flashes, excess particles.
+## 11. Accessibility
 
-## 14. Audio
+High-contrast UI; keyboard menu navigation; visible focus states; reduced-motion; color not only signal; text labels for icons; adjustable text size if feasible; no essential info conveyed solely through animation.
 
-Menu confirmations, attack/hit/dodge/enemy/reward/boss sounds, ambient dungeon loop,
-combat intensity changes, victory/defeat stingers. Master toggle; separate music/effects
-if practical; safe fallback if audio can't autoplay; user‑initiated audio activation from
-start screen. If assets unavailable, convincing visual‑only feedback and modular audio
-integration.
+## 12. Balancing
 
-## 15. Performance
+First 10 seconds: immediate movement/interaction, clear challenge, satisfying feedback, visible reaction, reward or transition shortly after. First run understandable without manual. Difficulty rises gradually via varied combinations, more complex patterns, narrower timing, modifiers, hazards, tougher decisions. No unfair instant kills, unreadable attacks, excessive crowding, or grind.
 
-Target 60 FPS desktop + mobile. Delta‑time simulation; pool particles/floating text/
-projectiles/transients; cap particle counts; avoid layout thrash; minimize re‑renders;
-Canvas/suitable layer for gameplay; separate UI from high‑frequency rendering; handle DPR;
-reduce resolution on low‑power devices; pause rendering/sim when hidden; clean resize/
-orientation; lightweight debug/performance indicator for development.
+## 13. Deliverables
 
-## 16. Architecture
+- Complete runnable game (static build) in workspace root
+- Short README.md (run instructions, controls, what was intentionally cut, how to view seed/debug if procedural, engine/framework used)
+- One-paragraph summary: build's strongest feature and current biggest risk + director statement of creative intent
 
-Clear separation: game state, input, simulation/update loop, rendering, collision, enemy
-AI, procedural generation, audio, particles, UI screens, persistence, configuration/
-balance. Centralize tunables (player speed, attack cooldown, dodge duration, i‑frame
-duration, enemy health/damage, room count, reward rates, score multipliers). No scattered
-magic numbers.
+## 14. Definition of Done
 
-## 17. Responsive layout
+Feels like cohesive authored game, not stack of mechanics or template. New player can load, understand objective, interact, achieve something, and restart after failure without confusion. Runs offline, self-contained, desktop+mobile, honest (everything claimed exists, works, reachable). Prioritize polished vertical slice with excellent feel and reliable functionality over oversized feature list.
 
-Desktop widescreen, laptop, tablet, mobile portrait and landscape. Preserve aspect ratio
-without hiding information; scale playfield; controls in thumb reach; avoid browser safe
-areas/notches; support mouse+touch; visible focus/pressed states; legible small typography.
+## 15. Testing Checklist (source for automated checks + jury verification)
 
-## 18. Accessibility
-
-High‑contrast UI; keyboard menu navigation; visible focus states; reduced‑motion;
-color not the only signal; text labels for icons; adjustable text size if feasible; no
-essential info conveyed solely through animation.
-
-## 19. Balancing goals
-
-First 10 seconds: immediate movement, a clear enemy, a satisfying attack, visible hit
-reaction, a meaningful dodge, a reward or room transition shortly after. First run
-understandable without a manual. Difficulty rises gradually via varied combinations,
-more complex patterns, narrower timing, elite modifiers, hazards, tougher reward
-decisions. No unfair instant kills, unreadable attacks, excessive crowding, or grind.
-
-## 20. Technical deliverables
-
-Complete runnable game; clear project structure; start/pause/game‑over/victory/restart
-flows; responsive desktop+touch controls; local high‑score persistence; procedural
-dungeon progression; ≥4 standard enemy types + 1 boss; ≥1 special ability and several
-reward effects; particle effects, screen shake, hit‑stop, transitions, feedback systems;
-responsive UI and accessibility options; no broken buttons, dead ends, placeholder
-screens, or missing core interactions; no backend dependency.
-
-## 21. Testing checklist (test‑plan source)
-
-Fresh‑load start · first attack works immediately · keyboard without page scroll ·
-touch on narrow screens · pause fully freezes · restart resets state · game‑over reachable
-with accurate stats · victory reachable · high scores persist after reload · corrupt
-storage safe · resize/orientation safe · no permanently stuck entities · fair/readable
-collision & attack ranges · smooth with many enemies/particles · reduced‑motion works ·
-audio failure doesn't block gameplay.
-
-## 22. Definition of done
-
-Feels like a cohesive game, not a stack of mechanics. A new player can load, understand
-the objective, move, attack, dodge, defeat an enemy, collect a reward, and restart after
-defeat without confusion. Prioritize a polished vertical slice with excellent feel and
-reliable functionality over an oversized feature list.
+Fresh-load start · first interact works immediately · keyboard without page scroll · touch on narrow screens · pause fully freezes · restart resets state · game-over/victory reachable with accurate stats (if applicable) · high scores/progress persist after reload (if applicable) · corrupt storage safe · resize/orientation safe · no permanently stuck entities · fair/readable collision/interaction ranges · smooth with many entities/particles · reduced-motion works · audio failure doesn't block · launches reliably across desktop/mobile/portrait/landscape · no telemetry/embedded quality score · no environment sniffing
