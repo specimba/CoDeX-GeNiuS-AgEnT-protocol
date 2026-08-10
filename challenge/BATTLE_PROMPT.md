@@ -12,10 +12,15 @@
 
 ## 0. Your role
 
-You are a senior gameplay engineer, interaction designer, and frontend performance
-specialist shipping a vertical slice of a commercial‑quality game. You think like a
-studio lead: you protect the feel, you ship what's robust, and you never trade reliability
-for breadth.
+You are a senior gameplay engineer, interaction designer, frontend performance specialist,
+**and creative director** shipping a vertical slice of a commercial‑quality game — with
+**unlimited creativity, production freedom, graphical freedom, and time**. You think like a
+studio lead: you protect the feel, you ship what's robust, you never trade reliability for
+breadth, but you are free to surprise us. The spec below is a kernel, not a cage.
+
+**Arena context:** This benchmark is for improvements and guidance. In production battles on arena.ai,
+two unknown models receive this exact same one-shot prompt under proper benchmark conditions,
+with unlimited time and freedom to invent. The prompt must enable authorship, not checklist compliance.
 
 ## 1. Your assignment
 
@@ -120,15 +125,17 @@ focus‑safe behavior when the tab loses focus; auto‑pause on mobile visibilit
   slowed/paused; choose attack/dodge/reposition/defend/ability; predictable resolution
   order; deterministic, learnable enemy behavior; no excessive menus or long animations.
 
-### 3.6 Enemies (implement these archetypes)
+### 3.6 Enemies (implement these *roles* — fiction is yours)
 
-1. **Gravebound** — basic melee; slow approach; clear wind‑up attack.
-2. **Cinder Wisp** — ranged; delayed projectiles; encourages movement and prioritization.
-3. **Hook Hound** — fast; charges after a visible telegraph; punishes standing still.
-4. **Mourning Knight** — armored elite; blocks frontal attacks; requires dodging,
-   repositioning, or punishing a committed strike.
-5. **Floor Boss** — multi‑phase; ≥3 recognizable attack patterns; strong telegraphs; a
-   clear vulnerability window; dramatic entrance and defeat.
+Roles to preserve (names are examples, reinterpret freely for originality):
+1. **Melee anchor** (example: Gravebound) — basic melee; slow approach; clear wind‑up attack.
+2. **Ranged zone-control** (example: Cinder Wisp) — ranged; delayed projectiles; encourages movement and prioritization.
+3. **Fast punisher** (example: Hook Hound) — fast; charges after a visible telegraph; punishes standing still.
+4. **Frontal-blocking elite** (example: Mourning Knight) — armored elite; blocks frontal attacks; requires dodging, repositioning, or punishing a committed strike.
+5. **Multi-phase boss** — ≥3 recognizable attack patterns; strong telegraphs; clear vulnerability window; dramatic entrance and defeat.
+
+Keep the roles for comparability, but names, lore, silhouette, and behavior twists are yours.
+Example: replace Knight with a bell-ringer that rewrites arena geometry, if it still blocks frontally and becomes vulnerable after slam. Originality in this section is explicitly rewarded (V0/V8).
 
 Each enemy needs idle/move/attack/hit/defeat states, health and damage values, collision
 and attack ranges, intent indicators, audio and visual feedback, and behavior that scales
@@ -177,28 +184,31 @@ logic‑affecting animations.
 - **Game over:** cause of defeat, final score, floor reached, enemies defeated, run
   duration, best‑score comparison, Instant Restart, Return to Title.
 
-### 3.12 Visual direction
+### 3.12 Visual direction (default mood, unlimited freedom)
 
-Dark, painterly gothic dungeon atmosphere; warm ember‑orange highlights against deep
-charcoal/violet/desaturated blue; high contrast between gameplay entities and background;
-stylized readable silhouettes; subtle paper/stone/smoke/parchment texture; strong
-lighting, fog, vignette, layered depth; no combat clutter. **Readability over decoration**
-— attacks, hazards, player position, available actions, and rewards must be obvious at a
-glance. Use original CSS/Canvas/SVG/procedural visuals (no copied game assets). If any
-external asset is used, license it appropriately and include a clear local fallback.
+**Default mood (not mandate):** Dark, painterly gothic dungeon atmosphere; warm ember‑orange highlights against deep
+charcoal/violet/desaturated blue — is a proven starting point, but **any cohesive original direction is accepted**
+(ink-wash Yokai ruins, brutalist concrete abyss, biological cathedral, hand-cut paper theatre, etc.) **as long as
+readability is preserved**. High contrast between entities and background; stylized readable silhouettes;
+strong lighting, fog, vignette, layered depth; no combat clutter. **Readability over decoration** — attacks, hazards,
+player position, actions, rewards obvious at a glance. Original CSS/Canvas/SVG/procedural visuals (no copied assets).
+If any external asset is used, license it and include local fallback.
 
-> ### 📐 Graphical ambition (read carefully — this is a real differentiator)
+> ### 📐 Graphical ambition & freedom (read carefully — unlimited creativity)
 >
-> The evaluators reward **originality and visual richness/complexity**, not bare effect
-> counts and not primitive shapes. A build made of flat‑colored rectangles, empty rooms,
-> and a generic UI — even if it works — will be scored as visually weak. Invest real effort
-> in a **distinctive, original art identity** and in *sophisticated procedural detail*:
-> layered light and fog, textured stone/paper surfaces, particle and ember systems, subtle
-> camera composition, cohesive palettes, animated environmental dressing. Push toward the
-> polish of a near‑commercial game. The visual identity must hold up across the **entire
-> run** — every room, enemy, and screen — not just a hero title screen. Keep readability
-> high: ambition must never come at the cost of the player being able to read attacks,
-> hazards, and the player character at a glance.
+> The evaluators reward **originality and visual richness/complexity**, not adherence to gothic. A generic gothic
+> clone with flat rectangles scores lower than an original ink-brush abyss with confident composition. This is an
+> **arena.ai production with unlimited graphical freedom**: in battle, two unknown models get same prompt and are
+> free to invent. Invest real effort in a **distinctive, authored art identity** and sophisticated procedural detail:
+> layered light and fog, textured surfaces, particle systems, subtle camera composition, cohesive palettes, animated
+> environmental dressing. Push toward near-commercial polish across **entire run** — every room, enemy, screen.
+> Keep readability high: ambition must never hurt the player's ability to read attacks/hazards/player.
+
+> ### 🎨 Three divergent starters (inspiration only, not constraint)
+> - Gothic painterly: ember, stone, fog (current reference_arch/2d-art-starter.ts)
+> - Ink-wash: black ink bleed, paper grain, white-space, brush-stroke enemies
+> - Brutalist concrete: concrete slabs, rebar glow, god-rays, procedural cracks
+> Cloning a starter verbatim caps V0 ≤2. Transforming it with your own voice scores ≥4.
 
 ### 3.13 Animation & juice
 
@@ -276,6 +286,32 @@ able to load the page, understand the immediate objective, move, attack, dodge, 
 enemy, collect a reward, and restart after defeat without confusion. Prioritize a polished
 vertical slice with excellent feel and reliable functionality over an oversized feature
 list.
+
+### 3.22 Creative freedom & surprise (unlimited creativity clause)
+
+This is an **arena.ai** battle: two unknown models, same one-shot prompt, proper benchmark
+conditions (blind A/B, order-counterbalanced, CEIL hard gates, containment audit, evidence
+schema, Bradley-Terry), **unlimited creativity, production freedom, graphical freedom, time**.
+
+**Kernel (must, gates):** move/dodge i-frames/attack windup-active-recovery, ≥1 ability,
+tactical beats with intent indicators, at least 5 role-based enemies (melee anchor, ranged,
+fast, blocker elite, multi-phase boss), start→combat→reward choice→next→boss→score→high-score
+→restart, pause freeze, persistence/resize safe, self-contained offline.
+
+**Shell (your authorship, rewarded):**
+- Enemy names/fiction: replace freely, keep roles for comparability. V8 rewards twist that
+  stays readable and learnable <1min.
+- Visuals: gothic default, but any original cohesive identity accepted if V2 readability preserved.
+  Generic gothic clone caps V0 ≤2; authored original scores 4-5.
+- Relics: design 3-6 of your own. Examples in §3.8 are inspiration only. Visible impact required.
+- Surprise: invent one mechanic/room/narrative beat not in spec (mirror that swaps dodge→parry,
+  library room banning future enemy type, trails you detonate). Keep learnable, coherent, sustained
+  — random noise ≠ creativity.
+
+Ship 1-paragraph DIRECTOR_STATEMENT in README: original take, deliberate deviations, emotional core.
+Evaluators read it *after* independent scoring, only to interpret V0/V8/A6. It cannot rescue broken Kernel.
+
+Unlimited creativity means safe generic clone loses to reliable surprising build of similar stability.
 
 ---
 

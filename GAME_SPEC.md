@@ -1,14 +1,10 @@
-# Ashen Descent — Game Specification
+# Ashen Descent — Game Specification (Kernel + Unlimited Creativity)
 
-This is the **shared, frozen specification** handed to both game‑development agents.
-Both builds are evaluated against the *player experience* this spec describes — not
-against this text as a checklist. It defines the intended scope, the objective list used
-by the test plan, and the terms/mechanics expected to exist.
+This is the **shared, frozen specification** for arena.ai battles: two unknown models, same one-shot prompt, proper benchmark conditions (blind A/B, order-counterbalanced, CEIL gates, containment audit, evidence schema, Bradley-Terry), **unlimited creativity, production freedom, graphical freedom, time**.
 
-> **Note for evaluators.** This spec describes what the game *should* be. During play you
-> judge what the game *actually is*. A build that implements the spec's letter but feels
-> dead, or one that deviates while feeling great, is judged on experience. See the
-> "experience over compliance" rule in the rubric.
+It defines Kernel (must, comparable) and Shell (your authorship, rewarded). Evaluated on player *experience* — not checklist — with originality explicitly rewarded. A distinctive authored game beats a correct generic clone.
+
+> **Note for evaluators.** This spec describes Kernel. During play you judge what the game *actually is*. Deviation that improves experience is scored on that experience. See "experience over compliance" + "creative freedom" in BATTLE_PROMPT §3.22 and rubric V8/A6/M7.
 
 ---
 
@@ -78,15 +74,16 @@ focus‑safe when the tab loses focus; auto‑pause on mobile visibility changes
   slowed/paused; choose attack/dodge/reposition/defend/ability; predictable resolution;
   deterministic, learnable enemy behavior; no excessive menus or long animations.
 
-## 6. Enemies
+## 6. Enemies (roles — fiction yours, unlimited creativity)
 
-1. **Gravebound** — basic melee; slow approach; clear wind‑up attack.
-2. **Cinder Wisp** — ranged; delayed projectiles; encourages movement/prioritization.
-3. **Hook Hound** — fast; charges after a visible telegraph; punishes standing still.
-4. **Mourning Knight** — armored elite; blocks frontal attacks; requires dodging,
-   repositioning, or punishing a committed strike.
-5. **Floor Boss** — multi‑phase; ≥3 recognizable patterns; strong telegraphs; clear
-   vulnerability window; dramatic entrance and defeat.
+Roles to preserve for comparability (names are examples, reinterpret freely):
+1. **Melee anchor** (ex: Gravebound) — basic melee; slow approach; clear wind‑up.
+2. **Ranged zone-control** (ex: Cinder Wisp) — ranged delayed projectiles.
+3. **Fast punisher** (ex: Hook Hound) — fast, telegraphed charge.
+4. **Frontal-blocking elite** (ex: Mourning Knight) — blocks frontal, vulnerable after commit.
+5. **Multi-phase boss** — ≥3 patterns, strong telegraphs, vulnerability window, dramatic entrance/defeat.
+
+Names/lore/silhouette/behavior twist are yours. Originality rewarded (V0/V8). Keep roles for comparability, not names.
 
 Each needs idle/move/attack/hit/defeat states, health/damage values, collision and attack
 ranges, intent indicators, audio+visual feedback, and behavior scaling with depth.
