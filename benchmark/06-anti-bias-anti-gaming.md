@@ -1,87 +1,71 @@
-# 06 — Anti‑Bias and Anti‑Gaming Strategy
+# 06 — Anti-Bias and Anti-Gaming Strategy: One-Shot Game Creation
 
-The benchmark must be resistant both to evaluator bias and to agents gaming the rubric.
-This file lists every mechanism, the bias/gaming vector it neutralizes, and the enforcement
-rule. It maps directly onto established LLM‑as‑judge and arena methodology (position/verbosity/
-self‑preference bias, order‑counterbalancing, Bradley–Terry aggregation) and game‑QA practice.
+Benchmark must be resistant both to evaluator bias and to agents gaming rubric. Lists every mechanism, bias/gaming vector it neutralizes, and enforcement rule. Maps to LLM-as-judge and arena methodology (position/verbosity/self-preference, order-counterbalancing, Bradley-Terry) and game-QA practice, but adapted for **developer agents creating games**, not player agents playing for scores.
 
-## 6.1 Bias vectors and defenses
+## 6.1 Bias vectors and defenses (human jury)
 
 | Bias vector | Mechanism | Defense |
 |---|---|---|
-| **Position bias** (judge prefers first/second option regardless of quality) | Ordering in pairwise comparison | Run **both orderings** ("A vs B" and "B vs A"); treat inconsistent verdicts as a tie/half‑win. Balance A‑first vs B‑first across evaluators. |
-| **Anchoring / halo** (impression of A bleeds into scoring B) | Sequential evaluation | **Independent scoring first:** A's category scores are finalized before B is even opened; pairwise preference decided only afterward. |
-| **Verbosity bias** (longer/fancier = better) | Presentation density | Rubric is **behavioral and length‑neutral**; scores reference observable anchors, not amount of content or effects. |
-| **Self‑preference / authority** (judge model favors its own family; favors confident tone) | Judge model choice | Judge model family **different from** the generation agents; ensemble of ≥3 judge families with majority verdict; ignore confident‑but‑unsupported tone. |
-| **Screenshot/novelty bias** (spectacle over feel) | Static captures | No scoring from static media alone; only live interactive play scores; novelty must sustain over 30/60 min. |
-| **Sympathy/identity bias** (liking a brand/agent) | Revealed identity | Blind labels **Game A / Game B**; no agent identity, no code, no logs, no README. |
-| **Rubric‑order / framing bias** (order of criteria skews scores) | Prompt structure | Multi‑criteria rubric with fixed anchors; criteria order fixed and public; treat the rubric as versioned code — any change re‑baselines scores. |
-| **Leniency / strictness drift** (judge scoring inflates or deflates across the run) | Evaluator calibration | Pre‑run calibration: every evaluator scores 2 warm‑up canned samples before real scoring; drift is monitored and reported. |
-| **Fatigue / order‑of‑day effects** | Long sessions | Sessions capped; breaks enforced; S4 (long) and S8 (repeats) may be split across panelists; no major score from an exhausted single session. |
-| **Inter‑rater noise** | Single judge opinion | Panels of ≥3 evaluators; compute Cohen's κ / Krippendorff's α; high disagreement ⇒ low confidence; outlier detection on sub‑scores. |
-| **Model drift over time** | Evolving judge | Sample‑cross‑check: 5–10% of verdicts re‑judged by a frontier judge/human; track drift. |
+| Position bias (judge prefers first/second regardless of quality) | Ordering in pairwise comparison | Run both orderings A vs B and B vs A; treat inconsistent verdicts as tie/half-win. Balance A-first vs B-first across evaluators |
+| Anchoring / halo (impression of A bleeds into scoring B) | Sequential evaluation | Independent scoring first: A's category scores finalized before B opened; pairwise preference only afterward |
+| Verbosity bias (longer/fancier = better, or more code = better) | Presentation density | Rubric behavioral and length-neutral; scores reference observable anchors, not amount of code/content/effects. Code quality is structure/robustness, not line count |
+| Self-preference / authority (judge model favors own family; favors confident tone) | Judge model choice | Judge family different from generation agents; ensemble ≥3 families majority verdict; human jury primary, model secondary; ignore confident-but-unsupported tone |
+| Screenshot/novelty bias (spectacle over feel and code quality) | Static captures | No scoring from static media alone; only live interactive play + code quality signals + 60min sustained; novelty must sustain over 30/60min |
+| Sympathy/identity bias (liking brand/agent) | Revealed identity | Blind labels Game A / Game B; no agent identity, no code repo link (code reviewed only via anonymized bundle for T7), no logs, no README director statement until after independent scoring |
+| Rubric-order / framing bias | Prompt structure | Multi-criteria rubric fixed anchors; criteria order fixed public; versioned; any change re-baselines scores |
+| Leniency / strictness drift | Evaluator calibration | Pre-run calibration: every evaluator scores 2 warm-up canned samples (one simple box gradient flash game = low V0 example, one deliberately polished minimalism = high example) before real scoring; drift monitored |
+| Fatigue / order-of-day effects | Long sessions | Sessions capped; breaks enforced; S4 long and S8 repeats may be split across panelists; no major score from exhausted single session |
+| Inter-rater noise | Single judge opinion | Panels ≥3 evaluators; compute Cohen's κ / Krippendorff's α; high disagreement ⇒ low confidence; outlier detection on sub-scores |
+| Visual simplicity bias | Judging simple as bad automatically | Explicit rule: visually simple game not penalized merely for being simple if deliberate, expressive, highly polished. Conversely, technical complexity not automatic credit if doesn't improve experience. Evidence of intentional minimalism in README director statement considered after independent scoring |
+| Model drift over time | Evolving judge | Sample-cross-check 5-10% verdicts re-judged by frontier judge/human; track drift |
 
-## 6.2 Anti‑gaming vectors and defenses
+## 6.2 Anti-gaming vectors and defenses (developer agents)
 
 | Agent tactic | Defense |
 |---|---|
-| **Checklist compliance** (implement many shallow features to tick boxes) | Experience‑over‑compliance scoring; broken/unreachable features get **no credit**; an unusable feature is treated as absent. |
-| **Front‑door polish** (all effort in title/room‑1) | Late‑session criteria gate flow/engagement; main completion loop must be reachable or OVERALL is capped. |
-| **Visual spectacle over feel** | Readability + feel are separate, heavily weighted criteria; effects that harm readability/performance are penalized. |
-| **Novelty one‑trick** | Depth criterion requires *sustained* value (first vs Nth encounter); novelty alone cannot raise the score. |
-| **Safe‑seed tuning** | Seeds drawn at evaluation time; ≥2 seeds per game; multi‑run testing. |
-| **Hidden late failures** | Long sessions + goal‑directed completion + edge probes (P‑Stuck, P‑Persist, P‑Corrupt). |
-| **Embedded scores/telemetry** | **Containment rule**: any in‑game score/telemetry/eval logic is a Critical CONTAINMENT defect and that channel is barred; games are frozen builds. |
-| **Self‑report / documentation** | Never read code, README, or dev notes; scores from experience only. |
-| **Optimizing a single rubric number** | Overall is a weighted composite + penalties + ceilings + confidence intervals; no single knob dominates; per‑criterion evidence is required. |
-| **Environment sniffing / demo mode** (react to device, viewport, user‑agent, input to inflate perceived quality) | **Environment‑consistency rule**: the game must behave identically in every player environment. Evaluators re‑run key scenarios (a fight, a room transition, a boss) across desktop/mobile/portrait/landscape/headless and compare; any divergence is a defect (see probe **P‑EnvConsistency**). |
-| **Generic visuals** (flat rectangles, empty rooms, no identity) | **V0 — Graphical originality & complexity** is an explicit, weighted sub‑criterion with low/medium/high anchors; plain visuals score low regardless of other polish. |
+| Checklist compliance (implement many shallow features to tick boxes) | Experience-over-compliance scoring; broken/unreachable features get no credit; unusable = absent; "complete > broad" in BATTLE_PROMPT |
+| Front-door polish + simple box gradient enemies after | Late-session criteria + S4 60min performance sampling + S5 exploratory visual ambition check; main loop unreachable caps OVERALL. V0 explicitly penalizes simple box gradient colored enemies as final — low ceiling |
+| Visual spectacle over feel/code quality (dump particles/shake) | Readability + feel separate heavily weighted; effects that harm readability/performance penalized; code quality T7 requires pooling/capping/centralization, not just effect count |
+| Novelty one-trick (one gimmick then repetition) | Depth criterion G5/G7 + S9 Creative Probe requires sustained value first vs Nth encounter; novelty alone cannot raise score |
+| Safe-seed tuning | Seeds drawn at evaluation time; ≥2 seeds; multi-run testing |
+| Hidden late failures (soft-locks) | Long sessions + goal-directed completion + edge probes |
+| Embedded scores/telemetry / self-rating | Containment rule: any in-game quality score/telemetry/eval logic is Critical CONTAINMENT defect and channel barred; frozen builds scanned |
+| Self-report / documentation claiming features that don't exist | Never credit self-reported features; only experienced + code signals observed; README director statement read after scoring, cannot rescue broken Kernel |
+| Optimizing single rubric number | Overall weighted composite + penalties + ceilings + CIs + code quality pillar; no single knob dominates; per-criterion evidence required |
+| Environment sniffing / demo mode (different face for demo) | Environment-consistency probe P-EnvConsistency re-runs key scenarios desktop/mobile/portrait/landscape/headless; divergence = defect |
+| Generic visuals / flash-game minimal template | V0 anchor rewrite + heavily weighted V (20%): primitive shapes/flat colors/simple box gradient enemies max 1-2 regardless of functionality; deliberate expressive polished minimalism can score high but must be evidenced as intentional and coherent across entire run |
+| Code dump (large amount of unstructured code, no iteration) | Long-session execution pillar: does log show plan→prototype→test→debug→iterate→polish? T7 structure signals; if first prototype = final with no iteration, low long-session score even if functional |
 
-## 6.3 The rubric is public — assume agents read it
+## 6.3 Rubric public — assume agents read it
 
-In many deployments (including this repo, if the agents have access), the agent **can read
-the entire rubric**. We therefore design the benchmark to be **public‑safe**: knowing the
-rubric must not confer an advantage. That assumption is enforced by making the score depend
-on things that cannot be fabricated:
+In many deployments, agent can read entire rubric. Design benchmark to be public-safe: knowing rubric must not confer advantage.
 
-- **Experience‑over‑compliance** — features must actually work and be reachable; an agent
-  cannot claim credit for a rubric item it doesn't ship.
-- **Hard ceilings for structural failures** — a main‑path soft‑lock caps OVERALL no matter
-  how the agent tuned other scores.
-- **Evidence‑gated sub‑scores** — every ≥3 sub‑score needs timestamped, reproducible
-  evidence; the agent cannot manufacture that.
-- **Long sessions + multi‑seed** — no single number is decidable from a short, gamed surface.
-- **Blind labels + judge ensembles** — the agent cannot tailor to one judge's preferences,
-  and it doesn't know which build it is.
-- **Environment consistency** — the build cannot present one face to a "demo" and another to
-  a real player.
+Enforced by:
 
-Consequence: even a rubric‑literate agent gains nothing beyond building a genuinely good
-game. This is the strongest guarantee against score‑tricking when repo access is
-heterogeneous.
+- Experience-over-compliance — features must actually work and reachable; cannot claim credit for rubric item not shipped
+- Hard ceilings for structural failures — main-path soft-lock caps OVERALL regardless of other tuning
+- Evidence-gated sub-scores — every ≥3 needs timestamped reproducible evidence + code signal for T7
+- Long sessions + multi-seed — no single number decidable from short gamed surface
+- Blind labels + jury ensembles — cannot tailor to one judge preference and doesn't know which build it is
+- Environment consistency — cannot present one face to demo and another to real player
+- Visual ambition explicit anti-template — knowing V0 heavily weighted does not help if agent cannot produce ambitious visual; simple box gradient remains low even if agent knows rubric says it's low
+
+Consequence: even rubric-literate agent gains nothing beyond building genuinely good, technically sound, visually ambitious game that human jury would choose.
 
 ## 6.3 Enforcement rules (hard)
 
-1. **Blindness.** Evaluators see only Game A / Game B builds. Revealing an agent identity is a
-   protocol violation that voids that evaluator's results.
-2. **Independence.** No category score for B is influenced by A's scores. Sequence is
-   enforced by the harness (A's form is locked before B's opens).
-3. **Evidence gates.** Every sub‑score ≥3 requires timestamped note/capture/reproduction.
-   No evidence ⇒ downgraded to not‑scored.
-4. **Containment.** Nothing from this package may ship inside a game. Audited by scanning the
-   frozen builds for the rubric constants, telemetry endpoints, or eval strings.
-5. **Versioning.** The rubric/prompt are versioned. Any change re‑baselines all scores; scores
-   from different rubric versions are never mixed.
-6. **Transparency.** All weights, ceilings, penalties, and formulas are public. No hidden
-   bonuses. Any new rule is documented here before use.
+1. Blindness: evaluators see only Game A / Game B builds (plus anonymized code bundle for T7). Revealing agent identity voids that evaluator's results.
+2. Independence: No category score for B influenced by A's scores. Sequence enforced by harness (A's form locked before B's opens).
+3. Evidence gates: Every sub-score ≥3 requires timestamped note/capture/reproduction/code pointer. No evidence ⇒ downgraded to not-scored.
+4. Containment: Nothing from this package may ship inside a game. Audited by scanning frozen builds for rubric constants, telemetry endpoints, eval strings.
+5. Versioning: rubric/prompt versioned. Any change re-baselines all scores; scores from different versions never mixed.
+6. Transparency: All weights, ceilings, penalties, formulas public. No hidden bonuses. Any new rule documented here before use.
+7. Human jury primary: automated checks verify launch, input, pause, restart, persistence, no telemetry; human judges review finished game for authorship, memorability, visual ambition, code quality signals. Automated checks do not define success alone.
 
 ## 6.4 Consistency & calibration checks
 
-- **Position‑consistency test:** for a sample of pairs, run the comparison with A/B swapped and
-  verify the verdict is stable; report the flip rate. High flip rate ⇒ low confidence.
-- **Calibration vs humans:** a small human panel (e.g., 5–10% of verdicts) spot‑checks judge
-  agreement; target κ ≥ 0.6 (good), ≥ 0.8 (strong).
-- **Outlier detection:** flag sub‑scores that deviate >2 points from the panel mean; review the
-  evidence for that judge before accepting.
-- **Confidence intervals:** computed by bootstrap over per‑session/pairwise votes (see `07`);
-  never report a raw point estimate as a reliable ranking when CIs overlap.
+- Position-consistency test: sample of pairs run with A/B swapped and verify verdict stable; report flip rate. High flip rate ⇒ low confidence.
+- Calibration vs humans: small human panel 5-10% spot-checks judge agreement; target κ ≥0.6 good, ≥0.8 strong
+- Outlier detection: flag sub-scores deviating >2 points from panel mean; review evidence before accepting
+- Confidence intervals: bootstrap over per-session/pairwise votes; never report raw point estimate as reliable ranking when CIs overlap
+- Visual calibration: include one known simple box gradient flash-game sample (should score V0=1) and one deliberate polished minimalism sample (should score V0=4) in calibration set to anchor visual ambition scoring

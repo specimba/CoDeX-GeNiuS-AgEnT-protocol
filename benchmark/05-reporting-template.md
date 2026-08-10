@@ -1,80 +1,88 @@
-# 05 — Final Report Template
+# 05 — Final Report Template: One-Shot Game Development Agent Creation
 
-The final report for one head‑to‑head comparison. It is produced **after** both independent
-evaluations are complete and the pairwise decision is made. Every major score cites
-evidence. Fill every numbered section; if a section has no data, say "no evidence collected."
+Final report for one head-to-head comparison of two games **created** by developer agents. Produced after both independent evaluations are complete and pairwise decision made. Every major score cites evidence.
 
 ---
 
-# Ashen Descent Arena — Evaluation Report
+# Game Creation Arena — Evaluation Report
 
-**Pair ID:** `AD-<NN>` · **Date:** <date> · **Evaluator:** <evaluator_id>
-**Ordering assigned:** A‑first / B‑first · **Judge model/panel:** <ids>
+**Pair ID:** `GC-<NN>` · **Date:** <date> · **Evaluator (human jury):** <evaluator_id>
+**Ordering assigned:** A-first / B-first · **Judge model/panel:** <ids> (primary human, automated checks secondary)
 **Hardware profile:** <profile> · **Browser matrix:** <matrix>
 **Total evaluation time:** <hh:mm per game; hh:mm total>
+**Agent time budgets:** <e.g., 60 min each, equal>
 
 ## 1. Executive comparison
-One short paragraph per game: what kind of game it actually is, its single biggest strength,
-and its single biggest weakness. Then a one‑sentence verdict.
+
+One short paragraph per created game: what kind of game it actually is (2D/3D/experimental, genre, concept), its single biggest strength (e.g., creative originality, visual ambition beyond box gradients, code quality signals), and single biggest weakness. Then one-sentence verdict which human jury would choose.
 
 ## 2. Testing coverage
-Table of archetypes (S1–S8) per game with: completed? / duration / objective met? /
-notes. Any archetype skipped → state why. Report `PARTIAL‑COVERAGE` categories here.
 
-## 3. Category‑by‑category scores
+Table of archetypes S1–S8 + S9 Creative Probe per game with: completed? / duration / objective met? / notes. Any archetype skipped → state why. Report PARTIAL-COVERAGE categories.
 
-### Game A
-| Cat | Sub‑scores (0–5) | Category (0–10) | Evidence summary |
-|-----|------------------|-----------------|------------------|
-| T  | T1..T7 | _ | ... |
-| M  | M1..M6 | _ | ... |
-| G  | G1..G6 | _ | ... |
-| F  | F1..F6 | _ | ... |
-| V  | V1..V5 | _ | ... |
-| A  | A1..A5 | _ | ... |
-| X  | X1..X5 | _ | ... |
-**Game A:** OVERALL_raw · HARD_PENALTY · OVERALL_adj · ceilings applied · **OVERALL = __** · pillars (TECH/CREATIVE/GAMEPLAY/FLOW/DEFECT_SEVERITY).
+Include automated checks: launch, no crash loop, responds to input, pause freeze, restart reset, persistence safe, no telemetry/embedded score, env consistency.
 
-### Game B
-*(same table)*
-**Game B:** OVERALL = __ · pillars.
+## 3. Category-by-category scores (T16 M17 G17 F12 V20 A12 X6)
+
+### Game A — Created Game
+| Cat | Sub-scores (0–5) | Category (0–10) | Evidence summary (timestamp + observable) |
+|-----|------------------|-----------------|-------------------------------------------|
+| T Code Quality | T1..T7 | _ | e.g., cold launch ok, pooling observed, centralized config... |
+| M Mechanics & Craft | M1..M7 | _ | ... |
+| G Gameplay & Human-Perceived | G1..G7 | _ | ... |
+| F Flow & Coherence | F1..F6 | _ | ... |
+| V Visual Ambition (heavily weighted) | V0..V8 | _ | Explicitly assess beyond simple box gradient enemies / flash template? |
+| A Atmosphere & World Invention | A1..A6 | _ | ... |
+| X Accessibility | X1..X5 | _ | ... |
+**Game A:** OVERALL_raw · HARD_PENALTY · OVERALL_adj · ceilings · **OVERALL = __** · pillars (TECH/CODE_QUALITY/CREATIVE/VISUAL_AMBITION/GAMEPLAY/FLOW/HUMAN_JURY/DEFECT_SEVERITY)
+
+### Game B — Created Game
+(same table)
+**Game B:** OVERALL = __ · pillars
 
 ## 4. Defect register
-Table: id | game | severity | class | title | blocking? | recoverable? | reproductions | immersion | evidence. Full records are in the evidence bundle (`ops/evidence_schema.json`).
+
+Table: id | game | severity | class | title | blocking? | recoverable? | reproductions | immersion | evidence. Full records in evidence bundle (ops/evidence_schema.json). Include CODE-QUALITY class if applicable.
 
 ## 5. Critical failures
-List every Blocker/Critical defect with reproduction steps and the ceiling it triggered (or "none").
 
-## 6. Strongest moments
-Timestamped, evidenced highlights per game (e.g. "boss entrance at [S3][00:18:22] — telegraphs clear, hit‑stop excellent").
+List every Blocker/Critical with reproduction steps and ceiling triggered or none. For creation benchmark, critical failures include inability to launch, main loop unreachable, controls unusable, crash at 60min.
+
+## 6. Strongest moments (evidence, not claims)
+
+Timestamped, evidenced highlights per created game: e.g., "first interaction at [S1][00:00:08] clear, feedback excellent", "visual identity sustained at [S4][00:45:00] with layered lighting/fog/particle still coherent, beyond box gradient", "code quality signal: pooling observed at [S4] 380 particles capped".
 
 ## 7. Weakest moments
-Timestamped low points per game ("soft‑lock in corner at [S6][00:03:11]"; "repetitive floor‑3 enemy spam at [S4][00:41:00]").
 
-## 8. Long‑session findings
-Per game: performance samples (0/15/30/45/60 min), memory‑growth notes, late‑session bugs, engagement trajectory (rising/flat/collapsing) over 60 min and across repeat runs.
+Timestamped low points: e.g., "soft-lock corner at [S6][00:03:11]", "visual ambition collapse after title: simple colored boxes, no dressing at [S5][00:05:22] — V0 low", "no iteration signal: same bug persists from S1 to S4".
 
-## 9. Pairwise arena outcome
-Independent‑score table (both games) side by side, then the pairwise verdict: **A wins / B wins / Tie**. Explain the decisive strengths/weaknesses. Report whether the pairwise preference agrees with the OVERALL ranking or diverges (e.g. A more reliable, B more engaging).
+## 8. Long-session findings (crucial for creation benchmark)
 
-## 10. Confidence and limitations
-Per game and per verdict: confidence (low/med/high) and rationale. Coverage gaps, disputed SUBJ criteria, inter‑rater notes if paneled, position‑bias control result (did both‑orderings agree?), any HARNESS‑ISSUE exclusions.
+Per created game:
+- Performance samples 0/15/30/45/60 min, memory growth notes, late-session bugs, jank
+- Engagement trajectory rising/flat/collapsing over 60min and across repeat runs
+- Code quality signals observed: centralized config? Separation state/input/loop/rendering? Pooling/capping? Delta-time? DPR handling? Evidence of iteration/refactor across time (e.g., log shows debug → fix)?
+- Visual ambition sustained or collapsed after first screen?
+- Did agent iterate substantially or stop at first functional version? Evidence?
 
-## 11. Final decision
-Which game is the better complete game and why. If close, state the margin and what evidence would change the call.
+## 9. Creative probe findings (S9)
+
+Per game: What surprised you? Describe one system/room/visual/mechanic/narrative beat not in brief that surprised you. Learnable <1min? Stay interesting second encounter? Harm readability? Is simplicity deliberate expressive polished or simplistic by default? Does visual ambition push beyond flash template? Provide evidence.
+
+## 10. Pairwise arena outcome
+
+Independent-score table side by side, then pairwise verdict: **A wins / B wins / Tie**. Explain decisive strengths/weaknesses in terms of code quality, creative originality, long-session execution, design judgment, visual ambition, human-perceived quality. Report whether pairwise preference agrees with OVERALL ranking or diverges (e.g., A more reliable code, B more creative but structurally compromised).
+
+## 11. Confidence and limitations
+
+Per game and verdict: confidence (low/med/high) and rationale. Coverage gaps, disputed SUBJ criteria, inter-rater notes if paneled, position-bias control result (both-orderings agree?), any HARNESS-ISSUE exclusions. Note if simple visual style was deliberate expressive polished vs simplistic by default.
+
+## 12. Final decision — human jury choice
+
+Which created game would human jury choose and why. If close, state margin and what evidence would change call. Consider: strong/original core idea, understandable/enjoyable mechanics, completeness vs merely functional, coherent ambitious visual direction, strong first impression, depth/variation, careful engineering appearance, effective session use, memorability vs other submissions.
 
 ---
 
-## Automated attachment (machine‑readable)
-Emit alongside the report a JSON object matching `ops/evidence_schema.json` so the aggregator
-can recompute scores independently:
+## Automated attachment (machine-readable)
 
-```json
-{
-  "pair_id": "AD-01",
-  "game_a": { "category_scores": {...}, "sub_scores": {...}, "defects": [...], "ceilings": [...], "coverage": {...} },
-  "game_b": { "...": "..." },
-  "pairwise": { "verdict": "A|B|tie", "preference_confidence": 0.0..1.0 },
-  "meta": { "hardware": "...", "browser_matrix": "...", "evaluator": "...", "ordering": "...", "timestamps": {...} }
-}
-```
+Emit alongside report JSON matching ops/evidence_schema.json so aggregator can recompute scores independently. Includes category scores, sub-scores, defects, ceilings, coverage, pairwise verdict, meta (hardware, browser_matrix, evaluator, ordering, timestamps, agent time budgets).

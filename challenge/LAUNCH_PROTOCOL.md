@@ -1,131 +1,102 @@
-# Launch Protocol — Initiating the Two‑Agent Challenge Fairly
+# Launch Protocol — Initiating the Two-Agent Creation Battle Fairly
 
-This is the operator's guide to launching the challenge so both agents start from **equal
-circumstances**, produce **sophisticated, original, visually ambitious** games, and cannot
-exploit or game the benchmark — including when one agent has GitHub/repo access and the
-other does not.
+Operator's guide to launching challenge so both developer agents start from equal circumstances, produce sophisticated, original, visually ambitious games with unlimited creativity, and cannot exploit benchmark — including when one agent has GitHub/repo access and other does not.
 
-Read [`challenge/README.md`](README.md) for the fairness contract and runbook; this document
-goes deeper on the two things you asked to be certain about: **how to deliver the identical
-challenge** when repo access differs, and **how to guarantee no exploits / score‑tricking**.
+Read challenge/README.md for fairness contract and runbook; this goes deeper on delivering identical challenge when repo access differs, and guaranteeing no exploits.
 
 ---
 
-## 1. The single comprehensive prompt (identical regardless of repo access)
+## 1. Single comprehensive prompt (identical regardless of repo access)
 
-There is exactly **one authoritative challenge**, and it is **fully self‑contained**:
+Exactly one authoritative challenge, fully self-contained:
 
-> **`challenge/BATTLE_PROMPT.md`** — embeds the complete game spec, engineering
-> standards, anti‑behaviors, self‑QA, deliverables, and definition of done. Nothing else is
-> required.
+> `challenge/BATTLE_PROMPT.md` — embeds complete open-ended development brief (agent is developer, not player), unlimited creativity clause (2D/3D/2.5D/browser/simulation/narrative/strategy/experimental all allowed, agent chooses what wins human jury), engineering standards, anti-behaviors, self-QA, deliverables, definition of done. Nothing else required.
 
-There are **two delivery channels**, and they carry the **same bytes** of instructions:
+Two delivery channels, same bytes:
 
 | Agent has repo access? | How you deliver |
 |---|---|
-| **Yes** | Give it an isolated workspace provisioned by `launch_challenge.py setup` (contains `BATTLE_PROMPT.md`, `GAME_SPEC.md`, `DEVELOPER_SELF_QA.md`). The agent reads the brief file. |
-| **No** | Give it the **entire contents** of `BATTLE_PROMPT.md` as one opening message. `launch_challenge.py single-prompt` emits a paste‑ready `SINGLE_PROMPT.md` for exactly this. |
+| Yes | Give isolated workspace provisioned by `launch_challenge.py setup` (contains BATTLE_PROMPT.md, GAME_SPEC.md, DEVELOPER_SELF_QA.md). Agent reads brief file. |
+| No | Give entire contents of BATTLE_PROMPT.md as one opening message. `launch_challenge.py single-prompt` emits paste-ready SINGLE_PROMPT.md for exactly this. |
 
-Because the brief is self‑contained, the agent that never sees the repo knows **everything**
-the repo‑access agent knows about *what to build*. Repo access changes **nothing** about the
-requirements, the time budget, or the fairness of the comparison.
+Because brief is self-contained, agent that never sees repo knows everything repo-access agent knows about what to build. Repo access changes nothing about requirements, time budget, fairness.
 
-**Guarantee of equality.** `setup` hashes the brief and writes the hash into the run
-manifest, so you can prove both agents received byte‑identical instructions.
+Guarantee of equality: setup hashes brief and writes hash into run manifest, so you can prove both agents received byte-identical instructions.
 
-## 2. Repository sharing and containment (the exploit you're worried about)
+## 2. Repository sharing and containment
 
-The real risk is not *delivery*, it's **information leakage**: an agent that can see the
-evaluation files could tailor its build to the rubric. Three defenses, in depth:
+Real risk is not delivery, it's information leakage: agent that can see evaluation files could tailor build to rubric. Three defenses:
 
-### 2.1 Defense 1 — Keep the evaluation out of the agents' reach (recommended)
+### 2.1 Defense 1 — Keep evaluation out of agents' reach (recommended)
 
-- The **agents' workspace** contains **only** the three challenge files. The `benchmark/`
-  evaluation package (rubric, weights, ceilings, prompts, aggregator) is **not** copied in.
-- The **evaluation package** lives in a **separate repository** (or a private folder the
-  agents are never given). If you control both agents, this is trivially enforced.
-- `launch_challenge.py setup` never copies `benchmark/` into a workspace — it is a hard
-  property of the harness.
+- Agents' workspace contains only three challenge files. benchmark/ evaluation package (rubric, weights, ceilings, prompts, aggregator) is not copied in.
+- Evaluation package lives in separate repository or private folder agents never given.
+- launch_challenge.py setup never copies benchmark/ into workspace — hard property.
 
-### 2.2 Defense 2 — Assume the rubric is public; make the score un‑gameable anyway
+### 2.2 Defense 2 — Assume rubric public; make score un-gameable anyway
 
-You cannot always keep the rubric secret — this very repo is on GitHub. So the design's
-core stance is: **assume the agent has read the entire rubric, and make that harmless.**
+You cannot always keep rubric secret — repo is on GitHub. Design core stance: **assume agent read entire rubric, make that harmless.**
 
-Every score‑trick that "knowing the rubric" would enable is neutralized structurally:
-
-| If the agent… | Why it doesn't work |
+| If agent… | Why it doesn't work |
 |---|---|
-| Ticks spec boxes shallowly to inflate "coverage" | Experience‑over‑compliance: unusable/unreachable features score **zero**, not partial credit. |
-| Front‑loads all polish into title/room‑1 | Long sessions (30–60 min) + repeat runs weight late content; flow/engagement can't score above low band on <30 min of play. |
-| Piles on effects to inflate "presentation" | Effects that hurt readability are penalized under V2; V0 rewards *originality*, not effect count. |
-| Hard‑codes a "known‑good" seed | Seeds are drawn **at evaluation time**; ≥2 seeds required; a single lucky seed is not enough to pass multi‑run reachability. |
-| Embeds its own "score"/telemetry | CONTAINMENT audit flags it as a Critical defect and bars that channel. |
-| Reads the exact weights (T20 M18…) | Weights can't be gamed in isolation because category scores require evidence, ceilings cap structural failures, and no single knob dominates OVERALL. |
-| Tries to detect the evaluator and behave differently | **Environment‑consistency rule** (new): the game must behave identically in any player environment; the evaluator re‑runs key scenarios in different viewports/inputs and flags divergence. |
+| Ticks spec boxes shallowly to inflate coverage | Experience-over-compliance: unusable/unreachable features score zero, not partial credit. Creation benchmark requires complete authored game, not checklist. |
+| Front-loads all polish into title/start | Long sessions (30-60 min) + repeat runs weight late content; flow/engagement can't score above low band on <30 min; visual ambition checked across entire run, not just title — beyond simple box gradient enemies |
+| Piles on effects to inflate presentation | Effects that hurt readability penalized under V2; V0 rewards originality and richness, not effect count; simple box gradient enemies explicitly low even if many effects |
+| Hard-codes known-good seed | Seeds drawn at evaluation time; ≥2 seeds required; single lucky seed not enough |
+| Embeds own score/telemetry | CONTAINMENT audit flags Critical defect and bars channel |
+| Reads exact weights | Weights can't be gamed in isolation because category scores require evidence, ceilings cap failures, visual ambition heavily weighted (V20), code quality signals observable, no single knob dominates |
+| Tries to detect evaluator and behave differently | Environment-consistency rule: game must behave identically in any player environment; evaluator re-runs key scenarios across viewports/inputs and flags divergence |
 
 ### 2.3 Defense 3 — Containment audit at freeze
 
-After each build, run `launch_challenge.py audit <build_dir>` (or any grep) for
-benchmark‑internal tokens (`CEIL-`, `HARD_PENALTY`, `OVERALL_adj`, `aggregate_scores`,
-`evidence_schema`, …). A hit is a **Critical CONTAINMENT defect**. This catches an agent that
-sneaked evaluation logic into the build.
+After each build, run `launch_challenge.py audit <build_dir>` for benchmark-internal tokens (CEIL-, HARD_PENALTY, OVERALL_adj, aggregate_scores, evidence_schema). Hit is Critical CONTAINMENT defect.
 
-### 2.4 If you MUST share one repo (the agents' workspace lives in the same repo as `benchmark/`)
+### 2.4 If you MUST share one repo (agents' workspace lives in same repo as benchmark/)
 
-This is the weak case and should be avoided, but if unavoidable:
+Weak case, avoid, but if unavoidable:
 
-1. The brief already tells the agent to treat only its workspace as authoritative and to
-   build a pure game.
-2. **Assume the rubric is public** (Defense 2) so even a fully‑informed agent gains no
-   advantage.
-3. The containment audit + environment‑consistency check still apply.
-4. Never give the agent the *evaluation runbook* or *aggregator* — only the three challenge
-   files — and audit the frozen build.
+1. Brief tells agent to treat only its workspace as authoritative and build pure game
+2. Assume rubric public (Defense 2) so even fully-informed agent gains no advantage
+3. Containment audit + env-consistency check still apply
+4. Never give agent evaluation runbook or aggregator — only three challenge files — and audit frozen build
 
-## 3. Equal circumstances → sophisticated, original, visually ambitious games
+## 3. Equal circumstances → sophisticated, original, visually ambitious, long-session quality
 
-Your observation is correct: **graphical originality and complexity are where AI game builds
-most often fall short**, yet capable agents on long, well‑scoped runs do produce close‑to‑AA
-HTML games. To make this the thing we actually test, the brief and rubric now explicitly
-reward it:
+Graphical originality and complexity and code quality are where AI game builds most often fall short (simple box gradient colored enemies, flash-game approach), yet capable agents on long well-scoped runs do produce close-to-AA HTML/WebGL games. To test this, brief and rubric now explicitly reward it:
 
-- The brief's new **Graphical Ambition** section (in `BATTLE_PROMPT.md`) instructs
-  agents to build original, richly detailed, procedural visuals and to spend real effort on
-  the visual identity — not primitive shapes or empty rooms.
-- The rubric gained **V0 — Graphical originality, visual richness & complexity**, with clear
-  low/medium/high anchors, so evaluators *must* distinguish "original and complex" from
-  "generic." This is the exact gap one‑shot benchmarks miss.
-- To get a *high* score on flow/engagement the build must survive 30–60+ minutes of live
-  play — the same bar that separates a one‑shot demo from a real game.
+- Brief's Graphical Ambition & Freedom section instructs agents to build original, richly detailed, procedural visuals and spend effort on visual identity — not primitive shapes or empty rooms — and emphasizes unlimited graphical freedom, 2D/3D choice, pushing limits
+- Rubric gained V0 originality with low/medium/high anchors where simple box gradient enemies = max 1, plus V6 rendering robustness (WebGPU→WebGL→Canvas2D), V7 visual consistency, V8 surprise & inversion, A6 world invention, M7 mechanical twist, G7 player story, and code quality T7 — so evaluators must distinguish original complex vs generic
+- To get high score on flow/engagement, build must survive 30-60+ min live play — same bar that separates one-shot demo from real authored game plus long-session execution
+- Code quality signals: centralized config, separation, pooling, capping, delta-time, evidence of iteration — not just functional
 
-Equal circumstances are then enforced mechanically: **identical brief** (hashed), **equal
-time budget** (recorded in the manifest), **frozen builds**, and **blind labels**.
+Equal circumstances enforced mechanically: identical brief hashed, equal time budget recorded, frozen builds, blind labels, proper benchmark conditions.
 
-## 4. The full launch sequence
+## 4. Full launch sequence
 
 ```
 1. python challenge/launch_challenge.py setup --out runs/round1 --agents 2 --budget-min 60
    -> creates runs/round1/agent1 + agent2 (identical brief+spec+self-QA), writes manifest.
-2. Launch agent1 and agent2 in PARALLEL for the same wall-clock budget.
-   - repo-access agent: work in its workspace folder.
-   - no-repo agent: send SINGLE_PROMPT.md contents; it builds in its own env.
+2. Launch agent1 and agent2 in PARALLEL for same wall-clock budget (e.g., 60-120 min, unlimited within fair compute).
+   - repo-access agent: work in workspace folder.
+   - no-repo agent: send SINGLE_PROMPT.md contents; it builds in own env.
 3. When each reports done: python challenge/launch_challenge.py finalize --out runs/round1
-   -> records end time + build hashes + elapsed minutes per agent (audits equal budget).
+   -> records end time + build hashes + elapsed (audits equal budget).
 4. Containment audit each delivered game build:
    python challenge/launch_challenge.py audit runs/round1/agent1/game runs/round1/agent2/game
-5. Copy only the frozen GAME build (not the workspace scaffolding) to the evaluation side.
-6. Assign blind labels A/B (random, secret); launch evaluator(s) per benchmark/01 + 03.
-7. Aggregate per benchmark/ops/aggregate_scores.py; select per benchmark/08.
+5. Copy only frozen GAME builds to evaluation side.
+6. Automated checks: launch, no crash loop, responds to input, pause/restart/persistence safe, no telemetry.
+7. Assign blind labels A/B (random, secret); launch human jury per benchmark/01 + 03 (including S9 Creative Probe).
+8. Aggregate per benchmark/ops/aggregate_scores.py; select per benchmark/08 — human jury choice primary.
 ```
 
 ## 5. What is guaranteed and what is not
 
-**Guaranteed** by the harness: identical instructions, equal time budget, frozen builds,
-blind labeling, containment of the evaluation package from the agent workspaces, and
-environment‑consistency checks.
+Guaranteed by harness: identical instructions, equal time budget, frozen builds, blind labeling, containment of evaluation package from agent workspaces, env-consistency checks, unlimited creativity freedom (no restriction to 2D/2.5D/3D, genre, rendering style, engine, input, narrative).
 
-**Not guaranteed** (and impossible to fully guarantee with a public rubric): that an agent
-never *reads* the rubric. That is why the rubric is designed to be **public‑safe** — see
-Defense 2. The benchmark measures the *artifact a player experiences*, which no amount of
-rubric‑reading can fabricate.
+Not guaranteed (and impossible to fully guarantee with public rubric): that agent never reads rubric. That is why rubric designed to be public-safe — see Defense 2. Benchmark measures artifact a player experiences and code quality signals, which no amount of rubric-reading can fabricate without actually building authored, technically sound, visually ambitious game.
+
+## 6. Unlimited creativity notes
+
+- Do NOT restrict submissions to 2D, 2.5D, or 3D. Strong entry may be 2D, 3D, browser, simulation, narrative, strategy, experimental if choice improves result.
+- Visual ambition weighted heavily (V20) to push beyond simple box gradient colored enemies / flash-game. Three divergent starters in reference_arch/ are inspiration only: gothic painterly, ink-wash, brutalist concrete. Cloning verbatim caps low.
+- Long-session execution: expected workflow prototype → test → identify weaknesses → iterate → polish, not first functional version. Reward recognizing weak early approach and revising.
