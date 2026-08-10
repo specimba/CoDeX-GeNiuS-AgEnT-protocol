@@ -46,12 +46,12 @@ CATEGORIES = sorted(WEIGHTS, key=lambda c: -WEIGHTS[c])
 # Sub-criterion id prefixes per category (rubric §2.2).
 CRITERIA = {
     "T": [f"T{i}" for i in range(1, 8)],
-    "M": [f"M{i}" for i in range(1, 7)],
+    "M": [f"M{i}" for i in range(1, 8)],  # M7 = architecture & performance hygiene
     "G": [f"G{i}" for i in range(1, 7)],
     "F": [f"F{i}" for i in range(1, 7)],
     # V0 is graphical originality & visual richness/complexity (the differentiator
     # most one-shot benchmarks miss); V1..V5 are the other visual sub-criteria.
-    "V": ["V0"] + [f"V{i}" for i in range(1, 6)],
+    "V": ["V0"] + [f"V{i}" for i in range(1, 8)],  # V6 = rendering robustness, V7 = visual consistency
     "A": [f"A{i}" for i in range(1, 6)],
     "X": [f"X{i}" for i in range(1, 6)],
 }

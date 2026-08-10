@@ -61,6 +61,12 @@ These probes are run during S6/S8 and whenever suspicion arises.
 
 **P‑Seeds (procedural).** If seeds are supported, play 2 distinct seeds fully. Verify layout reachability, no impossible enemy placement, clear exits, no duplication‑collapse (all rooms identical).
 
+**P‑Render (rendering fallback & robustness).** Launch the game on a profile with WebGPU unavailable (force WebGL or Canvas2D). Verify graceful degradation: no white screen, no crash, gameplay remains fully functional, visual identity remains coherent. Repeat with WebGL unavailable (Canvas2D only). Note any divergence in appearance or behavior.
+
+**P‑VisualConsistency (cross-environment identity).** Play the same fixed scene (e.g., first combat room, specific enemy set, a floor transition) on desktop widescreen, desktop small window, mobile portrait, mobile landscape, and at DPR 1 and 2. Capture screenshots. Verify the art identity holds, no clipped UI, no overlap, no broken layout; gameplay readability is preserved; no environment-dependent difficulty/reward changes.
+
+**P‑LoopSeparation (React/render hygiene).** Monitor React re-render counts vs. canvas loop ticks during 60s of active combat. Verify React renders are not triggered per frame by gameplay state; high-frequency updates (player position, projectiles, particles) live in the canvas layer; React only updates on screen/menu/HUD transitions. Note any per-frame React churn.
+
 **P‑EnvConsistency (no demo mode).** Run the same fixed scenario (e.g., the first combat room, a specific enemy, a boss phase) in multiple environments and confirm identical behavior: desktop vs mobile, portrait vs landscape, different user‑agents/viewports, touch vs keyboard, and a headless/automated run. Any divergence in difficulty, drops, enemy HP, reward rates, or game rules is a defect (class LOGIC/STATE or BALANCE, "environment sniffing"). Also confirms the game is not secretly degrading quality on lower‑spec devices in a way that hides performance problems.
 
 ## 3.4 Handling of hard cases
