@@ -51,7 +51,6 @@ Category score = `round( mean(sub_criteria) × 2, 1 )` → 0–10.
 | M4 | Balance & fairness (no unfair kills; timing windows fair; scaling sane) | |
 | M5 | Meaningful player choice & agency (risk/reward, tactical decisions) | |
 | M6 | Feedback quality (intent telegraphs, damage numbers, hit/miss/crit, sounds) | |
-| **M7** | **Architecture & performance hygiene** — gameplay loop lives outside React re-renders; no per-frame React churn; delta-time simulation; object pooling; clean separation of loop/UI. | |
 
 ### G — Gameplay & Player Experience · weight 18%
 | # | Sub‑criterion | SUBJ |
@@ -86,12 +85,6 @@ Category score = `round( mean(sub_criteria) × 2, 1 )` → 0–10.
 | V3 | Animation & juice quality (squash‑stretch, trails, afterimages, particles) | |
 | V4 | Lighting, atmosphere, effects, depth (fog, vignette, layered) — without clutter | SUBJ |
 | V5 | UI clarity & polish (menus, HUD, legibility, no broken buttons) | |
-| **V6** | **Rendering robustness & graceful fallback** — WebGPU/WebGL/Canvas2D degrades safely; no white screen, no crash, no environment-dependent visual breakage. | |
-| **V7** | **Visual consistency across environments & runs** — same scene coherent on desktop/mobile/portrait/landscape and at different DPRs; no clipped UI, overlap, or broken layout on resize/orientation change. Same identity holds across seeds. | |
-
-> **V6 anchors (0–5).** 0 = white screen / crash / no fallback. 1–2 = one backend only, breaks on some devices. 3 = works on one backend consistently. 4 = graceful WebGPU→WebGL→Canvas2D with consistent appearance. 5 = fully robust across backends, viewports, and DPRs with no visual divergence.
->
-> **V7 anchors (0–5).** 0 = broken layout on any viewport; identity varies wildly. 1–2 = partial consistency, some overlap/clipping. 3 = coherent on desktop and mobile separately, minor differences. 4 = same coherent identity across viewports and DPRs; minor safe differences only. 5 = perfect cross-environment consistency with identical gameplay readability.
 
 > **V0 anchors (0–5).** 0 = no visuals/placeholder. 1–2 = basic primitive shapes, flat
 > colors, little to no visual identity. 3 = coherent but simple/derivative; recognizable

@@ -277,18 +277,6 @@ enemy, collect a reward, and restart after defeat without confusion. Prioritize 
 vertical slice with excellent feel and reliable functionality over an oversized feature
 list.
 
-### 3.22 Rendering & visual consistency — elevated requirement (Graphical-Next)
-
-- Use a real rendering layer: **WebGPU** when available; else graceful fallback to **WebGL** or a clean **Canvas2D** engine. Never a blank canvas, never a browser crash, never a white screen on a device without WebGPU.
-- If a framework (e.g., React) is used: **keep the gameplay loop in Canvas/WebGL and out of React re-renders**; React owns screens, menus, and HUD only. No per-frame React state churn. Delta-time simulation stays in the loop layer.
-- **Visual consistency is scored:** the same scene must look coherent and legible on desktop, mobile, portrait, landscape, and at different DPRs. No overlap, no clipped UI, no broken layout on resize/orientation change.
-- The art identity must hold across **every room, enemy, screen, and floor** — not just a hero title screen. Layered lighting, fog, textured surfaces, procedural particles/embers, cohesive palette.
-- Readability is supreme: attacks, hazards, player, rewards must remain obvious at a glance even with rich visuals. No primitive-shape-only builds; this is the anti-flash gate.
-
-### 3.23 Anti-drone audio & mouse hygiene (hard gate)
-- **Mouse (desktop):** LMB/RMB, cursor aim, no overlay swallowing events, verified on a real mouse (not touch-emulation only).
-- **Audio:** event-driven finite sounds; no persistent drone/streaming loop; mute/pause/title silence the audio immediately; no unmanaged WebAudio nodes.
-
 ---
 
 ## 4. Engineering and build standards
