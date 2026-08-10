@@ -46,3 +46,5 @@ Every benchmark run must produce a creation log (`creation_log.json`) recording:
 - evidence filenames (screenshots, recordings)
 
 The log must never be embedded in the game build. It is a separate artifact, verified for containment (`benchmark/06-anti-bias-anti-gaming.md`).
+
+Framework constraints: no rendering dimension is mandatory (2D, 3D, mixed, or procedural all acceptable); no session time limit (agents may run for hours); reliability and visual consistency are the measured outcomes, not effect count.
