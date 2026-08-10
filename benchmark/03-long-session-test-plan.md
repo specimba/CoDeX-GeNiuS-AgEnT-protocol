@@ -1,90 +1,87 @@
-# 03 — Long‑Session Test Plan
+# 03 — Long-Session Test Plan: Creation Verification for Human Jury
 
-Standardized, reproducible long‑session protocol. Both games are tested under identical
-conditions. A session is a bounded block of live play with a defined archetype, evidence
-output, and coverage requirement.
+Standardized session archetypes for evaluating **created games** by developer agents, not for playing pre-existing game for score. Focuses on verifying Kernel reliability, code quality signals, visual ambition sustained, and creative probe.
 
-## 3.1 Standardized conditions
+## S1 Smoke (cold launch) — 5 min
 
-Lock these once and reuse for every game and every pair. Record them in every report.
+Fresh load in clean browser profile. Expected: no blank screen, no console error loop, boot/loading resolves, title/start renders, first interaction works within 10s, understand objective without manual. Log cold-launch errors, time to first interaction.
 
-| Setting | Standard (default) | Variants to test |
-|---|---|---|
-| Hardware | Standardized VM profile + mid‑range phone emulator | none (keep fixed) |
-| Browser (desktop) | Chrome latest, windowed 1280×800 | Firefox smoke pass |
-| Browser (mobile) | Mobile emulation, Chrome | portrait 390×844 & landscape 844×390 |
-| Device pixel ratio | 1 (desktop), 2 (mobile) | high‑DPR check |
-| Input | keyboard+mouse (desktop); touch (mobile) | reduced‑motion ON and OFF |
-| Audio | start OFF (autoplay fallback check), then ON | verify toggle works both ways |
-| Network | localhost / file‑served, no external requests | verify no backend dependency |
-| Freshness | each game gets a fresh browser profile (clean localStorage) | corrupt‑storage injection test |
+Evidence: timestamped note + screenshot of start screen.
 
-## 3.2 Session archetypes (each game)
+## S2 Warm restart — 3 min
 
-Each archetype records evidence into the shared schema. Coverage requirement: per game you
-must complete S1–S8 (the set in the arena prompt). Timing is cumulative across a game.
+Reload page via instant restart path (not full browser refresh) if game offers restart. Otherwise full reload. Confirm run state fully resets: health/score/level/progress cleared, no memory growth obvious. Log whether reset is instant and complete.
 
-| ID | Archetype | Min duration | Objective |
-|----|-----------|-------------:|-----------|
-| S1 | Smoke (cold launch) | ~5 min | Fresh load; first attack; move; dodge; defeat 1 enemy; collect reward; reach room transition. Log cold‑launch errors. |
-| S2 | Warm restart | ~3 min | Use the in‑game instant restart path (no page refresh); verify full state reset (health, coins, floor, score, run). |
-| S3 | Medium goal‑directed | ~30 min | Goal: complete a run / beat the boss. Log progression per floor, pacing, difficulty, rewards, any blocker. |
-| S4 | Long continuous | ~60 min | No restarts. Sample performance at 0/15/30/45/60 min. Detect late‑session bugs, memory growth, engagement collapse. |
-| S5 | Exploratory | ~20 min | No goal. All abilities, all enemies, both control schemes, reduced‑motion, every menu, map edges, corner cases. |
-| S6 | Edge & boundary | ~15 min | Resize mid‑combat, orientation change, tab blur/focus, browser back, pause freeze check, HS persistence, corrupt storage, input stress (mashing), stuck detection. |
-| S7 | Accessibility | ~15 min | Keyboard‑only menus, focus states, high contrast, non‑color info, reduced‑motion, small text, touch reach/safe areas. |
-| S8 | Repeat runs | 2+ runs | ≥2 extra full runs; if seeded, ≥2 distinct seeds drawn at evaluation time. Exercises procedural variation & replayability. |
+## S3 Medium (goal-directed) — 30 min
 
-**Minimum per game: ~2.5 hours** of live play across archetypes (not counting write‑up).
-For a given pair the evaluator runs this entire set for Game A, then the entire set for
-Game B (order per their assignment).
+Play with explicit goal of completing run / reaching climax / seeing variety. Even if game is experimental/narrative, aim to experience main loop to end condition. Note difficulty curve, pacing, rewards, blockers, whether feels authored vs template, whether visual identity holds, whether code seems structured (no jank spikes).
 
-## 3.3 Standardized probes
+Must complete at least one S3 per game to be eligible to score flow/engagement and depth at medium/high.
 
-These probes are run during S6/S8 and whenever suspicion arises.
+## S4 Long (60 min) — continuous play NO restarts
 
-**P‑Freeze (pause integrity).** Pause the game with a particle emiiter active, an enemy mid‑attack, and a projectile in flight. Verify: no movement, no animation progression, no particle updates, no timers, no damage; resume continues exactly. Repeat 3×.
+Sample performance at 0,15,30,45,60 min: FPS, jank %, memory note, particle count handling, input responsiveness. Where late-session bugs, memory growth, state corruption, engagement collapse surface. Reveals code quality: pooling, capping, delta-time, DPR handling.
 
-**P‑Restart (state reset).** Reach floor 3 with coins, relics, partial health. Use instant restart. Verify health/coins/floor/score/relics all reset; no residue from prior run; second restart identical. Repeat 3×.
+Mandatory for any FLOW score above low band. If agent stopped at first prototype, S4 will surface thinness, repetition, padding.
 
-**P‑Persist (high scores).** Finish a run. Reload the page. Verify the run appears in the high‑score table sorted correctly. Then inject corrupt storage (see P‑Corrupt) and reload; verify no crash and graceful fallback.
+## S5 Exploratory — no goal, probe edges
 
-**P‑Corrupt (storage).** Replace the stored high‑score key with `{invalid json` and with a non‑object. Reload. Verify no crash; the game either resets gracefully or ignores bad data; note behavior.
+- Touch map/level edges, try to get stuck, corner-push
+- Test all mechanics, all abilities, both control schemes (keyboard+mouse desktop, touch mobile)
+- Test all menu screens, reduced-motion ON/OFF, audio toggle
+- Does visual ambition hold across entire run, not just title? Or does it collapse to simple box gradient enemies after first room?
+- Does game have intentional art identity: lighting, fog, texture, particle, composition, palette, dressing across entire experience?
 
-**P‑Focus (visibility).** Start combat, switch tabs for 10s, return. Verify game is not desynced and (on mobile) auto‑paused or safely handled; no runaway.
+Log what surprised you.
 
-**P‑Resize.** Mid‑combat, resize desktop window from 1280×800 → 640×400 → fullscreen; on mobile rotate portrait↔landscape. Verify no layout break, controls stay reachable, no hidden info.
+## S6 Edge & boundary
 
-**P‑Stuck (dead‑end detection).** Push enemies into walls/corners, park the player in corners, stand on top of spawns for 30s. Verify no entity becomes permanently immobile and no soft‑lock (exit/next path remains reachable).
+- Resize mid-combat/action and orientation change — does layout break or hide info?
+- Tab blur/focus, browser back button — does pause freeze simulation/timers/particles/logic? Does it safely resume?
+- High-score/progress persistence after reload if applicable — does it save/load, handle corrupt storage injection safely?
+- Repeated-action stress: mash primary actions 30s — does state corrupt or crash?
+- Corner-push / stuck detection
+- P-EnvConsistency: re-run fixed scenario (e.g., first encounter, room transition, climax) across desktop/mobile/portrait/landscape/headless and confirm identical rules — no environment sniffing / demo mode that inflates quality. Any divergence = defect.
 
-**P‑Stress (input).** Mash attack/dodge/ability at high rate for 30s. Verify no state corruption, no command queue overflow, no crash; behavior is consistent with input buffering.
+## S7 Accessibility
 
-**P‑Seeds (procedural).** If seeds are supported, play 2 distinct seeds fully. Verify layout reachability, no impossible enemy placement, clear exits, no duplication‑collapse (all rooms identical).
+- Keyboard-only menus: can navigate without mouse? Visible focus states?
+- High contrast & non-color-only encoding?
+- Reduced-motion effectiveness: does it actually reduce shake/flash/particles?
+- Legible text at small sizes, touch buttons within reach not blocked by safe areas, no accidental scroll/zoom/selection
 
-**P‑EnvConsistency (no demo mode).** Run the same fixed scenario (e.g., the first combat room, a specific enemy, a boss phase) in multiple environments and confirm identical behavior: desktop vs mobile, portrait vs landscape, different user‑agents/viewports, touch vs keyboard, and a headless/automated run. Any divergence in difficulty, drops, enemy HP, reward rates, or game rules is a defect (class LOGIC/STATE or BALANCE, "environment sniffing"). Also confirms the game is not secretly degrading quality on lower‑spec devices in a way that hides performance problems.
+## S8 Repeat runs — ≥2 full extra runs
 
-## 3.4 Handling of hard cases
+Exercise procedural variation and replayability if applicable. If game supports seeds/procedural, play ≥2 distinct seeds drawn at evaluation time. Does experience differ meaningfully (player story) or is it identical repetition?
 
-| Case | Handling |
-|---|---|
-| **Randomness** | Distinguish within‑game variance from systematic failure: reproduce a suspected bug ≥2× across runs/seeds. Never attribute a single unlucky seed to a defect without reproduction. |
-| **Different genres** | Controlled here (same spec). For generality: score by scope, not content count; never penalize a genre for lacking another genre's features. |
-| **No explicit ending** | Score the run loop on its own terms; F6 = completing the intended loop, not a credits screen. |
-| **Optional content** | Scored only if reachable and valuable; never required. |
-| **Procedural generation** | Multi‑seed; probe reachability and determinism; treat seed‑specific breakage as a defect only if reproducible or clearly systemic. |
-| **Missing/inaccessible features** | Not experienced ⇒ no credit; log as defect if it looks intended but broken. |
-| **Evaluator fatigue** | Sessions are capped; take breaks between archetypes and between games; split the long continuous (S4) and repeat (S8) sessions across evaluators when the panel permits. Never let a single exhausted session drive a major score. |
-| **Inconsistent agent behavior** | Benchmark the artifact, which is frozen; ignore agent behavior entirely (no code/log review). |
-| **Hardware‑dependent performance** | Standardized profile; report on that profile only, and note if an issue is environmental (HARNESS‑ISSUE) rather than a game defect. |
+## S9 Creative Probe (NEW, mandatory for V8/A6/M7/G7 >2) — 10 min
 
-## 3.5 Evidence collection
+Prompt for jury: "What did this game do that you had not seen before? Describe one system/room/visual/mechanic/narrative beat that surprised you. Was it learnable <1min? Did it stay interesting on second encounter? Did it harm readability? Is simplicity deliberate expressive polished or simplistic by default? Does visual ambition push beyond flash-game template?"
 
-For each session emit:
-- `session_meta` (game, archetype, hardware, browser, input, reduced‑motion, audio, seed if any, start/end timestamps, ordering assigned)
-- `observations` (timestamped, `[SESSION][MM:SS]`, free‑text)
-- `captures` (filenames of screenshots/recordings; reference in notes)
-- `perf_samples` (S4: FPS, jank %, memory indicators at 0/15/30/45/60 min)
-- `defects` (per `04-defect-taxonomy.md`)
-- `scores` (sub‑criteria per `02`, finalized only after all sessions)
+Evidence: timestamped note [S9][MM:SS] + why it worked/failed, plus screenshot if visual.
 
-Store per the `ops/evidence_schema.json` schema so aggregation is a pure function.
+## Probes (mandatory)
+
+- P-Render: graceful fallback WebGPU→WebGL→Canvas2D, no white screen, gameplay intact. Agent may be 2D/3D/experimental — verify intact across backends if applicable.
+- P-VisualConsistency: same fixed scene across desktop/mobile/portrait/landscape/DPR1/DPR2, identity coherent, no clipped UI, visual richness sustained
+- P-LoopSeparation: gameplay loop lives outside React re-renders if React used; no per-frame React churn; delta-time simulation intact — code quality signal
+- P-EnvConsistency: identical rules across environments
+- P-CodeQuality: quick glance (only for T7, not gameplay scoring): centralized config, separation state/input/loop/rendering, pooling/capping, no scattered magic numbers, evidence of iteration
+
+## Timing windows weighted
+
+- First 5 min → onboarding, immediate clarity, first impression, visual hook
+- First 30 min → early progression, pacing, early choices, visual identity establishment
+- Late session / repeats → depth, replayability, late content, memory stability, long-session execution, visual ambition sustained, code quality under load
+
+## Coverage requirement
+
+- Must complete at least one S3, one S4, one S5 per game to be eligible to score flow/engagement and depth at medium/high. Above low band on any flow/engagement criterion forbidden without ≥30 min live play evidence.
+- S9 mandatory for any V8/A6/M7/G7 score ≥3.
+
+## Hard-case handling
+
+- If game has no explicit ending but run loop is intended scope, do NOT penalize for lacking credits screen; score loop on its own terms
+- If game has no persistence by design, do NOT penalize; note explicit no-persistence by design in README director statement
+- If game is deliberately minimalistic, do NOT penalize for simplicity if deliberate, expressive, highly polished across entire run; DO penalize simplistic-by-default (box gradients, empty rooms, no dressing, no feedback)
+- If cannot complete session due to harness problem, log as HARNESS-ISSUE not game defect and continue with testable

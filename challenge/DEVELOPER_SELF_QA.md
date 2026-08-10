@@ -1,129 +1,99 @@
-# Developer Self‑QA Checklist
+# Developer Self-QA Checklist — One-Shot Game Creation
 
-This is the **internal** build‑verification checklist an agent runs against its own build
-before delivery. It exists to help the agent ship a robust game. It is **not** the external
-evaluation rubric — that lives in `benchmark/` and is never shown to the agent. Some items
-overlap with the spec's requirements by design; that overlap is legitimate (the spec is
-the agent's source of truth). What is withheld is the *scoring*.
+Internal build-verification checklist agent runs before delivery. Not external rubric — lives in benchmark/ and never shown as scoring formula. Some overlap with spec legitimate (spec is source of truth). What is withheld is scoring weights.
 
-## How to run this checklist
+How to run: fresh load, then again after reload, then once on mobile viewport. For every item: Pass / Fail / N/A, plus one line evidence. Fix every Fail you can. If Fail can't be fixed in time, record honestly in README — player experience will reflect it regardless. This benchmark rewards long-session execution: prototype → test → debug → iterate → polish, not first functional version.
 
-Do it on a **fresh load**, then again after a reload, then once on a mobile viewport. For
-every item: **Pass** / **Fail** / **Not applicable**, plus one line of evidence. Fix every
-Fail you can. If a Fail can't be fixed in time, record it honestly in your README — the
-player experience will reflect it regardless.
+## A. Launch & boot (Kernel)
+- [ ] Fresh load starts; no blank screen, no unhandled console errors, no infinite spinner
+- [ ] Boot/loading state exists and resolves
+- [ ] Title/start screen renders with understandable objective, Start, How to Play if applicable, audio toggle, cohesive theme
+- [ ] Understandable in <1 min without manual
 
-## A. Launch & boot
+## B. Core controls / interaction (Kernel)
+- [ ] Primary movement/interaction works; no page scroll on game keys (Space/arrows prevented)
+- [ ] Dodge/special action if applicable has feedback and fair window
+- [ ] Input buffering: quick press while busy not silently dropped
+- [ ] Controls frame-rate independent (feel same at different FPS)
+- [ ] No hidden autoplay faking quality
 
-- [ ] Fresh load starts; no blank screen, no unhandled console errors, no infinite spinner.
-- [ ] Boot/loading state exists and resolves.
-- [ ] Title screen renders: title, subtitle, Start Run, How to Play, High Scores, audio toggle.
+## C. Mobile/touch (if applicable, or desktop-only documented)
+- [ ] Virtual controls work if applicable; buttons large thumb-reachable
+- [ ] No accidental scroll, zoom, text selection, page navigation during play
+- [ ] Buttons show press states; haptic where supported
 
-## B. Core controls (desktop)
+## D. Game feel & depth
+- [ ] First interaction works within ~10s
+- [ ] Actions have wind-up → active → recovery if applicable; hit-stop/feedback; distinct success/failure
+- [ ] Special action works, limited by resource, feels impactful
+- [ ] Mechanics offer variety beyond one-trick (emergence, viable approaches, not single trick)
 
-- [ ] WASD + arrows move the player; no page scroll on arrows/Space.
-- [ ] Space dodges with i‑frames and cooldown feedback.
-- [ ] J / LMB attacks; K / RMB uses the special ability.
-- [ ] E interacts (open chests, select rewards); P / Esc pauses.
-- [ ] Input buffering: a quick attack/dodge press while busy is not silently dropped.
-- [ ] Controls are frame‑rate independent (feel the same at different FPS).
+## E. World & progression (your design)
+- [ ] Run/level/mode contains start + gameplay + reward/progression + end condition
+- [ ] Branching/variety choices exist and all reachable if applicable
+- [ ] No impossible placements; clear goals/exits; readable hazards
+- [ ] If procedural/seeded: two different seeds give different both-reachable runs
 
-## C. Core controls (mobile/touch)
+## F. Rewards & polish
+- [ ] Rewards/collectibles have visible impact
+- [ ] Score/progress tracks understandable, combo/momentum if applicable
+- [ ] Feedback quality: telegraphs, numbers, hit/miss, sounds/visual
 
-- [ ] Left virtual joystick/drag pad works; right attack/dodge/ability buttons are large and
-      thumb‑reachable.
-- [ ] No accidental scroll, zoom, text selection, or page navigation during play.
-- [ ] Buttons show press states; haptic feedback where supported.
+## G. Persistence
+- [ ] If game has high-scores/progress: saves and survives reload, sorted, handles corrupt/invalid stored data without crash (verify by hand-editing key), reset behind confirmation
+- [ ] If explicit no-persistence by design: document in README director statement
 
-## D. Combat feel
+## H. States & transitions
+- [ ] Start → gameplay → reward → end → restart all work
+- [ ] Pause fully freezes simulation, timers, particles, behavior; resume continues
+- [ ] Gameplay input does not leak into menus
 
-- [ ] First attack connects in the first encounter (within ~10 s of a run).
-- [ ] Attack has wind‑up → hitbox → recovery; hit‑stop on impact; damage numbers appear.
-- [ ] Hit / miss / crit are visually distinct.
-- [ ] Dodge has i‑frames, afterimage/trail, sound, and a fair timing window.
-- [ ] Special ability works, is limited by a resource, and feels impactful.
-- [ ] Tactical phase shows enemy intent indicators and projected attack zones; decisions
-      resolve predictably and quickly.
+## I. Robustness & edge cases
+- [ ] Instant restart fully resets run state
+- [ ] Resize mid-combat and orientation change don't break layout or hide info
+- [ ] Tab blur/focus safe; on mobile visibility change pauses appropriately
+- [ ] Mashing primary actions doesn't corrupt state or crash
 
-## E. Enemies & combat loop
+## J. Accessibility
+- [ ] Keyboard can navigate menus; visible focus states
+- [ ] Reduced-motion mode reduces shake/flash/particles
+- [ ] Info not conveyed by color alone; text labels for icons where needed
+- [ ] Text legible at small sizes; touch targets respect safe areas
 
-- [ ] At least 4 enemy types behave distinctly (incl. a melee, a ranged, a fast, an elite).
-- [ ] A boss exists with ≥3 readable patterns and a vulnerability window.
-- [ ] Enemies have idle/move/attack/hit/defeat states with feedback.
-- [ ] No enemy or the player can become permanently stuck; paths remain reachable.
+## K. Performance & code quality (weighted)
+- [ ] Stable frame rate with many entities/particles, even at 45-60 min
+- [ ] Particles/floating text/projectiles pooled and capped; no per-frame garbage spikes
+- [ ] Rendering/simulation pauses when page hidden
+- [ ] Debug/performance indicator available toggleable off by default for players
+- [ ] Code shows separation: state, input, loop, rendering, collision, audio, UI, config centralized, no scattered magic numbers — evidence of iteration/refactor, not just dump
 
-## F. Dungeon & progression
+## L. Audio
+- [ ] Sound toggle works; audio failure doesn't block gameplay
+- [ ] Sounds present or strong visual-only fallback
 
-- [ ] Run contains start + combat + reward + (optionally healing/event) + boss rooms.
-- [ ] Branching path choices exist and all branches are reachable.
-- [ ] No impossible enemy placements; clear exits.
-- [ ] Seeded: two different seeds produce two different, both‑reachable runs.
+## M. Environment consistency (no demo mode)
+- [ ] Game plays same desktop/mobile/portrait/landscape/headless; no device/viewport/user-agent-based difficulty, bonuses, unlocks
+- [ ] No hidden autoplay, no environment detection, no "looks good in demo" path differing from real player path
 
-## G. Rewards & score
+## N. Visual ambition (heavily weighted — beyond flash template)
+- [ ] Visuals original, not primitive shapes/generic flat rectangles/box gradient colored enemies
+- [ ] Distinctive consistent art identity across screens/menus/HUD
+- [ ] Procedural detail: lighting, fog, texture, particles, composition, palette, dressing — not empty room with rectangle player
+- [ ] Visual identity holds across whole run, not just title screen
+- [ ] Rich visuals do NOT hurt readability: actions/hazards/player obvious
+- [ ] Clearly beyond simple box gradient enemies / flash-game approach — pushes limits, or deliberate expressive polished minimalism with exquisite timing/feedback (document intent in README)
 
-- [ ] Coins drop and collect; relics/upgrades have visible impact.
-- [ ] Score tracks enemy defeats, combos, floors, perfect dodges, coins.
-- [ ] Run score and best score are shown; combo/momentum meter works.
+## O. Long-session execution & iteration (new, heavily weighted)
+- [ ] Built functional prototype quickly, then tested via actual interaction
+- [ ] Identified weaknesses in mechanics/usability/visuals/performance
+- [ ] Iterated substantially rather than stopping at first functional version
+- [ ] Added polish, feedback, content, presentation improvements after first prototype
+- [ ] Verified final build launches reliably and understandable to new player
+- [ ] Can describe strongest feature and biggest risk + director statement
 
-## H. Persistence
+## P. Honesty gate
+- [ ] No placeholder screens, under construction, dead ends, broken buttons
+- [ ] Everything claimed in README actually works reachable
+- [ ] No telemetry, analytics, hidden reporting, embedded quality score
+- [ ] No environment sniffing
 
-- [ ] High scores save and survive a reload, sorted descending.
-- [ ] Corrupt/invalid stored data does not crash the game (verify by hand‑editing the key).
-- [ ] Reset high scores is behind a confirmation.
-
-## I. States & transitions
-
-- [ ] Start → gameplay → reward → floor transition → boss → game over / victory → restart
-      all work.
-- [ ] Pause fully freezes simulation, timers, particles, enemy behavior; resume continues.
-- [ ] Gameplay input does not leak into menus.
-
-## J. Robustness & edge cases
-
-- [ ] Instant restart fully resets run state.
-- [ ] Resize mid‑combat and orientation change don't break layout or hide info.
-- [ ] Tab blur/focus is safe; on mobile, visibility change pauses appropriately.
-- [ ] Mashing attack/dodge/ability doesn't corrupt state or crash.
-
-## K. Accessibility
-
-- [ ] Keyboard can navigate menus; visible focus states.
-- [ ] Reduced‑motion mode reduces shake/flash/particles.
-- [ ] Info is not conveyed by color alone; text labels for icons where needed.
-- [ ] Text is legible at small sizes; touch targets respect safe areas.
-
-## L. Performance
-
-- [ ] Stable frame rate with several enemies and many particles.
-- [ ] Particles are pooled and capped; no per‑frame garbage spikes.
-- [ ] Rendering/simulation pauses when the page is hidden.
-- [ ] Debug/performance indicator available (toggleable, off by default for players).
-
-## M. Audio
-
-- [ ] Sound toggle works; audio failure does not block gameplay.
-- [ ] Menu/game/reward/boss sounds present (or a strong visual‑only fallback).
-
-## N. Honesty gate
-
-- [ ] No placeholder screens, "under construction", dead ends, or broken buttons.
-- [ ] Everything claimed in the README actually works and is reachable.
-- [ ] No telemetry, analytics, hidden reporting, or embedded "quality score."
-
-## O. Environment consistency (no demo mode)
-
-- [ ] The game plays the same on desktop and mobile, and in portrait and landscape.
-- [ ] It does not change difficulty, give bonuses, or unlock content based on device,
-      viewport, user‑agent, or input method.
-- [ ] A headless / automated run sees the same rules as a human keyboard run.
-- [ ] There is no hidden autoplay, no environment detection, no "looks good in a demo"
-      path that differs from a real player's path.
-
-## P. Graphical originality (this is weighted)
-
-- [ ] Visuals are original, not primitive shapes or generic flat rectangles.
-- [ ] There is a distinctive, consistent art identity across rooms, enemies, UI, and menus.
-- [ ] Procedural detail exists: lighting, fog, texture, particles, embers, dressing — not an
-      empty room with a rectangle player.
-- [ ] The visual identity holds across the whole run, not just the title screen.
-- [ ] Rich visuals do NOT hurt readability: attacks, hazards, and the player stay obvious.
