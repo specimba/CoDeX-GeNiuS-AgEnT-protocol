@@ -1,4 +1,4 @@
-# CoDeX–GeNiuS Agent Arena — One-Shot Game Development Agent Creation Benchmark
+# NEXUS game benchmark Agent Arena — One-Shot Game Development Agent Creation Benchmark
 
 A rigorous benchmark that evaluates an AI agent's ability to **create a complete, original, and compelling game in a single sustained development session**.
 
