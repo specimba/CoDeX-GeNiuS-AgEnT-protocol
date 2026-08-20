@@ -105,6 +105,16 @@ Rewarded for recognizing weak early approach and revising it. Long-session quali
 | `expert_team/` | Consensus docs on render pipeline, React/Canvas separation |
 | `benchmark/ops/` | Evidence schema, aggregator, decision block generator |
 
+## Battle log
+
+Every round produces an after-action record in `battles/`. Concrete defects found in a round are folded back into `challenge/BATTLE_PROMPT.md`, `challenge/DEVELOPER_SELF_QA.md`, `benchmark/02-scoring-rubric.md`, `benchmark/04-defect-taxonomy.md`, and `benchmark/06-anti-bias-anti-gaming.md` **before** the next round is launched. The benchmark evolves through use.
+
+| Round | Date | Status | Reference |
+|---|---|---|---|
+| 001 (informal) | 2026 (see file) | claude-opus-4-8 won on balance; deepseek-v4-pro failed reliability gate. Winner shipped broken mouse + audio drone → hardened v2. | (see `battles/round-001-after-action.md` — pending re-creation on this branch) |
+| **002 (informal — 10 games observed)** | 2026-08-20 | Directional review across 10 model-game deliveries (Kiana/Qwen3.8, Claude Haiku, Gemini 2.6/3.7/Pro-3.1, Qwen3.8-Max, glm-5.2, GPT-5.6 SOL, MiMo 2.5). Drove the **v6 prompt + rubric §2.8 two-track + §6.5 cliché-cluster registry + CEIL-5/6/7/8**. | [`battles/round-002-after-action.md`](battles/round-002-after-action.md) |
+| 002 (formal — planned) | tbd | Battle 2 · Unknown-LLM under v6 kit | [`BATTLE_2_ENTRY.md`](BATTLE_2_ENTRY.md) — paste-ready launch kit |
+
 ## How to run one comparison (summary)
 
 1. Launch both agents with identical `challenge/BATTLE_PROMPT.md` in isolated environments

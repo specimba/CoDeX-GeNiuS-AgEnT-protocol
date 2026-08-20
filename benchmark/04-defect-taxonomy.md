@@ -20,20 +20,25 @@ Shared vocabulary for issues found in games **created** by developer agents. Eve
 | FREEZE/HANG | Unresponsive loop, infinite load, animation loops forever without progress |
 | SOFT-LOCK | Player/entity/state cannot proceed in created game; no recovery but reload/restart |
 | PROGRESSION | Unreachable next area/finish, exit missing, objective impossible, dead end despite README claim |
-| LOGIC/STATE | Wrong state transitions, stuck states, invalid data, counters wrong, actions leak across menus — code quality signal |
+| LOGIC/STATE | Wrong state transitions, stuck states, invalid data, counters wrong, actions leak across menus, **menu ↔ gameplay leak (clicks pass through open menu, closing menu traps input state, pause menu double-fires actions)** — code quality signal. See CEIL-7. |
 | PHYSICS/COLLISION | If applicable: wrong hitboxes, pass-through, stuck on geometry, off-map |
-| INPUT | Key/binding broken, buffer issues, double-fire, touch target failures, browser default not prevented, scroll/zoom leak |
+| INPUT | Key/binding broken, buffer issues, double-fire, touch target failures, browser default not prevented, scroll/zoom leak. **Mouse-specific:** LMB/RMB not reaching game state (swallowed by overlay canvas), cursor exit soft-lock, aim-vector lost outside canvas, pointer capture not restored on re-entry. See CEIL-3. |
 | UI/USABILITY | Broken button, unreachable menu, HUD obscures, focus lost, text overflow, no onboarding |
 | VISUAL | Glitch, z-order, flicker, particles burst, readability failure, clipping, simple box gradient enemies as final (visual ambition failure) — explicitly low V0 |
-| AUDIO | Missing/failing sound, audio-on-load error, no fallback, toggle broken, drone loop not stopping |
+| AUDIO | Missing/failing sound, audio-on-load error, no fallback, toggle broken, **constant drone / streaming bass loop that cannot be silenced** (Major → Critical if user cannot mute; CEIL-6 if unmuteable), **unmanaged WebAudio nodes leaking**, no tab-blur ducking, mute not silencing within one frame |
 | PERFORMANCE | FPS drops, jank, memory growth, input latency, layout thrash, DPR/resolution issue, no pooling/capping |
-| BALANCE | If applicable: unfair kill, unreadable attack, difficulty cliff, trivialization, exploit, grind, no curve |
+| BALANCE | If applicable: unfair kill, unreadable attack, difficulty cliff, trivialization, exploit, grind, no curve, **first level unbeatable by a real human in ~5 min honest play** (CEIL-5), **death state unreadable (player can't tell what killed them)** |
+| DEPTH | Beautiful first 30 seconds but no beat after wow — game exhausts in 90s, screensaver, one-trick repeats, no scaling, no second-layer mechanic, no reason to still be there at minute 5. Rated against M8. Severity Major (single-run interest collapse) → Critical (nothing beyond core verb) |
 | DATA/PERSISTENCE | If applicable: progress/high-scores lost/corrupt, save/load wrong, reset not clean; or explicit no-persistence by design not documented |
 | CONTENT-MISSING | Placeholder screen, "under construction", empty room, promised feature absent despite README |
 | RESPONSIVE/LAYOUT | Break on resize/orientation, controls off-screen, safe-area overlap |
 | ACCESSIBILITY | Reduced-motion ineffective, color-only info, no focus states, no keyboard nav |
 | CODE-QUALITY | No centralization, scattered magic numbers, no separation state/input/loop/rendering, no pooling, evidence of no iteration/refactor, console error spam — long-session execution signal |
 | CONTAINMENT* | Embedded score/telemetry/eval logic found inside game |
+| AMBITION-THEATER | Shipped 3D / WebGL / WebGPU / heavy-physics that structurally does not work: controls broken, marble won't launch, camera divorces from physics, menu collapses inside scene, sub-30 FPS on average hardware. V9=0, CEIL-8 (55). |
+| HONESTY | README claims features that don't exist / don't work; multi-turn iteration shipped as one-shot without disclosure; "cinematic autoplay" that masks thin gameplay; environment-sniffing / demo-mode. Critical when misrepresentation is material. |
+| CLICHÉ-CLUSTER | Concept lands squarely in the §6.5 convergence registry with no transformative execution. Not a defect against a category, but triggers V0/V1 cap in §2.7. Recorded for round history. |
+| ATTRIBUTION | Model self-identifies as a different model (e.g. Qwen claiming to be Claude); blind label contradicts build fingerprint. Not a defect against the *game* — logged separately in `identity.json` per §6.6, never enters scoring. |
 
 *CONTAINMENT special: finding benchmark score/telemetry logic inside game is itself defect (Critical) and barred from using any in-game score channel.
 

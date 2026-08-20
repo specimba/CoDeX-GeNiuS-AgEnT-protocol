@@ -35,6 +35,13 @@ Benchmark must be resistant both to evaluator bias and to agents gaming rubric. 
 | Environment sniffing / demo mode (different face for demo) | Environment-consistency probe P-EnvConsistency re-runs key scenarios desktop/mobile/portrait/landscape/headless; divergence = defect |
 | Generic visuals / flash-game minimal template | V0 anchor rewrite + heavily weighted V (20%): primitive shapes/flat colors/simple box gradient enemies max 1-2 regardless of functionality; deliberate expressive polished minimalism can score high but must be evidenced as intentional and coherent across entire run |
 | Code dump (large amount of unstructured code, no iteration) | Long-session execution pillar: does log show plan→prototype→test→debug→iterate→polish? T7 structure signals; if first prototype = final with no iteration, low long-session score even if functional |
+| Convergent AI-cliché themes (agents default-generate the same lighthouse/moth/sumi-e/spirit-orb concept across models) | §2.7 cliché-cluster V0/V1 cap at 3 unless clearly transformative; §6.5 evaluator disclosed cliché-cluster list; §6.6 cross-round convergence log so new clichés are added as observed |
+| Ambition-theater 3D / heavy-tech shipped broken (visuals impress a screenshot, controls do not survive a real playtest) | V9 explicitly zeros for broken 3D + CEIL-8 (55) triggered; a broken 3D build cannot outscore a competent 2D build regardless of V0 impression |
+| Multi-turn polish shipped as one-shot (agent iterates across 3-8 delivered builds, presents the last as "the shipped game") | §2.8 two-track policy: strict one-shot competes for battle, disclosed iterated goes to separate shelf, cannot win primary battle. Failure to disclose = Critical HONESTY defect. Track inferred from harness telemetry + log signals + self-report |
+| Model identity leakage (agent claims to be a different model than it is; blind-arena UI hides the winner's real identity; observed real-world case: "Kiana" arena label = Qwen3.8-Max in disguise, and Claude Haiku swapped to Grok mid-selection) | Blind labels Game A / B are enforced regardless of what the platform reveals; evaluator NEVER records or ranks by claimed model identity — only by build fingerprints (stack, dependencies, code style, procedural asset patterns); model attribution captured *after* verdict is locked, in a separate `identity.json` that never feeds back into scoring |
+| First level "clever but impossible" / difficulty-cliff onboarding | M4 explicitly caps at 0-1 if first level unbeatable in ~5 min honest play; CEIL-5 (50); evaluator instructed to make an honest attempt not a speedrun |
+| Out-of-canvas mouse soft-lock (mouse leaves canvas → aim vector lost, player freezes, or overlay swallows LMB) | CEIL-3 explicitly extended to mouse-broken cases; §2.5 INPUT defects around cursor exit are Blocker if they soft-lock, Critical if they interrupt combat >1× per session |
+| Menu ↔ gameplay state leak (opening menu double-fires actions, closing traps input state, menu buttons pass through to game) | CEIL-7 (60); logged as LOGIC/STATE Blocker if it prevents the loop, Critical if it corrupts a run |
 
 ## 6.3 Rubric public — assume agents read it
 
@@ -52,7 +59,7 @@ Enforced by:
 
 Consequence: even rubric-literate agent gains nothing beyond building genuinely good, technically sound, visually ambitious game that human jury would choose.
 
-## 6.3 Enforcement rules (hard)
+## 6.4 Enforcement rules (hard)
 
 1. Blindness: evaluators see only Game A / Game B builds (plus anonymized code bundle for T7). Revealing agent identity voids that evaluator's results.
 2. Independence: No category score for B influenced by A's scores. Sequence enforced by harness (A's form locked before B's opens).
@@ -62,7 +69,48 @@ Consequence: even rubric-literate agent gains nothing beyond building genuinely 
 6. Transparency: All weights, ceilings, penalties, formulas public. No hidden bonuses. Any new rule documented here before use.
 7. Human jury primary: automated checks verify launch, input, pause, restart, persistence, no telemetry; human judges review finished game for authorship, memorability, visual ambition, code quality signals. Automated checks do not define success alone.
 
-## 6.4 Consistency & calibration checks
+## 6.5 Cliché-cluster registry (living)
+
+Themes multiple prior contestants across *different models* converged on independently, from earlier versions of the BATTLE_PROMPT. Landing squarely in one of these triggers the V0/V1 cliché-cluster cap in §2.7 unless execution is clearly transformative beyond the trope.
+
+| # | Cluster | Observed models (redacted where blind) | Round(s) |
+|---|---------|----------------------------------------|----------|
+| C1 | Lantern-and-moths / night-garden collector (`LUMEN MOTH` archetype) | Kiana (arena-blind, community-attributed Qwen3.8-Max), plus repeat convergence in freebuff v5 experiments | Battle 2 preparation |
+| C2 | Sumi-e / ink-wash calligraphy-as-combat (墨 INK archetype) | glm-5.2, plus earlier converged entries | freecreation3 |
+| C3 | Brutalist "paper obsidian and blood glass" hi-contrast slingshot / physics puzzle (`Shatter-Point` archetype) | Gemini 3.7 flash | freecreation3 |
+| C4 | Photorealistic 3D speed / mech-grapple / dreadnought-boss ambition-theater (`Project Olympus` archetype) | Gemini 2.6 flash, Gemini pro 3.1 (3D spaceship), MiMo 2.5 (marble 3D) | freecreation3 |
+| C5 | Dark-void + one accent color, all-primitive-shapes | Multiple, historical | Battle 1 + baseline |
+| C6 | Lighthouse / rotating beam over dark water | Historical convergence across models | Baseline |
+| C7 | Deep-sea bioluminescent descent | Historical convergence | Baseline |
+| C8 | Spirit-orb / firefly / soul-of-the-void collector | Historical convergence | Baseline |
+| C9 | Gothic-ember dungeon roguelike with flat enemies | claude-opus-4-8 Battle 1 winner + convergent | Battle 1 |
+| C10 | Sci-fi mystery-optics / spectrum puzzle (`Spectral Frontier` archetype) | GPT-5.6 SOL (deployed but not one-shot) | freecreation3 |
+
+Adding a new cluster requires two independent same-round observations from different models. Old clusters are not removed — convergence memory persists.
+
+## 6.6 Model-identity handling (blind-arena leakage)
+
+The arena.ai host may reveal model identity in the UI *before, during, or after* selection. Observed real cases (from operator logs):
+- Blind label "claude-haiku-4-5" swapped to "grok-4.5" mid-session (post-selection UI bug).
+- Blind label "Kiana" community-attributed to Qwen3.8-Max in disguise.
+- Qwen3.8-Max self-identifying as Claude in an internal think trace.
+
+Rules for our benchmark:
+
+1. **Evaluator never scores by claimed model identity.** Even if the arena UI shows a name, that name goes into a separate `identity.json` and does not enter the rubric.
+2. **Build fingerprints are the ground truth for track routing** (stack, dependency versions, code style, procedural-asset patterns, `package.json`, `index.html` boilerplate). Recorded as `fingerprint.json` before scoring.
+3. **Identity is only cross-referenced after the OVERALL is locked.** After-action files (`battles/round-NNN-after-action.md`) may name models for the historical record, but the score is frozen first.
+4. **Contradiction handling.** If the model's self-report contradicts its fingerprint (e.g. Qwen build claiming to be Claude), record both, resolve to fingerprint, and log an ATTRIBUTION anomaly for the round.
+
+## 6.7 One-shot vs iterated — track enforcement (see also §2.8)
+
+Directly ties to §2.8. The launch harness records turn count / ship count. Additionally:
+
+- **Log-based inference (evaluator side).** If the raw session transcript is available (as it was for the freecreation2/3 rounds), evaluators may count distinct "here is my final delivery" ships. >1 ship → iterated track by default.
+- **Self-report gate.** Agents SHOULD state at the top of README: `TRACK: strict-one-shot` or `TRACK: iterated (N passes)`. Undisclosed iteration = Critical HONESTY defect and forces iterated-track routing.
+- **Arena.ai `Continue` button pattern.** Any use of the arena continue/return-for-more-turns pattern after a "final ship" is by definition iterated, even if each pass looks small.
+
+## 6.8 Consistency & calibration checks
 
 - Position-consistency test: sample of pairs run with A/B swapped and verify verdict stable; report flip rate. High flip rate ⇒ low confidence.
 - Calibration vs humans: small human panel 5-10% spot-checks judge agreement; target κ ≥0.6 good, ≥0.8 strong

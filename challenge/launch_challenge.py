@@ -20,14 +20,21 @@ and the paper trail around them.
 Usage:
     python launch_challenge.py setup --out dir [--agents 2] [--budget-min 60]
     python launch_challenge.py single-prompt --out dir            # paste-ready prompt (no-repo delivery)
-    python launch_challenge.py finalize --out dir [--agents 2]    # record end time + build hashes
+    python launch_challenge.py finalize --out dir [--agents 2] [--ship-count agent1=N,agent2=M]
     python launch_challenge.py audit <build_dir> [<build_dir> ...]
+    python launch_challenge.py fingerprint <build_dir> [<build_dir> ...]   # capture stack/deps fingerprint per §6.6
     python launch_challenge.py status --out dir
 
 Examples:
     python launch_challenge.py setup --out /tmp/arena-run --agents 2 --budget-min 60
     python launch_challenge.py single-prompt --out /tmp/arena-run
-    python launch_challenge.py finalize --out /tmp/arena-run --agents 2
+    python launch_challenge.py finalize --out /tmp/arena-run --agents 2 --ship-count agent1=1,agent2=3
+    python launch_challenge.py fingerprint /tmp/arena-run/agent1/game /tmp/arena-run/agent2/game
+
+Track routing (per rubric §2.8):
+    ship_count == 1 AND README declares TRACK: strict-one-shot  ->  primary battle
+    ship_count > 1  OR README declares TRACK: iterated          ->  iterated shelf
+    undisclosed multi-turn (ship_count>1, README claims one-shot) -> Critical HONESTY + iterated
     python launch_challenge.py audit /tmp/arena-run/agent1 /tmp/arena-run/agent2
 """
 
@@ -151,29 +158,168 @@ def cmd_single_prompt(args) -> None:
     print(f"[single-prompt] wrote {dest} ({len(prompt)} chars). Send its full contents to the agent.")
 
 
+def _parse_ship_count(raw: str | None) -> dict[str, int]:
+    """Parse --ship-count agent1=1,agent2=3 -> {'agent1': 1, 'agent2': 3}."""
+    out: dict[str, int] = {}
+    if not raw:
+        return out
+    for chunk in raw.split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "=" not in chunk:
+            print(f"[warn] --ship-count entry '{chunk}' has no '='; skipping")
+            continue
+        k, v = chunk.split("=", 1)
+        try:
+            out[k.strip()] = int(v.strip())
+        except ValueError:
+            print(f"[warn] --ship-count value for '{k}' not an int; skipping")
+    return out
+
+
+def _readme_track_hint(workspace: Path) -> str | None:
+    """Look for TRACK: declaration in the agent's README (rubric §2.8)."""
+    for candidate in ("README.md", "readme.md", "Readme.md", "game/README.md"):
+        p = workspace / candidate
+        if not p.is_file():
+            continue
+        try:
+            text = p.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        for line in text.splitlines()[:40]:  # only look near top
+            lo = line.strip().lower()
+            if lo.startswith("track:") or lo.startswith("**track:**") or lo.startswith("track =") or "track: strict-one-shot" in lo or "track: iterated" in lo:
+                if "iterated" in lo:
+                    return "iterated"
+                if "strict-one-shot" in lo or "strict one shot" in lo:
+                    return "strict-one-shot"
+        # heuristic: prose disclosure
+        low = text.lower()
+        if "multi-turn" in low or "iterated across" in low or "polish pass" in low:
+            return "iterated-inferred"
+    return None
+
+
+def _route_track(ship_count: int | None, readme_track: str | None) -> tuple[str, list[str]]:
+    """Return (track, warnings) per rubric §2.8. Track ∈ {strict-one-shot, iterated}."""
+    warnings: list[str] = []
+    if ship_count is None:
+        warnings.append("ship_count not provided; falling back to README track hint only")
+    if ship_count is not None and ship_count > 1 and readme_track == "strict-one-shot":
+        warnings.append("HONESTY: ship_count>1 but README declares strict-one-shot — Critical honesty defect; forcing iterated track")
+        return ("iterated", warnings)
+    if ship_count is not None and ship_count > 1:
+        return ("iterated", warnings)
+    if readme_track == "iterated" or readme_track == "iterated-inferred":
+        return ("iterated", warnings)
+    if readme_track == "strict-one-shot" and (ship_count is None or ship_count == 1):
+        return ("strict-one-shot", warnings)
+    # No signal at all — default conservative: strict-one-shot (assume best faith), warn.
+    warnings.append("no ship_count and no README TRACK declaration; defaulting to strict-one-shot — verify manually")
+    return ("strict-one-shot", warnings)
+
+
 def cmd_finalize(args) -> None:
     out = Path(args.out)
     manifest = read_manifest(out)
     if manifest is None:
         sys.exit(f"[error] no {MANIFEST_NAME} in {out}; run setup first")
     end = now_iso()
+    ship_counts = _parse_ship_count(getattr(args, "ship_count", None))
     for i in range(1, args.agents + 1):
-        a = manifest["agents"].get(f"agent{i}")
+        key = f"agent{i}"
+        a = manifest["agents"].get(key)
         if a is None:
             continue
         wd = Path(a["workspace"])
         if not wd.exists():
-            print(f"[warn] workspace missing for agent{i}: {wd}")
+            print(f"[warn] workspace missing for {key}: {wd}")
             continue
         a["end_utc"] = end
         a["build_hash"] = sha256_tree(wd)
         a["duration_min"] = round((datetime.fromisoformat(end) - datetime.fromisoformat(a["start_utc"])).total_seconds() / 60, 1)
+        # Track routing per rubric §2.8
+        sc = ship_counts.get(key)
+        rt = _readme_track_hint(wd)
+        track, warns = _route_track(sc, rt)
+        a["ship_count"] = sc
+        a["readme_track_hint"] = rt
+        a["track"] = track
+        a["track_warnings"] = warns
     write_manifest(out, manifest)
-    print(f"[finalize] recorded end time + build hashes in {out / MANIFEST_NAME}")
+    print(f"[finalize] recorded end time + build hashes + track routing in {out / MANIFEST_NAME}")
     for i in range(1, args.agents + 1):
         a = manifest["agents"].get(f"agent{i}")
         if a:
-            print(f"  agent{i}: start={a['start_utc'][:19]} end={a['end_utc'][:19]} dur={a.get('duration_min')}min files={len(a.get('build_hash') or {})}")
+            print(f"  agent{i}: start={a['start_utc'][:19]} end={a['end_utc'][:19]} "
+                  f"dur={a.get('duration_min')}min files={len(a.get('build_hash') or {})} "
+                  f"ship_count={a.get('ship_count')} track={a.get('track')}")
+            for w in a.get("track_warnings", []):
+                print(f"    [warn] {w}")
+
+
+def cmd_fingerprint(args) -> None:
+    """Capture build stack/deps fingerprint per anti-gaming §6.6 — never feeds back into scoring."""
+    for d in args.build_dirs:
+        p = Path(d)
+        if not p.is_dir():
+            print(f"[fingerprint] not a dir, skipping: {p}")
+            continue
+        fp: dict = {
+            "path": str(p),
+            "captured_utc": now_iso(),
+            "stack": [],
+            "deps": {},
+            "notes": [],
+        }
+        pkg = p / "package.json"
+        if pkg.is_file():
+            try:
+                pkg_data = json.loads(pkg.read_text(encoding="utf-8"))
+                fp["stack"].append("node/npm")
+                fp["deps"]["dependencies"] = pkg_data.get("dependencies", {})
+                fp["deps"]["devDependencies"] = pkg_data.get("devDependencies", {})
+                if "vite" in json.dumps(pkg_data).lower():
+                    fp["stack"].append("vite")
+                if "react" in json.dumps(pkg_data).lower():
+                    fp["stack"].append("react")
+                if "three" in json.dumps(pkg_data).lower():
+                    fp["stack"].append("three.js")
+            except (OSError, json.JSONDecodeError) as e:
+                fp["notes"].append(f"package.json unreadable: {e}")
+        index = p / "index.html"
+        if index.is_file():
+            try:
+                html = index.read_text(encoding="utf-8", errors="ignore").lower()
+                if "webgpu" in html or "gpuadapter" in html:
+                    fp["stack"].append("webgpu")
+                if "webgl" in html or "getcontext('webgl" in html or 'getcontext("webgl' in html:
+                    fp["stack"].append("webgl")
+                if "canvas" in html and "webgl" not in html and "webgpu" not in html:
+                    fp["stack"].append("canvas2d")
+                fp["notes"].append(f"index.html size={index.stat().st_size}B")
+            except OSError as e:
+                fp["notes"].append(f"index.html unreadable: {e}")
+        elif not any(pkg.is_file() for pkg in [p / "package.json"]):
+            fp["notes"].append("no index.html and no package.json at root — nonstandard layout")
+        # asset patterns (proxy for procedural vs authored)
+        assets = list(p.rglob("*.png")) + list(p.rglob("*.jpg")) + list(p.rglob("*.wav")) + list(p.rglob("*.mp3")) + list(p.rglob("*.glb"))
+        fp["asset_files"] = len(assets)
+        fp["asset_hint"] = "procedural-heavy" if len(assets) < 3 else "authored-assets"
+        out_path = p.parent / "fingerprint.json"
+        # merge if exists
+        existing = {}
+        if out_path.is_file():
+            try:
+                existing = json.loads(out_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                existing = {}
+        existing[p.name] = fp
+        out_path.write_text(json.dumps(existing, indent=2), encoding="utf-8")
+        print(f"[fingerprint] {p.name}: stack={fp['stack']} assets={fp['asset_files']} ({fp['asset_hint']})")
+        print(f"[fingerprint]   -> {out_path}")
 
 
 def cmd_status(args) -> None:
@@ -244,9 +390,14 @@ def main() -> None:
     p.add_argument("--out", required=True)
     p.set_defaults(func=cmd_single_prompt)
 
-    p = sub.add_parser("finalize", help="record end time + build hashes")
+    p = sub.add_parser("finalize", help="record end time + build hashes + one-shot/iterated track routing")
     p.add_argument("--out", required=True)
     p.add_argument("--agents", type=int, default=2)
+    p.add_argument(
+        "--ship-count",
+        default=None,
+        help="comma-separated per-agent ship count for track routing (§2.8), e.g. agent1=1,agent2=3",
+    )
     p.set_defaults(func=cmd_finalize)
 
     p = sub.add_parser("status", help="show the run manifest")
@@ -256,6 +407,13 @@ def main() -> None:
     p = sub.add_parser("audit", help="containment-audit frozen builds")
     p.add_argument("build_dirs", nargs="+")
     p.set_defaults(func=cmd_audit)
+
+    p = sub.add_parser(
+        "fingerprint",
+        help="capture build stack/deps fingerprint for anti-attribution routing (§6.6). Never enters scoring.",
+    )
+    p.add_argument("build_dirs", nargs="+")
+    p.set_defaults(func=cmd_fingerprint)
 
     args = ap.parse_args()
     args.func(args)

@@ -11,11 +11,14 @@ How to run: fresh load, then again after reload, then once on mobile viewport. F
 - [ ] Understandable in <1 min without manual
 
 ## B. Core controls / interaction (Kernel)
-- [ ] Primary movement/interaction works; no page scroll on game keys (Space/arrows prevented)
+- [ ] Primary movement/interaction works with a **real mouse and real keyboard**, not just synthetic events
+- [ ] No page scroll on game keys (Space/arrows prevented)
 - [ ] Dodge/special action if applicable has feedback and fair window
 - [ ] Input buffering: quick press while busy not silently dropped
 - [ ] Controls frame-rate independent (feel same at different FPS)
 - [ ] No hidden autoplay faking quality
+- [ ] **Mouse specifics** (if used): LMB/RMB reach game state (not swallowed by overlay/menu canvas); cursor leaving canvas does not soft-lock, lose aim vector, or freeze player; pointer re-entry restores aim cleanly
+- [ ] **Menu ↔ gameplay isolation**: opening a menu mid-game does not fire the click through to gameplay; closing the menu does not leave input state trapped; pause menu and death menu do not double-fire actions
 
 ## C. Mobile/touch (if applicable, or desktop-only documented)
 - [ ] Virtual controls work if applicable; buttons large thumb-reachable
@@ -27,6 +30,9 @@ How to run: fresh load, then again after reload, then once on mobile viewport. F
 - [ ] Actions have wind-up → active → recovery if applicable; hit-stop/feedback; distinct success/failure
 - [ ] Special action works, limited by resource, feels impactful
 - [ ] Mechanics offer variety beyond one-trick (emergence, viable approaches, not single trick)
+- [ ] **First level is beatable** by a real human in reasonable time (~5 min honest play); onboarding difficulty is calibrated, not "clever-but-impossible"
+- [ ] **There is a beat after the first wow** — difficulty scales, a new mechanic unlocks, a new environment enters, world reveals a second layer. Give the judge a reason to still be there at minute 5.
+- [ ] Death / fail states are readable — player understands *what killed them* and wants to retry
 
 ## E. World & progression (your design)
 - [ ] Run/level/mode contains start + gameplay + reward/progression + end condition
@@ -67,8 +73,12 @@ How to run: fresh load, then again after reload, then once on mobile viewport. F
 - [ ] Debug/performance indicator available toggleable off by default for players
 - [ ] Code shows separation: state, input, loop, rendering, collision, audio, UI, config centralized, no scattered magic numbers — evidence of iteration/refactor, not just dump
 
-## L. Audio
-- [ ] Sound toggle works; audio failure doesn't block gameplay
+## L. Audio (hygiene — hard requirement)
+- [ ] Sound toggle works; master mute silences everything within one frame
+- [ ] **No constant drone / streaming bass loop that never stops**
+- [ ] Sounds are event-driven with finite envelopes; unmanaged WebAudio nodes cleaned up
+- [ ] Audio failure (AudioContext init, autoplay policy) doesn't block gameplay
+- [ ] Tab-blur pauses or ducks audio; sounds don't play behind pause overlay
 - [ ] Sounds present or strong visual-only fallback
 
 ## M. Environment consistency (no demo mode)
@@ -95,5 +105,11 @@ How to run: fresh load, then again after reload, then once on mobile viewport. F
 - [ ] No placeholder screens, under construction, dead ends, broken buttons
 - [ ] Everything claimed in README actually works reachable
 - [ ] No telemetry, analytics, hidden reporting, embedded quality score
-- [ ] No environment sniffing
+- [ ] No environment sniffing / demo mode differing from real play
+- [ ] **This build is the actual result of one session** — not stitched from multiple polish passes. If it isn't, disclose in README (it will be scored on the multi-turn track, not the primary battle).
+
+## Q. Ambition-vs-execution honesty (3D / WebGPU / heavy tech)
+- [ ] If shipping 3D / WebGL / WebGPU / physics: **controls are as tight as any 2D game equivalent** — no marble that won't launch, no camera that divorces from physics, no menu that collapses into the scene
+- [ ] Ambition is scoped so the wow beat is *finished*, not just started. A polished 45-second slice beats 5 broken minutes.
+- [ ] Framerate stable under load on average hardware; if not, scope was too big — cut before shipping
 
