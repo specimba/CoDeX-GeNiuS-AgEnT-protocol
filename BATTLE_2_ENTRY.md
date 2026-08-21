@@ -1,11 +1,11 @@
-# BATTLE 2 — Unknown-LLM Round · Paste-Ready Launch Kit
+# BATTLE — Unknown-LLM Round · Paste-Ready Launch Kit
 
-This is the single file to open when you're ready to run Battle 2 on arena.ai. It packages the launch procedure, the per-run scoresheet, and the paste-ready contestant prompt in one place. Everything else in the repo is supporting material.
+This is the single file to open when you're ready to run a new round on arena.ai. It packages the launch procedure, the per-run scoresheet, and the paste-ready contestant prompt in one place. Everything else in the repo is supporting material.
 
-**Prompt version:** BATTLE_PROMPT v6 (adopted from freebuff "WOW v5" base + Battle 1 + Round 002 hardening)
-**Rubric version:** 02-scoring-rubric §2.0–§2.9
-**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8
-**Ready:** yes — see `battles/round-002-after-action.md` for the changes that produced this version.
+**Prompt version:** BATTLE_PROMPT **v7** (short, calm, concrete — replaces v6 after Round 003 regression)
+**Rubric version:** 02-scoring-rubric §2.0–§2.9 (cluster cap now soft, not hard)
+**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (§6.5 cluster registry now JUDGE-SIDE ONLY)
+**Ready:** yes — see `battles/round-003-after-action.md` for why v7 replaced v6.
 
 ---
 
@@ -195,14 +195,17 @@ Run this from repo root:
 ```bash
 python3 -m py_compile challenge/launch_challenge.py benchmark/ops/aggregate_scores.py benchmark/ops/decision_block.py && echo "harness OK"
 
-grep -q "v6" challenge/BATTLE_PROMPT.md && echo "prompt: v6 loaded"
-grep -q "M8 " benchmark/02-scoring-rubric.md && echo "rubric: M8 (depth-after-wow) present"
-grep -q "CEIL-8" benchmark/02-scoring-rubric.md && echo "rubric: CEIL-8 (ambition-theater 3D) present"
-grep -q "6.5 Cliché-cluster" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: cluster registry present"
+grep -q "(v7)" challenge/BATTLE_PROMPT.md && echo "prompt: v7 loaded (calm/short)"
+BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 12000 ] && echo "prompt: size OK (<12KB, was 21KB in v6)"
+grep -qE "M8 |Depth after wow" benchmark/02-scoring-rubric.md && echo "rubric: M8 depth-after-wow present"
+grep -q "CEIL-8" benchmark/02-scoring-rubric.md && echo "rubric: CEIL-8 ambition-theater 3D present"
+grep -q "JUDGE-SIDE ONLY" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: cluster registry judge-side-only per v7"
 grep -q "track" challenge/launch_challenge.py && echo "harness: track routing present"
+grep -q "TRACK: strict-one-shot" challenge/BATTLE_PROMPT.md && echo "prompt: track disclosure requested"
+! grep -q "Competent.*will lose" challenge/BATTLE_PROMPT.md && echo "prompt: v6 'competent will lose' framing REMOVED"
 ```
 
-Expected output: five OK lines. If any are missing, do not start — inspect `battles/round-002-after-action.md` for what changed and re-verify.
+Expected output: eight OK lines. If any are missing, do not start — inspect `battles/round-003-after-action.md` for what changed and re-verify.
 
 ---
 

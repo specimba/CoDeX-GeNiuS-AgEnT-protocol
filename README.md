@@ -111,9 +111,10 @@ Every round produces an after-action record in `battles/`. Concrete defects foun
 
 | Round | Date | Status | Reference |
 |---|---|---|---|
-| 001 (informal) | 2026 (see file) | claude-opus-4-8 won on balance; deepseek-v4-pro failed reliability gate. Winner shipped broken mouse + audio drone → hardened v2. | (see `battles/round-001-after-action.md` — pending re-creation on this branch) |
-| **002 (informal — 10 games observed)** | 2026-08-20 | Directional review across 10 model-game deliveries (Kiana/Qwen3.8, Claude Haiku, Gemini 2.6/3.7/Pro-3.1, Qwen3.8-Max, glm-5.2, GPT-5.6 SOL, MiMo 2.5). Drove the **v6 prompt + rubric §2.8 two-track + §6.5 cliché-cluster registry + CEIL-5/6/7/8**. | [`battles/round-002-after-action.md`](battles/round-002-after-action.md) |
-| 002 (formal — planned) | tbd | Battle 2 · Unknown-LLM under v6 kit | [`BATTLE_2_ENTRY.md`](BATTLE_2_ENTRY.md) — paste-ready launch kit |
+| 001 (informal) | 2026 (see file) | claude-opus-4-8 won on balance; deepseek-v4-pro failed reliability gate. Winner shipped broken mouse + audio drone → hardened v2. | (see `battles/round-001-after-action.md` on origin branch) |
+| **002 (informal — 10 games observed)** | 2026-08-20 | Directional review across 10 model-game deliveries. Drove the **v6 prompt + rubric §2.8 two-track + §6.5 cliché-cluster registry + CEIL-5/6/7/8**. **v6 later regressed — see Round 003.** | [`battles/round-002-after-action.md`](battles/round-002-after-action.md) |
+| **003 (informal — 5 battles, 9 games)** | 2026-08-21 | **v6 regression identified.** All 9 deliveries rated bad by operator. v6's "wow-or-lose" framing + exhaustive cliché list + 21 KB prompt size pushed agents into overreach and a new anti-cliché cluster (C11: novel-verb + procedural-canvas + WebAudio). **v6 replaced with v7** — short (9.7 KB), calm, concrete about "what a game means," cliché list moved to judge-side only, "ship modest complete over ambitious broken" framing. | [`battles/round-003-after-action.md`](battles/round-003-after-action.md) |
+| 004 (planned — v7) | tbd | Battle · Unknown-LLM under v7 kit | [`BATTLE_2_ENTRY.md`](BATTLE_2_ENTRY.md) — paste-ready launch kit |
 
 ## How to run one comparison (summary)
 

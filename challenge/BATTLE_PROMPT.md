@@ -1,241 +1,115 @@
-# 🗡️ BATTLE PROMPT — Ship something that makes a human go *"…wait"* (v6)
+# BATTLE PROMPT — Build one good browser game, in one session (v7)
 
-> You are one of two or more contestants. Every contestant receives this exact prompt (identical bytes). A human judge will play your build blind for up to an hour, side-by-side against the other entry. The judge never reads your code, your README, or these instructions during scoring. **They score only what they experience.**
->
-> There is no style guide, no approved genre, no approved control scheme, no approved palette, no approved camera perspective, and no approved input modality. **Your job is surprise.** Ship something that, within the first 60 seconds of play, makes the judge think at least one of:
->
-> - *"Wait — how did an AI do this in one session?"*
-> - *"I haven't seen that before."*
-> - *"That looks / sounds / feels genuinely incredible."*
-> - *"I want to show this to someone."*
->
-> That is the entire brief. Everything below is either **gates** (must pass or you're disqualified) or **anti-patterns** (learned from prior rounds; ignore them at your peril).
+You have a single sustained development session to build a complete, original, playable browser game. A human will play it for up to an hour and compare it side-by-side with one other agent's build from the same brief. You never see the other build. There is no rubric to game and no evaluator to please — the human is playing the game they get.
+
+**The task is not to impress. The task is to build a game a person is genuinely glad they played.**
 
 ---
 
-## 0. What actually wins
+## 1. What "a game" means here
 
-The winning entry is the one the judge remembers after closing the tab. That can come from anywhere:
+A complete run has all of these, in order, with no page refresh:
 
-- **Mechanical novelty** — an interaction, verb, or system that is genuinely yours.
-- **Graphical / technical ambition** — near-commercial rendering fidelity, clever shader work, WebGPU/WebGL depth, fluid or physics simulation of unusual depth, real-data integration (real geography/terrain/maps/audio used coherently and legally), demoscene-level craft, something that looks like it shouldn't run in a browser.
-- **Experience design** — atmosphere, emotion, narrative, pacing, sound, humor, absurdity, quiet, tension — a game that *does* something to the player, not just a game the player *does* something in.
-- **Experimental input** — mouse, keyboard, touch, microphone, camera, device orientation, one-button, text-only, any input used in a way that is obviously the right choice for *this* game.
-- **Feel** — the specific sensation that the thing you are touching has weight and intent.
+1. **Title / start** — the player understands within 10 seconds what they're about to do.
+2. **Gameplay** — a clear core action they take repeatedly, with resistance (something to overcome, learn, discover, or master).
+3. **Reward / progression** — something changes as they play: score, level, environment, story, unlock, revealed content. The player can see they got somewhere.
+4. **End condition** — victory, death, exhaustion of content, a beat that says "run over." A run has a shape.
+5. **Restart** — from the end state, one action starts a fresh run with all state cleanly reset.
 
-**You are not limited to 2D. You are not limited to small scope. You are not limited to indie-jam aesthetics. You are not limited to mechanics as the sole carrier of originality.**
+A screensaver, a physics toy, a tech demo, a scene you walk through once with no ask — none of those are games for this benchmark, no matter how beautiful. **If your build can be fully exhausted in under 2 minutes on first try with no resistance, it fails this gate.**
 
-If you can ship a photorealistic driving simulator using streamed local map tiles, do it. If you can ship a single-shader GPU demo that is somehow also a game, do it. If you can ship a text game that makes people cry, do it. If you can ship a physics sandbox with destruction depth nobody expects from a browser, do it. If you can ship a small thing so beautifully made it feels like a commercial title, do it.
+Scope suggestion — this is where good one-shot builds tend to land:
+- **One core verb** (drag, shoot, tilt, draw, place, deflect, whatever) that feels great in isolation before you add anything.
+- **3–5 levels or 3–5 minutes of escalation**, hand-shaped, that make the core verb evolve.
+- **Simple loss condition** the player understands immediately.
+- **Small honest polish pass** at the end for feel, feedback, and readability.
 
-> **"Competent" will lose. "Safe" will lose. "Bland but bug-free" will lose.**
-> **"Least bad" is not a win — the judge is allowed to call a tie when neither entry is impressive, and a tie is the correct outcome over a false winner.**
+A tight game that does one thing well beats a sprawling game that mostly works. If you have to choose between more content and more polish, choose polish.
 
 ---
 
-## 1. Non-negotiable gates (fail any of these and the judge stops)
+## 2. Non-negotiable gates (fail any and the human stops early)
 
-These are for comparability, not style. They are the only shape restrictions.
+These are the only hard rules. Everything else is your call.
 
 1. **Launches.** Opening the HTML (or running `python -m http.server`) starts the game. No blank screen, no infinite spinner, no console-error loop, no missing-asset fatal.
-2. **Complete loop.** Start → meaningful interaction → payoff / end-state → restart, all without a page refresh. A build that can be exhausted in under 2 minutes on a fresh first run, or whose final challenge is trivially one-shottable, or where there is no resistance / escalation / discovery at all (a screensaver, a toy, a pretty thing with no ask) — is **not a complete game** and will be scored as *incomplete loop*.
-3. **First level is beatable by a real human.** If your onboarding wave/room/level cannot be cleared by the judge inside ~5 minutes of honest play, the game reads as broken difficulty, not depth. (Real prior failure: a "clever" first-level puzzle nobody could solve killed sustained interest.)
-4. **Self-contained & offline.** No backend, no network calls, no auth, no telemetry, no analytics, no runtime calls to external AI/image/model services, no hidden reporting. Static folder or single HTML. Bundle every library. Pre-baked / procedural / self-created / clearly-licensed local assets only.
-5. **Honest.** No placeholder screens, no dead ends, no buttons that don't work, no "coming soon", no hidden autoplay that fakes quality, no environment sniffing that changes rules per device/viewport/UA/headless. **The same game plays for every judge in every run.**
-6. **Mouse, keyboard, touch — whichever you support, work.** In prior rounds primary desktop input has failed silently on shipped builds (mouse aim swallowed by overlay canvases, LMB not reaching game state, cursor lost when moving outside canvas). **Verify with a real mouse before shipping.** If your game uses mouse-aim, out-of-canvas movement must not soft-lock or lose the aim vector.
-7. **Mute, pause, restart work.** Audio can be turned off instantly; muted gameplay is complete and legible; pause fully freezes the simulation (timers, particles, physics, spawns, AI); restart from anywhere resets state fully; menus and gameplay do not leak into each other (opening a menu mid-game must not double-fire actions or trap input state when closed).
-8. **Audio hygiene.** No constant unchanging drone. No streaming bass loop that never stops. Sounds are event-driven (finite envelopes, sensibly stopped). Master mute silences everything within one frame. Tab-blur pauses or ducks audio. If `AudioContext` cannot initialize, the game still plays.
-9. **State isolated across resize / blur / orient / restart.** Resizing mid-game does not lose entities or freeze. Tabbing away pauses. Orientation change re-lays out cleanly. Rapid Restart→Start does not double-spawn. Corrupt localStorage does not crash.
-10. **Controls are self-explanatory or disclosed inline.** If your game uses a non-obvious control scheme, it must be obvious *from the game itself* (in-scene affordance, first-second prompt, glowing cursor) — not just from the README. If you deliberately invert a convention, show the player within ~3 seconds. **There is no required control convention.** You do not have to use WASD. You do not have to use Space-as-primary. Pick what your game needs and make it *work*.
-11. **Legal / original.** Only ship content you have the right to ship. Self-created, procedurally generated, public-domain, or clearly-licensed assets only. Attribute in README.
-12. **One shot.** This entire deliverable must be produced inside a single sustained development session. Iterating across multiple delivered builds after a "first ship" is not this benchmark. Multi-turn polish is tracked separately and cannot compete for the primary battle result. Ship your best in one pass.
+2. **Complete loop.** Start → gameplay → reward/progression → end → restart, without page refresh. Not a toy, not a demo, not a screensaver — see §1.
+3. **First level / wave / room is beatable** by a real human in ~5 minutes of honest play. Onboarding must not be "clever-but-impossible."
+4. **Controls that work.** Whatever inputs you support, they work with a *real* mouse and *real* keyboard (or *real* touch). If you use mouse-aim, cursor leaving the canvas must not soft-lock or lose the aim vector. Menus don't leak clicks into gameplay. Test this before shipping.
+5. **Pause, mute, restart work.** Pause fully freezes simulation, timers, particles, spawns. Mute silences everything within one frame — **no constant drone, no streaming bass loop that never stops.** Restart from any state resets fully. If `AudioContext` cannot init, the game still plays.
+6. **Robust to normal browser things.** Resize mid-play safe. Tab-blur pauses (or safely continues without audio). Orientation change re-lays out cleanly. Rapid Restart→Start doesn't double-spawn. Corrupt `localStorage` doesn't crash.
+7. **Self-contained & offline.** No backend, no network calls, no external AI/model services at runtime, no analytics, no telemetry, no hidden reporting. Static folder or single HTML. Bundle every library. Local / procedural / self-created / clearly-licensed assets only.
+8. **Honest.** No placeholder screens, no dead ends, no buttons that don't work, no "coming soon." No hidden autoplay that makes the game look better than it plays. The same game plays for every human on every run — no environment sniffing, no demo mode differing from real play.
+9. **One shot.** This deliverable is the output of one sustained development session. If you go back and iterate across multiple returned artifacts, disclose that in the README as `TRACK: iterated (N passes)` — those builds are tracked separately and cannot win the primary battle result. If in doubt, disclose. Undisclosed multi-turn iteration is worse than disclosed iteration.
+10. **Legal / original.** Ship only content you have the right to ship. Self-created, procedurally generated, public-domain, or clearly-licensed local assets. Attribute in README.
 
-That's it. Everything else — genre, rendering stack, visual style, palette, audio style, camera, scope, level structure, narrative, UI chrome — is your decision.
+That's all. No required control scheme, no required style, no required genre, no required tech stack. 2D, 2.5D, 3D, text, ASCII, CSS-only — your call.
 
 ---
 
-## 2. The patterns that lose (read once, don't re-read)
+## 3. What a human will notice
 
-The fastest way to lose is to ship something a judge has already seen from three other agents this week. This is not a style ban — you *can* win with any of these settings if your execution is genuinely transformative — but know that you are walking into a headwind:
+You don't need to be told what makes a game good. But here are things humans consistently do and don't notice, so you can spend your session accordingly:
 
-- **Dark / near-black background with one bright accent color**, where *every* entity (player, enemies, pickups, particles) is a glowing orb/circle, and there is no authored world behind the glow. A screenshot looks like every other AI game.
-- **"Shapes that shoot shapes."** Flat primitive geometry (rectangles/circles/triangles) with no silhouette identity, no texture, no animation, no dressing, shooting other primitive geometry.
-- **Reskin of an existing casual game with no meaningful transformation** — endless runner / Dino-jumper, Flappy-Bird variant, neon vector shooter, generic collect-stars, snake, tetris-with-a-twist.
-- **Feature list before a feel** — 10 UI modals (classes / relics / talents / codex / shop / settings / lore / inventory) around a core verb that does not yet feel good.
-- **"Chill" as an excuse for zero resistance** — a pretty ambient thing you can exhaust in 90 seconds, where nothing asks anything of the player.
-- **Ambition-theater 3D** — a technically impressive 3D scene where the controls are broken, the marble won't launch, the menu collapses inside gameplay, or the player-camera divorces from the physics. A broken 3D build scores *below* a competent 2D build every time. If you commit to 3D, the controls must be as tight as any 2D game or the ambition backfires.
-- **The specific 2026 AI cliché cluster (observed converged multiple times):**
-  - lighthouse / rotating beam over dark water
-  - moth-to-flame / firefly / lantern-and-moths / night-garden collector
-  - deep-sea bioluminescent descent
-  - sumi-e / ink-wash calligraphy-as-combat
-  - spirit-orb-in-void
-  - gothic-ember dungeon with flat enemies
-  - "brutalist paper obsidian and blood glass" hi-contrast physics slingshot
+**They notice** when the core verb has weight, when they die and understand why, when a second thing happens after they've figured out the first thing, when the visuals still look considered five minutes in, when audio adds rather than intrudes, when there's a moment they'd screenshot.
 
-  These are not banned — but multiple prior contestants across *different models* independently converged on them from earlier versions of this prompt. That means the judge has seen the default answer. If you land in one of these buckets, you have to work three times harder to escape the "oh, this one again" reaction.
+**They don't notice** most of your feature list, most of your particle systems, or how many buttons your title screen has. They don't notice code quality directly, but they notice the symptoms: stutters, glitches, layout breaks, console errors, controls that lag.
 
-If your first concept lands in one of those buckets, pause. Generate five wildly different ideas. Kill the most obvious one. Kill the one that defaults to black+one-accent. Pick the one that scares you a little because you don't quite know how to pull it off — that is usually the right answer.
+Two specific things previous rounds under-delivered on:
+
+- **Depth after the first minute.** A build that lands its first-30-seconds beat and then repeats identical content for the next 10 minutes reads as a screensaver, not a game. Something should change — difficulty, environment, mechanic, story — as the player continues.
+- **Visual density that lasts.** A polished title screen followed by primitive-shape gameplay reads as a broken promise. Whatever visual identity you commit to, sustain it across menus, gameplay, death, restart. If you commit to 3D or WebGPU, make sure it *also* passes the controls and framerate gates — broken 3D reads worse than competent 2D.
 
 ---
 
-## 3. The polish floor (what "competent" looks like in 2026, and why it loses alone)
+## 4. How to spend the session (a pattern that has worked, not a mandate)
 
-Visuals are scored ~20% of the composite and are the fastest way to signal or destroy the judge's first impression. You can win with 2D, 2.5D, 3D, text, ASCII, WebGPU compute, CSS-only, any of it — but *whatever you choose must actually be crafted, sustained across the whole run, and not primitive-shape default*.
+1. **Pick a concept you can finish.** Bigger-than-time is fine only if you can cut it down to a shippable core. If in doubt, smaller is better.
+2. **Get the one thing the player does most working and feeling right, in isolation, before adding anything.** Play it for a minute. Not proud? Fix it. Still not proud? Change the verb.
+3. **Build the shape of a run around that verb** — start, escalation, end, restart. Not features around it, *the shape.*
+4. **Play your own game for 10 minutes with sound on and a real mouse.** With the tab blurred and refocused. On a resized window. If you're bored, the human will be bored. If a bug keeps annoying you, it will annoy them faster.
+5. **Cut before you polish, polish before you add.**
+6. **Ship honestly.** Everything in your README works and is reachable. If something's rough, say so; don't oversell.
 
-The floor to be taken seriously:
-
-- **Silhouette identity.** Entities that are more than "colored circle / rectangle." Hand-drawn shapes, sprites, meshes, particles-with-personality. If every entity in your game is the same primitive geometry with different tints, your V0 score caps low regardless of functionality.
-- **Sustained density-of-craft, not just a hero title screen.** Layered lighting or fog or texture or particle systems or camera composition or dressing or cohesive palette — at least two of those, visible during *actual gameplay*, not just the menu.
-- **Readability preserved.** Craft that hides attacks, hazards, or the player under particle soup is not craft. Effects must not eat the game.
-- **Coherent identity from menu → gameplay → death → restart.** Same voice everywhere.
-
-**Working 3D / WebGL / WebGPU is bonused.** If your game ships actual GPU-programmed rendering that also passes every gate above (including controls and framerate) — that is a memorable answer to *"how did an AI do this in one session?"* and the rubric explicitly rewards it. But: **broken 3D scores below competent 2D.** Ambition without control is worse than restraint with control. Do not choose 3D unless you can finish it.
-
-**Deliberate minimalism is fine — and can win — but only if intentional and expressive.** A precise monochrome game with exquisite timing, a single-verb game with perfect feedback, a text-only game with an unforgettable voice — these can all score at the top of V0. The bar: it must read as *chosen*, not *defaulted-to-because-time-ran-out*, and the polish inside that constraint has to be extreme.
+Long-session credit goes to *revising a weak early approach*, not to *generating more code*. If your first prototype isn't landing, changing direction is a good sign, not a bad one.
 
 ---
 
-## 4. Depth after the wow
+## 5. Self-QA before you ship
 
-The single most common failure across recent rounds is *"beautiful first 30 seconds, then I don't want to keep playing."* First-impression polish without depth loses to a rougher game with real replay. To avoid that:
+Run these in one pass, fresh load, real mouse, sound on. Fix what you can; disclose what you can't.
 
-- **After the wow beat, there must be another beat.** Difficulty scales, a new mechanic unlocks, a new environment enters, the world reveals a second layer — *something* that gives the judge a reason to still be there at minute 5.
-- **The core verb has to earn its runtime.** If your core verb is dragging a light, or tilting a marble, or drawing a stroke — the game has to invent enough variations on it that the tenth use feels different from the first.
-- **Fail states must be readable.** The judge dies, understands why, and wants to try again. If they die and can't tell what killed them, they close the tab.
-- **Progression is visible.** Score, wave, level, story beat — any concrete signal that "I got further." A game with no legible progress is a screensaver.
-
----
-
-## 5. How to spend your session (a pattern, not a recipe)
-
-You decide your own process. What follows is the pattern observed in entries that did well:
-
-1. **Pick a concept that is a little too big for the time, then cut relentlessly.** A breathtaking 2-minute vertical slice beats 20 minutes of filler. If your wildest idea is "photorealistic coastal highway at golden hour with real traffic" and you can only ship 45 seconds of it at quality, ship the 45 seconds — but make those 45 seconds *unforgettable*.
-2. **Get the one thing the player does most — or the thing that is your wow shot — working and feeling/looking right before adding anything else.** Play it. If you are not proud of that one thing in isolation, stop and fix it.
-3. **Then build outward.** One scene, one beat, one payoff that earns its runtime, honest polish, final QA.
-4. **Play your own game for at least 10 minutes.** With a real mouse. With sound on. With the tab blurred and refocused. On a resized window. If you are bored, the judge will be bored. If you keep noticing the same bug, the judge will notice it faster.
-5. **Cut scope rather than ship half-working breadth.** A small thing that is astonishing beats a big thing that mostly works.
-6. **Be honest in your deliverable.** Ship what works; don't claim what doesn't.
-
-**Rewarded for revising a weak early approach.** The long-session pillar is not "generated more code" — it is "recognized my first prototype wasn't good enough and did something about it."
+- [ ] Fresh load → title → first meaningful interaction inside 10s. No blank screen, no console error loop.
+- [ ] Complete loop works: start → gameplay → reward → end → restart, no refresh needed.
+- [ ] First level / wave / room is beatable in ~5 min honest play.
+- [ ] Controls respond, no page-scroll on game keys, mouse cursor exit doesn't soft-lock, menus don't leak clicks.
+- [ ] Pause fully freezes. Mute silences within one frame — no drone.
+- [ ] Resize mid-play safe. Tab-blur safe. Rapid Restart→Start doesn't double-spawn. Corrupt `localStorage` doesn't crash.
+- [ ] Visual identity is present in gameplay, not just the title screen.
+- [ ] There's a reason to still be playing at minute 5 — something changes as the run continues.
+- [ ] No placeholder screens, dead ends, broken buttons, "coming soon."
+- [ ] No analytics, telemetry, hidden reporting, embedded quality/score meta-metric.
+- [ ] `TRACK: strict-one-shot` at top of README (or `TRACK: iterated (N passes)` if disclosing).
+- [ ] Everything the README claims exists, works, and is reachable.
 
 ---
 
-## 6. Explicit anti-behaviors (auto-defect)
+## 6. Deliverables
 
-Doing any of these is a defect against your build, regardless of how good the rest is:
-
-- Backend, external service, analytics, telemetry, network calls, hidden reporting.
-- Embed a quality/benchmark self-rating or "eval score" inside the game. Internal high-score tables are fine; meta-quality scores are not.
-- Read or reference any benchmark/evaluation files (there are none in your workspace anyway).
-- Reverse-engineer or hunt for evaluation criteria beyond this document.
-- Placeholder screens, "under construction" rooms, dead ends, unimplemented buttons, disabled tabs.
-- Fake behavior: hidden autoplay that makes a demo look better than real play; behavior that changes between headless/desktop/mobile; a "cinematic intro" that hides that the actual gameplay is much thinner.
-- Ship simple flat colored rectangles / primitive-shape enemies with no dressing as your final look — visual ambition is heavily weighted and this scores at the floor.
-- **Claim controls that don't work.** If your README says "click to aim" and clicking doesn't aim, that is worse than not shipping click-aim at all.
-- **Ship a constant audio drone / streaming bass loop.** Audio must be event-driven and stoppable.
+1. **Runnable game** — static folder or single HTML. Opens and plays.
+2. **README.md** — short. First line: `TRACK: strict-one-shot` or `TRACK: iterated (N passes)`. Then: how to run, controls, stack if any, what you cut for time, one paragraph **DIRECTOR_STATEMENT** describing your intent and what you want the player to feel, one paragraph **HONEST_SELF_ASSESSMENT** naming your strongest beat and your weakest area. The human reads these *after* they play — they don't rescue what the game itself doesn't communicate.
 
 ---
 
-## 7. Self-QA checklist (run before you ship)
+## 7. Definition of done
 
-Launch & boot:
-- [ ] Fresh load starts; no blank screen, no unhandled error loop, no infinite spinner, no missing-asset fatal
-- [ ] Title / entry screen renders coherently and matches the game's identity
+Before you stop, you should be able to say honestly:
 
-Core controls, desktop:
-- [ ] Primary movement/interaction works with a *real* mouse and a *real* keyboard, not just synthetic events
-- [ ] If mouse-aim is used: cursor leaving canvas does not soft-lock, lose the aim vector, or freeze the player
-- [ ] Menus / pause overlays do not swallow game clicks; game clicks do not fire through open menus
-- [ ] No page scroll on game keys, no browser default hijack
-- [ ] Input buffering: a press while busy is not silently dropped
-- [ ] Frame-rate independent
+- A new player can load, understand the objective, play, achieve something, fail, and restart — without reading anything, without confusion.
+- The game has a run shape — not a toy, not a demo. There's a reason to still be playing at minute 5.
+- Controls work, pause freezes, mute silences, restart resets. No drone. No menu leak. No dead buttons.
+- The visuals I committed to are sustained across the whole run.
+- Everything in the README is true.
+- If this is not a strict-one-shot build, I said so at the top of the README.
 
-Mobile / touch (if supported):
-- [ ] Buttons large & thumb-reachable; no accidental scroll / zoom / selection; press states visible
-
-Game feel:
-- [ ] First meaningful interaction happens inside ~10 seconds of load
-- [ ] Actions have wind-up → active → recovery if applicable; success and failure are distinct
-- [ ] Death / fail states clearly communicate what killed the player
-
-Loop & progression:
-- [ ] Full run: start → gameplay → reward/progression → end condition → restart, all without refresh
-- [ ] First level / wave is beatable by a real human in reasonable time
-- [ ] There is a beat after the first wow; the game gets somewhere over 5–10 minutes
-- [ ] No permanently stuck states, no impossible placements, no unreachable win conditions
-
-States & transitions:
-- [ ] Pause fully freezes simulation, timers, particles, physics, spawns; resume continues cleanly
-- [ ] Instant Restart fully resets; rapid Restart→Start does not double-spawn
-- [ ] Menu open / close does not leak input into gameplay
-- [ ] Resize / orientation change mid-game safe; tab blur/focus safe
-
-Audio:
-- [ ] Master mute silences everything within one frame
-- [ ] No constant drone / infinite bass streaming loop
-- [ ] Sounds are event-driven; failure to init AudioContext does not block gameplay
-- [ ] Tab-blur pauses or ducks audio
-
-Persistence (if applicable):
-- [ ] High scores / progress survive reload, sorted; corrupt storage doesn't crash; reset behind confirmation
-
-Robustness & performance:
-- [ ] Stable frame rate with many entities/particles; pooled / capped where possible
-- [ ] Rendering pauses when tab hidden
-- [ ] Mashing inputs safe
-
-Accessibility:
-- [ ] Keyboard navigates menus; visible focus states
-- [ ] Reduced-motion mode reduces shake / flash / particles
-- [ ] Info is not color-only; legible at small sizes; safe areas respected
-
-Environment consistency:
-- [ ] Same rules on desktop / mobile / portrait / landscape / headless — no device or UA bonuses
-
-Visual ambition (heavily weighted):
-- [ ] Not primitive shapes / flat rectangles / generic UI as final look
-- [ ] Distinctive, consistent art identity across menu, gameplay, death, restart
-- [ ] Layered visual craft (at least two of: lighting, fog, texture, particles, dressing, camera composition, palette) sustained across the whole run, not just the title
-- [ ] Rich visuals do not hurt readability of hazards / player / actions
-- [ ] Clearly beyond box-gradient-colored-enemies / 2002-flash-game presentation
-
-Honesty gate:
-- [ ] No placeholder screens, dead ends, broken buttons; everything the README claims works and is reachable
-- [ ] No telemetry, analytics, hidden reporting, embedded meta-quality score
-- [ ] The build I am about to ship is the *actual result of one session*, not stitched from multiple polish passes
-
----
-
-## 8. Deliverables
-
-1. **Runnable game** — static build (folder or single HTML). Opens in a modern browser or via `python -m http.server`. It plays.
-2. **README.md** — short: how to run, controls (what you chose and why), engine/stack if any, what you intentionally cut for time (if anything), a 1-paragraph **DIRECTOR_STATEMENT** (your intent, the wow you were going for, what you want the player to feel).
-3. **One-paragraph honest self-assessment** (can be inside README): what your build's strongest beat is and where it is weakest. Don't oversell. The judge scores what they experience, not what you promise.
-
-The judge reads (2) and (3) *after* independent scoring, to understand intent — not to rescue anything the game itself failed to communicate.
-
----
-
-## 9. Definition of Done (final gate)
-
-Before you stop, you must be able to say truthfully:
-
-- A new player can load the page, understand the objective, interact meaningfully, achieve something, and restart after failure — without confusion, without reading anything.
-- The game is complete (start → progression → end → restart) and has no broken buttons, dead ends, or placeholder screens.
-- It runs offline, self-contained, on desktop, on mobile.
-- **Every claim in the README is true.** Everything I say exists, works, and is reachable.
-- Mouse works on a real mouse. Audio can be muted instantly and does not drone. Pause fully freezes. Menu state does not leak into gameplay.
-- The visuals are *chosen* and *sustained*, not primitive-default-because-time-ran-out.
-- After the first wow, there is a reason to still be playing at minute 5.
-- The build feels authored and intentional — not a template, not a stack of features. A *game*.
-
----
-
-## 10. Final word
-
-You are not filling out a checklist. You are not delivering homework. You are trying to make another human being, on the other side of a blind comparison, stop for a second and go *"…wait."*
-
-The judge has seen the safe answers. They have seen the generic answers. They have seen particle soup. They have seen the lighthouses and the moths and the sumi-e. They have seen "Move with WASD, Space to jump." They have seen the modal-stack feature soups. They have seen the dark-void-with-glow. **None of those win unless they are elevated by something unignorable.**
-
-Ship your best complete game in one shot. Choose whatever format wins — 2D, 3D, WebGPU compute, text, weird — unlimited freedom, one honest pass. Good luck.
+Ship a modest complete game rather than an ambitious broken one. Good luck.

@@ -1,115 +1,74 @@
-# Developer Self-QA Checklist — One-Shot Game Creation
+# Developer Self-QA — One-Shot Game Creation
 
-Internal build-verification checklist agent runs before delivery. Not external rubric — lives in benchmark/ and never shown as scoring formula. Some overlap with spec legitimate (spec is source of truth). What is withheld is scoring weights.
+A short internal checklist to run against your build before delivery. Fresh load, real mouse, sound on. Then again after reload. Then once on a mobile viewport (if you support touch).
 
-How to run: fresh load, then again after reload, then once on mobile viewport. For every item: Pass / Fail / N/A, plus one line evidence. Fix every Fail you can. If Fail can't be fixed in time, record honestly in README — player experience will reflect it regardless. This benchmark rewards long-session execution: prototype → test → debug → iterate → polish, not first functional version.
+For every item: Pass / Fail / N/A, plus one line of evidence. Fix every Fail you can. If you can't fix it in time, disclose honestly in the README — the human will find it either way and honest disclosure is not penalized.
 
-## A. Launch & boot (Kernel)
-- [ ] Fresh load starts; no blank screen, no unhandled console errors, no infinite spinner
-- [ ] Boot/loading state exists and resolves
-- [ ] Title/start screen renders with understandable objective, Start, How to Play if applicable, audio toggle, cohesive theme
-- [ ] Understandable in <1 min without manual
+This checklist is not the scoring rubric. It's a discipline aid.
 
-## B. Core controls / interaction (Kernel)
-- [ ] Primary movement/interaction works with a **real mouse and real keyboard**, not just synthetic events
-- [ ] No page scroll on game keys (Space/arrows prevented)
-- [ ] Dodge/special action if applicable has feedback and fair window
-- [ ] Input buffering: quick press while busy not silently dropped
-- [ ] Controls frame-rate independent (feel same at different FPS)
-- [ ] No hidden autoplay faking quality
-- [ ] **Mouse specifics** (if used): LMB/RMB reach game state (not swallowed by overlay/menu canvas); cursor leaving canvas does not soft-lock, lose aim vector, or freeze player; pointer re-entry restores aim cleanly
-- [ ] **Menu ↔ gameplay isolation**: opening a menu mid-game does not fire the click through to gameplay; closing the menu does not leave input state trapped; pause menu and death menu do not double-fire actions
+---
 
-## C. Mobile/touch (if applicable, or desktop-only documented)
-- [ ] Virtual controls work if applicable; buttons large thumb-reachable
-- [ ] No accidental scroll, zoom, text selection, page navigation during play
-- [ ] Buttons show press states; haptic where supported
+## Launch & boot
+- [ ] Fresh load starts. No blank screen, no unhandled console error loop, no infinite spinner, no missing-asset fatal.
+- [ ] Title / entry screen renders coherently and matches the game's identity.
+- [ ] A new player can understand the objective from the game itself in <1 minute, without reading the README.
 
-## D. Game feel & depth
-- [ ] First interaction works within ~10s
-- [ ] Actions have wind-up → active → recovery if applicable; hit-stop/feedback; distinct success/failure
-- [ ] Special action works, limited by resource, feels impactful
-- [ ] Mechanics offer variety beyond one-trick (emergence, viable approaches, not single trick)
-- [ ] **First level is beatable** by a real human in reasonable time (~5 min honest play); onboarding difficulty is calibrated, not "clever-but-impossible"
-- [ ] **There is a beat after the first wow** — difficulty scales, a new mechanic unlocks, a new environment enters, world reveals a second layer. Give the judge a reason to still be there at minute 5.
-- [ ] Death / fail states are readable — player understands *what killed them* and wants to retry
+## Controls
+- [ ] Primary movement / interaction works with a **real mouse and real keyboard**, not just synthetic events.
+- [ ] If mouse-aim is used: cursor leaving the canvas does not soft-lock, does not lose the aim vector, does not freeze the player. Re-entry restores aim cleanly.
+- [ ] Menus / pause overlays do not swallow game clicks; game clicks do not fire through open menus.
+- [ ] No page-scroll on game keys (Space / arrows prevented).
+- [ ] Input buffering: quick press while busy is not silently dropped.
+- [ ] Controls feel the same at different frame rates (delta-time simulation).
+- [ ] Touch (if supported): buttons large & thumb-reachable, no accidental scroll / zoom / selection, visible press states.
 
-## E. World & progression (your design)
-- [ ] Run/level/mode contains start + gameplay + reward/progression + end condition
-- [ ] Branching/variety choices exist and all reachable if applicable
-- [ ] No impossible placements; clear goals/exits; readable hazards
-- [ ] If procedural/seeded: two different seeds give different both-reachable runs
+## Complete loop
+- [ ] Full run: start → gameplay → reward / progression → end condition → restart, all without a page refresh.
+- [ ] **First level / wave / room is beatable** by a real human in ~5 min honest play. Onboarding difficulty is calibrated, not "clever-but-impossible."
+- [ ] **There is a reason to still be playing at minute 5.** Difficulty scales, or a new mechanic unlocks, or a new environment enters, or the world reveals a second layer — something that changes.
+- [ ] Death / fail states are readable — the player understands *what killed them* and wants to retry.
+- [ ] No permanently stuck states, no impossible placements, no unreachable win conditions.
 
-## F. Rewards & polish
-- [ ] Rewards/collectibles have visible impact
-- [ ] Score/progress tracks understandable, combo/momentum if applicable
-- [ ] Feedback quality: telegraphs, numbers, hit/miss, sounds/visual
+## States & transitions
+- [ ] Pause fully freezes simulation, timers, particles, spawns, physics. Resume continues cleanly.
+- [ ] Instant Restart fully resets run state.
+- [ ] Rapid Restart → Start does not double-spawn or corrupt state.
+- [ ] Menu open / close does not leak input into gameplay.
 
-## G. Persistence
-- [ ] If game has high-scores/progress: saves and survives reload, sorted, handles corrupt/invalid stored data without crash (verify by hand-editing key), reset behind confirmation
-- [ ] If explicit no-persistence by design: document in README director statement
+## Audio (hygiene)
+- [ ] Master mute silences everything within one frame.
+- [ ] **No constant drone / streaming bass loop that never stops.** Sounds are event-driven with finite envelopes.
+- [ ] Audio failure (AudioContext init, autoplay policy) does not block gameplay.
+- [ ] Tab-blur pauses or ducks audio; sounds don't play behind pause overlay.
 
-## H. States & transitions
-- [ ] Start → gameplay → reward → end → restart all work
-- [ ] Pause fully freezes simulation, timers, particles, behavior; resume continues
-- [ ] Gameplay input does not leak into menus
+## Robustness & edge
+- [ ] Instant restart fully resets.
+- [ ] Resize / orientation change mid-play safe.
+- [ ] Tab blur / focus safe; on mobile visibility change pauses appropriately.
+- [ ] Mashing primary actions doesn't corrupt state or crash.
+- [ ] Corrupt `localStorage` doesn't crash (verify by hand-editing your storage key).
 
-## I. Robustness & edge cases
-- [ ] Instant restart fully resets run state
-- [ ] Resize mid-combat and orientation change don't break layout or hide info
-- [ ] Tab blur/focus safe; on mobile visibility change pauses appropriately
-- [ ] Mashing primary actions doesn't corrupt state or crash
+## Performance
+- [ ] Stable frame rate with typical entity load.
+- [ ] Particles / floating text / projectiles are pooled or capped; no per-frame garbage spikes.
+- [ ] Rendering / simulation pauses when the tab is hidden.
 
-## J. Accessibility
-- [ ] Keyboard can navigate menus; visible focus states
-- [ ] Reduced-motion mode reduces shake/flash/particles
-- [ ] Info not conveyed by color alone; text labels for icons where needed
-- [ ] Text legible at small sizes; touch targets respect safe areas
+## Visual identity
+- [ ] Visual identity is sustained across menu, gameplay, death, restart — not just the title screen.
+- [ ] Rich visuals do not hurt readability of hazards / player / actions.
+- [ ] If you shipped 3D / WebGL / WebGPU / heavy physics: controls are as tight as any 2D game equivalent, framerate is stable, menu isolates from scene. Broken 3D reads worse than competent 2D — cut if it can't ship at quality.
+- [ ] Deliberate minimalism is fine, but it must read as *chosen* — the polish inside the constraint is what makes it work.
 
-## K. Performance & code quality (weighted)
-- [ ] Stable frame rate with many entities/particles, even at 45-60 min
-- [ ] Particles/floating text/projectiles pooled and capped; no per-frame garbage spikes
-- [ ] Rendering/simulation pauses when page hidden
-- [ ] Debug/performance indicator available toggleable off by default for players
-- [ ] Code shows separation: state, input, loop, rendering, collision, audio, UI, config centralized, no scattered magic numbers — evidence of iteration/refactor, not just dump
+## Accessibility
+- [ ] Keyboard navigates menus; visible focus states.
+- [ ] Reduced-motion mode reduces shake / flash / particles.
+- [ ] Info is not color-only; legible at small sizes; safe areas respected.
 
-## L. Audio (hygiene — hard requirement)
-- [ ] Sound toggle works; master mute silences everything within one frame
-- [ ] **No constant drone / streaming bass loop that never stops**
-- [ ] Sounds are event-driven with finite envelopes; unmanaged WebAudio nodes cleaned up
-- [ ] Audio failure (AudioContext init, autoplay policy) doesn't block gameplay
-- [ ] Tab-blur pauses or ducks audio; sounds don't play behind pause overlay
-- [ ] Sounds present or strong visual-only fallback
+## Environment consistency
+- [ ] Same rules on desktop / mobile / portrait / landscape / headless — no device or UA bonuses, no demo mode differing from real play.
 
-## M. Environment consistency (no demo mode)
-- [ ] Game plays same desktop/mobile/portrait/landscape/headless; no device/viewport/user-agent-based difficulty, bonuses, unlocks
-- [ ] No hidden autoplay, no environment detection, no "looks good in demo" path differing from real player path
-
-## N. Visual ambition (heavily weighted — beyond flash template)
-- [ ] Visuals original, not primitive shapes/generic flat rectangles/box gradient colored enemies
-- [ ] Distinctive consistent art identity across screens/menus/HUD
-- [ ] Procedural detail: lighting, fog, texture, particles, composition, palette, dressing — not empty room with rectangle player
-- [ ] Visual identity holds across whole run, not just title screen
-- [ ] Rich visuals do NOT hurt readability: actions/hazards/player obvious
-- [ ] Clearly beyond simple box gradient enemies / flash-game approach — pushes limits, or deliberate expressive polished minimalism with exquisite timing/feedback (document intent in README)
-
-## O. Long-session execution & iteration (new, heavily weighted)
-- [ ] Built functional prototype quickly, then tested via actual interaction
-- [ ] Identified weaknesses in mechanics/usability/visuals/performance
-- [ ] Iterated substantially rather than stopping at first functional version
-- [ ] Added polish, feedback, content, presentation improvements after first prototype
-- [ ] Verified final build launches reliably and understandable to new player
-- [ ] Can describe strongest feature and biggest risk + director statement
-
-## P. Honesty gate
-- [ ] No placeholder screens, under construction, dead ends, broken buttons
-- [ ] Everything claimed in README actually works reachable
-- [ ] No telemetry, analytics, hidden reporting, embedded quality score
-- [ ] No environment sniffing / demo mode differing from real play
-- [ ] **This build is the actual result of one session** — not stitched from multiple polish passes. If it isn't, disclose in README (it will be scored on the multi-turn track, not the primary battle).
-
-## Q. Ambition-vs-execution honesty (3D / WebGPU / heavy tech)
-- [ ] If shipping 3D / WebGL / WebGPU / physics: **controls are as tight as any 2D game equivalent** — no marble that won't launch, no camera that divorces from physics, no menu that collapses into the scene
-- [ ] Ambition is scoped so the wow beat is *finished*, not just started. A polished 45-second slice beats 5 broken minutes.
-- [ ] Framerate stable under load on average hardware; if not, scope was too big — cut before shipping
-
+## Honesty gate
+- [ ] No placeholder screens, "under construction," dead ends, broken buttons.
+- [ ] Everything the README claims exists, works, and is reachable.
+- [ ] No telemetry, analytics, hidden reporting, embedded quality / eval score inside the game.
+- [ ] **First line of README** declares `TRACK: strict-one-shot` or `TRACK: iterated (N passes)`. If this build is the actual result of one session, say so. If it isn't, disclose — undisclosed multi-turn iteration is worse than disclosed iteration.

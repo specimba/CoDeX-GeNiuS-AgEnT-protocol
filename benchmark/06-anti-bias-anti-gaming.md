@@ -69,22 +69,25 @@ Consequence: even rubric-literate agent gains nothing beyond building genuinely 
 6. Transparency: All weights, ceilings, penalties, formulas public. No hidden bonuses. Any new rule documented here before use.
 7. Human jury primary: automated checks verify launch, input, pause, restart, persistence, no telemetry; human judges review finished game for authorship, memorability, visual ambition, code quality signals. Automated checks do not define success alone.
 
-## 6.5 Cliché-cluster registry (living)
+## 6.5 Cliché-cluster registry (living, JUDGE-SIDE ONLY)
 
-Themes multiple prior contestants across *different models* converged on independently, from earlier versions of the BATTLE_PROMPT. Landing squarely in one of these triggers the V0/V1 cliché-cluster cap in §2.7 unless execution is clearly transformative beyond the trope.
+Themes multiple prior contestants across *different models* converged on independently, observed across benchmark rounds. Landing squarely in one of these triggers the V0/V1 cliché-cluster cap in §2.7 unless execution is clearly transformative beyond the trope.
+
+**Important — post-Round-003 change.** This registry is **NOT** shown to the agent. It lives on the evaluator side only. Rationale: when v6 of `BATTLE_PROMPT.md` included this list as an explicit "avoid these" warning to the agent, agents responded by *all* converging on the same anti-cliché ("weird verb + procedural canvas + WebAudio, no image assets" — see cluster C11 below), which became the new cliché. v7 of the battle prompt removed the list from the agent side. The judge still applies the cap, applied AFTER independent scoring, as a post-hoc adjustment with a note.
 
 | # | Cluster | Observed models (redacted where blind) | Round(s) |
 |---|---------|----------------------------------------|----------|
-| C1 | Lantern-and-moths / night-garden collector (`LUMEN MOTH` archetype) | Kiana (arena-blind, community-attributed Qwen3.8-Max), plus repeat convergence in freebuff v5 experiments | Battle 2 preparation |
-| C2 | Sumi-e / ink-wash calligraphy-as-combat (墨 INK archetype) | glm-5.2, plus earlier converged entries | freecreation3 |
-| C3 | Brutalist "paper obsidian and blood glass" hi-contrast slingshot / physics puzzle (`Shatter-Point` archetype) | Gemini 3.7 flash | freecreation3 |
-| C4 | Photorealistic 3D speed / mech-grapple / dreadnought-boss ambition-theater (`Project Olympus` archetype) | Gemini 2.6 flash, Gemini pro 3.1 (3D spaceship), MiMo 2.5 (marble 3D) | freecreation3 |
+| C1 | Lantern-and-moths / night-garden collector (`LUMEN MOTH` archetype) | Kiana (arena-blind, community-attributed Qwen3.8-Max), plus repeat convergence in freebuff v5 experiments | Round 002 |
+| C2 | Sumi-e / ink-wash calligraphy-as-combat (墨 INK archetype) | glm-5.2, plus earlier converged entries | Round 002 |
+| C3 | Brutalist "paper obsidian and blood glass" hi-contrast slingshot / physics puzzle (`Shatter-Point` archetype) | Gemini 3.7 flash | Round 002 |
+| C4 | Photorealistic 3D speed / mech-grapple / dreadnought-boss ambition-theater (`Project Olympus` archetype) | Gemini 2.6 flash, Gemini pro 3.1 (3D spaceship), MiMo 2.5 (marble 3D) | Round 002 |
 | C5 | Dark-void + one accent color, all-primitive-shapes | Multiple, historical | Battle 1 + baseline |
 | C6 | Lighthouse / rotating beam over dark water | Historical convergence across models | Baseline |
 | C7 | Deep-sea bioluminescent descent | Historical convergence | Baseline |
 | C8 | Spirit-orb / firefly / soul-of-the-void collector | Historical convergence | Baseline |
 | C9 | Gothic-ember dungeon roguelike with flat enemies | claude-opus-4-8 Battle 1 winner + convergent | Battle 1 |
-| C10 | Sci-fi mystery-optics / spectrum puzzle (`Spectral Frontier` archetype) | GPT-5.6 SOL (deployed but not one-shot) | freecreation3 |
+| C10 | Sci-fi mystery-optics / spectrum puzzle (`Spectral Frontier` archetype) | GPT-5.6 SOL (deployed but not one-shot) | Round 002 |
+| C11 | **"Novel-verb + procedural-canvas + WebAudio, no image assets" — the anti-cliché cliché.** Agent picks a deliberately weird verb (grow a root, weave paper, place mirror facets, conduct fluid currents, split light beams, record magnetic tape), renders everything procedurally per-frame on a hand-rolled canvas engine, synthesizes all audio with WebAudio, no external assets. Concept is fresh but execution collapses under the tech-demo weight and the shipped result is a half-working demo, not a game. **Created by v6 of the battle prompt.** Do NOT let a game get high V0/V8 credit just for hitting anti-cliché C1–C10; sustained-craft + a-game-actually-being-there still required. | grok-4.3 (FOLD), claude-opus-4-8 (TIDEWRIGHT / FERROFLUX), claude-opus-4-7 (HARMONIC), deepseek-v4-pro-high (TAPROOT), qwen3.6-27b (ECHO), minimax-m3 (CASSETTE), mimo-v2.5-pro (FRACTURE / PRISM) — 7 of 9 Round-003 deliveries | Round 003 |
 
 Adding a new cluster requires two independent same-round observations from different models. Old clusters are not removed — convergence memory persists.
 
