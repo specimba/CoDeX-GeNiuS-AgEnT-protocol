@@ -2,10 +2,10 @@
 
 This is the single file to open when you're ready to run a new round on arena.ai. It packages the launch procedure, the per-run scoresheet, and the paste-ready contestant prompt in one place. Everything else in the repo is supporting material.
 
-**Prompt version:** BATTLE_PROMPT **v7** (short, calm, concrete — replaces v6 after Round 003 regression)
+**Prompt version:** BATTLE_PROMPT **v8** (craft-based working method — replaces v7 after Round 004 concept-cluster collapse)
 **Rubric version:** 02-scoring-rubric §2.0–§2.9 (cluster cap now soft, not hard)
-**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (§6.5 cluster registry now JUDGE-SIDE ONLY)
-**Ready:** yes — see `battles/round-003-after-action.md` for why v7 replaced v6.
+**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (§6.5 cluster registry judge-side only; C11 caused by v6, C12 caused by v7 documented)
+**Ready:** yes — see `battles/round-004-after-action.md` for why v8 replaced v7, and the mode-collapse literature that grounds the craft-based approach.
 
 ---
 
@@ -195,17 +195,21 @@ Run this from repo root:
 ```bash
 python3 -m py_compile challenge/launch_challenge.py benchmark/ops/aggregate_scores.py benchmark/ops/decision_block.py && echo "harness OK"
 
-grep -q "(v7)" challenge/BATTLE_PROMPT.md && echo "prompt: v7 loaded (calm/short)"
-BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 12000 ] && echo "prompt: size OK (<12KB, was 21KB in v6)"
+grep -q "(v8)" challenge/BATTLE_PROMPT.md && echo "prompt: v8 loaded (craft-based)"
+BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 18000 ] && echo "prompt: size OK ($BYTES bytes, ceiling 18000)"
+grep -q "actual game designers do" challenge/BATTLE_PROMPT.md && echo "prompt: §1 craft-based working method present"
+grep -q "DESIGN_PILLARS" challenge/BATTLE_PROMPT.md && echo "prompt: DESIGN_PILLARS README requirement present"
+grep -qE "MDA|Swink|Vlambeer|Porpentine|Ludum Dare" challenge/BATTLE_PROMPT.md && echo "prompt: craft tradition cited (grounds the method)"
 grep -qE "M8 |Depth after wow" benchmark/02-scoring-rubric.md && echo "rubric: M8 depth-after-wow present"
 grep -q "CEIL-8" benchmark/02-scoring-rubric.md && echo "rubric: CEIL-8 ambition-theater 3D present"
-grep -q "JUDGE-SIDE ONLY" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: cluster registry judge-side-only per v7"
+grep -q "JUDGE-SIDE ONLY" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: cluster registry judge-side-only"
+grep -q "C12" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C12 v7-caused-cluster recorded"
 grep -q "track" challenge/launch_challenge.py && echo "harness: track routing present"
 grep -q "TRACK: strict-one-shot" challenge/BATTLE_PROMPT.md && echo "prompt: track disclosure requested"
-! grep -q "Competent.*will lose" challenge/BATTLE_PROMPT.md && echo "prompt: v6 'competent will lose' framing REMOVED"
+! grep -q "Competent.*will lose" challenge/BATTLE_PROMPT.md && echo "prompt: v6 'competent will lose' framing STILL removed"
 ```
 
-Expected output: eight OK lines. If any are missing, do not start — inspect `battles/round-003-after-action.md` for what changed and re-verify.
+Expected output: twelve OK lines. If any are missing, do not start — inspect `battles/round-004-after-action.md` for what changed and re-verify.
 
 ---
 
