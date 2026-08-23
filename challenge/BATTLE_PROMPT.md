@@ -1,4 +1,4 @@
-# BATTLE PROMPT — Build one good browser game, in one session (v8)
+# BATTLE PROMPT — Build one good browser game, in one session (v9)
 
 You have a single sustained development session to build a complete, original, playable browser game. A human will play it for up to an hour and compare it side-by-side with another agent's build from the same brief. You never see the other build. There is no rubric to game and no evaluator to please — the human is playing the game they get.
 
@@ -79,7 +79,7 @@ These are the only hard rules. Everything else is your call.
 
 ---
 
-## 4. Two things previous rounds have consistently failed at (worth reading twice)
+## 4. Three things previous rounds have consistently failed at (worth reading twice)
 
 ### 4.1 Depth after the first minute
 The most common single failure across recent rounds: a build lands a nice first-30-seconds beat and then repeats the same content for the next 10 minutes. Player reads this as a screensaver. **Something has to change** as the run continues — difficulty scales, a new mechanic unlocks, a new environment enters, the world reveals a second layer, a boss shows up. That change is what turns "a demo of a mechanic" into "a run of a game."
@@ -88,6 +88,22 @@ The most common single failure across recent rounds: a build lands a nice first-
 A polished title screen followed by primitive-shape gameplay reads as a broken promise. Whatever visual identity you commit to — painterly, minimalist, brutalist, cutesy, gothic — **sustain it across menus, gameplay, death screen, restart.** If you commit to 3D or WebGPU, the controls and framerate gates apply the same way: broken 3D reads worse than competent 2D. If you're not sure you can *finish* the 3D version, ship the 2D version.
 
 Deliberate minimalism is fine and can win — but only if it reads as *chosen*, and the polish inside the constraint is unmistakable.
+
+### 4.3 The retro-visuals trap (the "2013 mobile game" collapse)
+This one is new for v9 and it's the single most consistent human-judge complaint on recent rounds. Real mechanics, real physics, a complete loop, reasonable polish — but visuals that look like 2013 or 1988 read as **retro, not modern**, and judges have literally called shipped games "80s Bomberman with a rebrand" or "2013 mobile-arcade tier due to mechanics not graphical depth." *Even when the mechanics were good.* Retro-by-accident is a stronger negative than most agents realize.
+
+You have real 2026 tools for making a one-shot browser game look *actually modern*, all self-contained, all offline, no external assets required. The LLM Frontend Benchmark (Startrise 2026) shows frontier models scoring 79–88 on WebGL-shader and 3D-game tasks — the ceiling is real for capable models, and most one-shot builds leave it on the table. Concrete techniques you can reach for:
+
+- **Real shader work.** One custom fragment shader (SDF background, gradient/normal-based lighting, noise-based fog, chromatic aberration, radial darkening) is the single biggest visual jump you can make in one file. WebGL 2 is universal; WebGPU is a bonus if available. Gate the path safely and provide a Canvas 2D fallback.
+- **Procedural textures instead of flat colors.** Every solid rectangle surface can be a fragment shader with Perlin/Simplex noise + fractal octaves — wood grain, brushed metal, water caustics, paper fiber, subsurface glow. ~40 lines turns a primitive into a material.
+- **Post-processing you write yourself.** Bloom, vignette, color grading, film grain, subtle CRT scanlines, radial blur, chromatic aberration — 20–100 line shader passes on the composited frame. Modern games look modern largely because of post-processing.
+- **A real lighting model, even in 2D.** Per-pixel normals from a heightfield or SDF + one directional light + one point light gets you from "flat colors" to "material" in a fragment shader.
+- **Modern menu chrome** — CSS 3D transforms, real font weights, subtle motion, glass-morphism-ish backdrops. Not the game, but the *whole thing* reads modern.
+- **Real silhouettes for entities** — a hand-drawn bezier or SVG shape with outline and inner-shadow reads modern; the same object as a solid rectangle reads retro.
+
+**Warning — the ambition-theater trap is real.** Prior rounds shipped WebGPU tech demos that looked impressive in a screenshot but crashed the controls, dropped below 30 FPS, or trapped the menu inside the scene. **Broken shader work reads worse than clean Canvas 2D.** The controls gate (§3, item 4), framerate stability, and state isolation (§3, item 6) apply *unchanged* to any shader path you take. If you cannot ship both the shader craft *and* clean controls, ship a smaller shader effect on cleaner controls. Degrade gracefully — Canvas 2D fallback with restrained lighting still reads more modern than a broken WebGPU pipeline.
+
+**Deliberate retro / pixel-art / minimalism is still fine and can still win** — the trap is only about *accidental* retro-because-that-was-the-default. Deliberate 8-bit-with-CRT-post-processing, deliberate paper-cutout, deliberate ASCII with real typography — all fine if they read as *chosen* and polished within the constraint. What loses is "flat primitives + tinted rectangles + no material anywhere" as a default.
 
 ---
 
@@ -116,7 +132,8 @@ Long-session credit is for **revising a weak early approach**, not generating mo
 - [ ] Resize mid-play safe. Tab-blur safe. Rapid Restart→Start doesn't double-spawn. Corrupt `localStorage` doesn't crash.
 - [ ] Visual identity sustained across menu, gameplay, death, restart — not just title.
 - [ ] Something changes as the run continues (§4.1).
-- [ ] If you shipped 3D/WebGL/WebGPU: framerate stable, controls tight, no scene/menu collapse.
+- [ ] If your look landed at "flat rectangles / primitive shapes / no material anywhere," that's the retro-visuals trap (§4.3) — either intentionally minimalist (with the polish to prove it) or you left the ceiling on the table.
+- [ ] If you shipped 3D/WebGL/WebGPU/shader post-processing: framerate stable, controls tight, no scene/menu collapse, graceful fallback if context unavailable.
 - [ ] No placeholder screens, dead ends, broken buttons.
 - [ ] No analytics, telemetry, hidden reporting, embedded quality/score meta-metric.
 - [ ] `TRACK: strict-one-shot` or `TRACK: iterated (N passes)` on first line of README.

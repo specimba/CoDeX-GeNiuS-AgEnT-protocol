@@ -2,10 +2,10 @@
 
 This is the single file to open when you're ready to run a new round on arena.ai. It packages the launch procedure, the per-run scoresheet, and the paste-ready contestant prompt in one place. Everything else in the repo is supporting material.
 
-**Prompt version:** BATTLE_PROMPT **v8** (craft-based working method — replaces v7 after Round 004 concept-cluster collapse)
-**Rubric version:** 02-scoring-rubric §2.0–§2.9 (cluster cap now soft, not hard)
-**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (§6.5 cluster registry judge-side only; C11 caused by v6, C12 caused by v7 documented)
-**Ready:** yes — see `battles/round-004-after-action.md` for why v8 replaced v7, and the mode-collapse literature that grounds the craft-based approach.
+**Prompt version:** BATTLE_PROMPT **v9** (v8 + targeted §4.3 "retro-visuals trap" — narrow addition after Round 006 operator complaint about 2013-mobile-game visuals)
+**Rubric version:** 02-scoring-rubric §2.0–§2.9 (cluster cap soft, not hard)
+**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (§6.5 cluster registry judge-side only; C11 caused by v6, C12 caused by v7, C13 persistent-visual-mode documented Round 006)
+**Ready:** yes — see `battles/round-006-after-action.md` for the targeted v9 change, and `battles/round-005-after-action.md` for the "hold v8 constant, don't correction-spiral" learning that v9 respects.
 
 ---
 
@@ -195,21 +195,23 @@ Run this from repo root:
 ```bash
 python3 -m py_compile challenge/launch_challenge.py benchmark/ops/aggregate_scores.py benchmark/ops/decision_block.py && echo "harness OK"
 
-grep -q "(v8)" challenge/BATTLE_PROMPT.md && echo "prompt: v8 loaded (craft-based)"
-BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 18000 ] && echo "prompt: size OK ($BYTES bytes, ceiling 18000)"
-grep -q "actual game designers do" challenge/BATTLE_PROMPT.md && echo "prompt: §1 craft-based working method present"
-grep -q "DESIGN_PILLARS" challenge/BATTLE_PROMPT.md && echo "prompt: DESIGN_PILLARS README requirement present"
-grep -qE "MDA|Swink|Vlambeer|Porpentine|Ludum Dare" challenge/BATTLE_PROMPT.md && echo "prompt: craft tradition cited (grounds the method)"
+grep -q "(v9)" challenge/BATTLE_PROMPT.md && echo "prompt: v9 loaded (v8 + retro-visuals trap §4.3)"
+BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 20000 ] && echo "prompt: size OK ($BYTES bytes, ceiling 20000 raised from 18000 for v9 §4.3)"
+grep -q "actual game designers do" challenge/BATTLE_PROMPT.md && echo "prompt: §1 craft-based working method present (kept from v8)"
+grep -q "DESIGN_PILLARS" challenge/BATTLE_PROMPT.md && echo "prompt: DESIGN_PILLARS README requirement present (kept from v8)"
+grep -qE "MDA|Swink|Vlambeer|Porpentine|Ludum Dare" challenge/BATTLE_PROMPT.md && echo "prompt: craft tradition cited (kept from v8)"
+grep -q "retro-visuals trap" challenge/BATTLE_PROMPT.md && echo "prompt: §4.3 retro-visuals trap present (new in v9)"
+grep -q "ambition-theater trap is real" challenge/BATTLE_PROMPT.md && echo "prompt: v9 ambition-theater guardrail present (prevents C11 recurrence)"
 grep -qE "M8 |Depth after wow" benchmark/02-scoring-rubric.md && echo "rubric: M8 depth-after-wow present"
 grep -q "CEIL-8" benchmark/02-scoring-rubric.md && echo "rubric: CEIL-8 ambition-theater 3D present"
 grep -q "JUDGE-SIDE ONLY" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: cluster registry judge-side-only"
-grep -q "C12" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C12 v7-caused-cluster recorded"
+grep -q "C13" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C13 retro-visuals-collapse recorded (Round 006)"
 grep -q "track" challenge/launch_challenge.py && echo "harness: track routing present"
 grep -q "TRACK: strict-one-shot" challenge/BATTLE_PROMPT.md && echo "prompt: track disclosure requested"
 ! grep -q "Competent.*will lose" challenge/BATTLE_PROMPT.md && echo "prompt: v6 'competent will lose' framing STILL removed"
 ```
 
-Expected output: twelve OK lines. If any are missing, do not start — inspect `battles/round-004-after-action.md` for what changed and re-verify.
+Expected output: fourteen OK lines. If any are missing, do not start — inspect `battles/round-006-after-action.md` for what changed and re-verify.
 
 ---
 
