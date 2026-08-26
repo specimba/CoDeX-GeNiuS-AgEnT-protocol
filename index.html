@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>TIDEWRIGHT — The Fluid Forge</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <div id="stage">
+      <canvas id="game"></canvas>
+
+      <!-- ===================== HUD ===================== -->
+      <div id="hud" class="hidden">
+        <div class="hud-top">
+          <div class="hud-left">
+            <div id="hud-level" class="hud-level">Level 1</div>
+            <div id="hud-name" class="hud-name">First Pour</div>
+          </div>
+          <div class="hud-center">
+            <div id="hud-timer" class="hud-timer">80</div>
+            <div class="bar">
+              <div id="hud-fill" class="bar-fill"></div>
+              <div id="hud-target" class="bar-target"></div>
+            </div>
+            <div id="hud-hold" class="hud-hold hidden">HOLDING…</div>
+          </div>
+          <div class="hud-right">
+            <button id="btn-pause" class="icon-btn" title="Pause (Space)">❚❚</button>
+            <button id="btn-restart" class="icon-btn" title="Restart (R)">↺</button>
+            <button id="btn-mute" class="icon-btn" title="Mute (M)">♪</button>
+            <button id="btn-gfx" class="icon-btn" title="Graphics (G)">◈</button>
+          </div>
+        </div>
+        <div id="hud-hint" class="hud-hint"></div>
+        <div id="hud-tilt" class="hud-tilt"><span class="tilt-label">TILT</span><div class="tilt-bar"><div id="hud-tilt-fill" class="tilt-fill"></div></div></div>
+      </div>
+
+      <!-- ===================== TITLE ===================== -->
+      <div id="title" class="overlay screen">
+        <div class="panel title-panel">
+          <h1 class="title-logo">TIDEWRIGHT</h1>
+          <div class="title-sub">The Fluid Forge · a WebGPU physical simulation</div>
+          <p class="lede">You are a wright of living liquid metal. Shape it, slosh it, and pour it into the crucible before the clock runs dry.</p>
+          <div class="btn-row">
+            <button id="btn-play" class="btn btn-primary">▶ Play</button>
+            <button id="btn-howto" class="btn">How to Play</button>
+          </div>
+          <div class="level-select">
+            <div class="ls-title">Select Chamber</div>
+            <div id="level-grid" class="level-grid"></div>
+          </div>
+          <div class="title-foot">Best experienced on desktop · mouse + keyboard</div>
+        </div>
+      </div>
+
+      <!-- ===================== HOW TO ===================== -->
+      <div id="howto" class="overlay screen hidden">
+        <div class="panel">
+          <h2>How to Play</h2>
+          <ul class="howto-list">
+            <li><b>Left-drag</b> — <span class="c-push">PUSH</span> the fluid away from your focus.</li>
+            <li><b>Right-drag</b> (or <b>Shift+Left</b>) — <span class="c-pull">PULL</span> the fluid toward your focus.</li>
+            <li><b>← / →</b> (or <b>A / D</b>) — tilt gravity to slosh the whole body of liquid.</li>
+            <li><b>Space</b> — pause · <b>R</b> — restart · <b>M</b> — mute · <b>G</b> — toggle graphics.</li>
+          </ul>
+          <p class="howto-goal">Goal: route enough fluid mass into the <b>GOAL</b> zone and <b>hold</b> it there until the hold meter fills. Beat the clock for more stars.</p>
+          <button id="btn-howto-back" class="btn btn-primary">Back</button>
+        </div>
+      </div>
+
+      <!-- ===================== PAUSE ===================== -->
+      <div id="pause" class="overlay screen hidden">
+        <div class="panel">
+          <h2>Paused</h2>
+          <div class="btn-row col">
+            <button id="btn-resume" class="btn btn-primary">Resume</button>
+            <button id="btn-pause-restart" class="btn">Restart Level</button>
+            <button id="btn-pause-title" class="btn">Quit to Title</button>
+          </div>
+          <div class="settings-row">
+            <button id="btn-pause-mute" class="btn small">Sound: On</button>
+            <button id="btn-pause-reduce" class="btn small">Motion: Normal</button>
+            <button id="btn-pause-gfx" class="btn small">Graphics: Auto</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== WIN ===================== -->
+      <div id="win" class="overlay screen hidden">
+        <div class="panel win-panel">
+          <h2 class="win-title">Chamber Cleared</h2>
+          <div id="win-stars" class="stars">★★★</div>
+          <div id="win-stats" class="win-stats"></div>
+          <div class="btn-row">
+            <button id="btn-next" class="btn btn-primary">Next Chamber ▶</button>
+            <button id="btn-win-replay" class="btn">Replay</button>
+            <button id="btn-win-title" class="btn">Title</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== LOSE ===================== -->
+      <div id="lose" class="overlay screen hidden">
+        <div class="panel">
+          <h2 class="lose-title">The clock ran dry</h2>
+          <p id="lose-stats" class="lose-stats"></p>
+          <div class="btn-row">
+            <button id="btn-retry" class="btn btn-primary">Retry</button>
+            <button id="btn-lose-title" class="btn">Title</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="focus" class="focus-ring hidden"></div>
+      <div id="toast" class="toast hidden"></div>
+    </div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
