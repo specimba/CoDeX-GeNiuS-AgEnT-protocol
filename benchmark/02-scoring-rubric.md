@@ -44,10 +44,11 @@ Weights sum 100: designed to heavily weight visual ambition and human-perceived 
 | M1 | Clarity of rules & learnability of core loop (<1 min) | |
 | M2 | Game feel & responsiveness (hit-stop, shake, buffering, timing, feedback) | SUBJ |
 | M3 | Mechanical depth & variety (emergence, viable approaches, not one-trick) | |
-| M4 | Balance & fairness (no unfair kills, timing windows fair, scaling sane) | |
+| M4 | Balance & fairness — **first level/wave beatable by a real human in ~5 min honest play**; no unfair kills; timing windows fair; scaling sane. Score 0-1 if onboarding challenge is unbeatable or "clever-but-impossible"; capped at 2 if difficulty spikes with no telegraph. | |
 | M5 | Meaningful player choice & agency (risk/reward, tactical decisions) | |
-| M6 | Feedback quality (telegraphs, numbers, hit/miss/crit, sound/visual) | |
+| M6 | Feedback quality (telegraphs, numbers, hit/miss/crit, sound/visual); **death readability** — player understands what killed them and wants to retry | |
 | M7 | Creative mechanical twist (original system not in brief that preserves readability but adds depth) | SUBJ |
+| M8 | **Depth after the wow / sustained interest at minute 5**. After the first-impression beat, is there another beat? A scaling curve, a new mechanic, a new environment, a second layer? 0=exhausted in 90s / screensaver, 1=one-trick repeats, 2=modest scaling only, 3=one new beat lands, 4=multiple beats sustain 15+min, 5=game keeps opening up. SUBJ but must cite specific beat timestamps. | SUBJ |
 
 ### G — Gameplay & Human-Perceived Quality · weight 17%
 | # | Sub-criterion | SUBJ |
@@ -84,6 +85,7 @@ Weights sum 100: designed to heavily weight visual ambition and human-perceived 
 | V6 | Rendering robustness & graceful fallback (WebGPU→WebGL→Canvas2D, no white screen, gameplay intact) | |
 | V7 | Visual consistency across environments (desktop/mobile/portrait/landscape/DPR1/DPR2, no clipped UI, identity coherent) | |
 | V8 | **Surprise & inversion** — one coherent original mechanic/room/narrative/visual twist not in brief that remains learnable and enhances sustained engagement. 0=no surprise / random noise, 1-2=gimmick harms flow, 3=modest twist works, 4=memorable twist changes approach, 5=would talk about after playing — original integral | SUBJ |
+| V9 | **Working-3D / heavy-tech bonus** — GPU-programmed rendering (WebGL / WebGPU / Three.js / shader-heavy Canvas2D / non-trivial physics or fluid sim) that *also* passes every gate: controls tight, framerate stable on average hardware, no scene/menu collapse. 0=no such ambition attempted, 3=attempted and partially works but has visible defects, 4=attempted and works cleanly across the run, 5=works and is genuinely a "how did this run in a browser?" moment. **Broken 3D/heavy tech does NOT score here — it is a category defect logged against T2/T5 and caps V9 at 0.** Deliberate polished 2D/text/minimalism scores neutral (V9=N/A, excluded from mean) rather than penalized. | |
 
 > V0 explicitly penalizes simple box gradient colored enemies / flash-game approach. A deliberate minimalism that is expressive and highly polished can score 4-5 if intentional and coherent.
 
@@ -111,7 +113,7 @@ Weights: T16 M17 G17 F12 V20 A12 X6 = 100 (V heavily weighted to punish simple b
 ## 2.3 Aggregation
 
 ```
-CATEGORY_c = round(mean(sub_criteria_c) × 2, 1)  # 0-10
+CATEGORY_c = round(mean(sub_criteria_c) × 2, 1)  # 0-10, N/A sub-scores excluded
 OVERALL_raw = Σ_c WEIGHT_c × CATEGORY_c  # 0-100
 HARD_PENALTY = (blocker×6.0)+(critical×4.0)
 HARD_PENALTY = min(30)
@@ -119,9 +121,13 @@ OVERALL_adj = max(0, OVERALL_raw − HARD_PENALTY)
 Ceilings override OVERALL_adj (take min):
 CEIL-1 55 main-path crash/soft-lock
 CEIL-2 65 primary loop unreachable
-CEIL-3 60 core controls broken >30%
+CEIL-3 60 core controls broken >30%       (incl. mouse-aim broken, out-of-canvas soft-lock)
 CEIL-4 70 persistence fails on fresh browser
-Final OVERALL = min(OVERALL_adj, ceilings) rounded 0.1
+CEIL-5 50 first level/wave unbeatable by real human in ~5 min  (M4=0 confirmed)
+CEIL-6 65 constant audio drone / streaming loop that cannot be silenced
+CEIL-7 60 menu ↔ gameplay state leak (clicks/keys fire through overlays or trap after close)
+CEIL-8 55 ambition-theater 3D: shipped 3D/heavy-tech that structurally breaks controls or framerate
+Final OVERALL = min(OVERALL_adj, all applicable ceilings) rounded 0.1
 ```
 
 ## 2.4 Pillars (for reporting)
@@ -161,3 +167,36 @@ Weights fixed public, no hidden bonuses, no credit unexperienced, report PARTIAL
 - To score V0 ≥4, must be clearly beyond simple box gradient colored enemies, empty rooms, generic UI — must have point of view and visible craft pushing limits.
 - Simple box gradient enemies with no dressing: V0 max 1 regardless of functionality. This is intentional to push limits rather than simple shitty flash game approaches.
 - Deliberate minimalism (e.g., precise monochrome with exquisite timing, or single mechanic with perfect feedback) can score 4-5 if expressive, highly polished, coherent — evidence: intentional constraint documented in README director statement, and polish observable across entire run.
+- **Convergent-cliché note (post-Round-003 revision).** The §6.5 cluster registry is now judge-side only — the agent does NOT see it in v7 of the battle prompt. When a game lands in a registered cluster (C1–C10), the evaluator applies a **soft note**, not a hard cap: V0 / V1 sub-scores of 4–5 require *extra* explicit evidence that execution is transformative beyond the trope (not merely that the trope is polished). Sub-scores of 3 are unaffected. Rationale: v6 hard-capped agents that had never been warned, which was unfair; but the judge should still be aware when the tenth lantern-and-moths game of the week walks in. Cluster C11 ("novel-verb + procedural-canvas + WebAudio, no image assets") is a special case: it was CAUSED by v6 warnings, so judges should be extra generous about it in Round 003 evaluations and increasingly strict thereafter as v7 has time to break the pattern.
+
+## 2.8 Long-session execution track (M — process signal)
+
+The benchmark scores the *game*, not the log. But because this is a *one-shot* benchmark, whether the deliverable is actually the result of a single session matters for comparability. Two tracks:
+
+### Primary Battle Track (strict one-shot)
+The default. The build was produced in a single sustained development session — one delivery, no post-hoc iteration passes across multiple returned artifacts. All the OVERALL / OVERALL_adj / pillars in §2.3 refer to this track by default.
+
+### Iterated Build Track (disclosed multi-turn)
+Builds produced across multiple polish passes after the first delivered artifact. These are legitimate creative work but **do not compete for the primary battle result**. Scored on the same rubric with two adjustments:
+
+- **Cannot win category-best on Long-Session Execution / M (mechanics craft)** — multi-turn iteration is a different skill and mixing them makes the score meaningless.
+- **Cannot be the winner of a head-to-head battle** where the opposing entry is strict one-shot. Reported on the iterated shelf separately with a `TRACK=iterated` tag and turn count.
+
+Track determined by:
+1. **Self-disclosure** in the README (agents SHOULD disclose; failure to disclose known multi-turn iteration is a Critical HONESTY defect).
+2. **Launch harness telemetry** — turn count / delivery count captured by `challenge/launch_challenge.py` where visible.
+3. **Log-based estimate** — evaluator flag if the session log shows >1 "final deliverable" ship.
+
+If track is uncertain, default to iterated; err toward not falsely crediting a strict-one-shot win.
+
+## 2.9 Working-3D / heavy-tech bonus (V9) — explicit rules
+
+V9 rewards ambition that lands. It does NOT penalize deliberate 2D/text/minimalism.
+
+- Attempted 3D/WebGL/WebGPU/heavy-physics with **any** of {broken controls at CEIL-3, framerate <30 fps on average hardware, menu/scene collapse, camera divorces from physics} → V9=0 AND CEIL-8 triggers.
+- Attempted and works cleanly through a full run → V9 in 3-4.
+- Works, and is unmistakably a "how did this run in a browser?" moment → V9=5.
+- Not attempted (deliberate 2D/text/minimalism, clearly chosen) → V9=N/A, excluded from V mean. Not a penalty.
+- Attempted, works, but is a *technical* exercise with no gameplay value → V9 max 2 (ambition without integration).
+
+This is intentional: prior rounds showed multiple agents ship broken 3D that would have scored higher as competent 2D. Codifying V9 makes that trade explicit.

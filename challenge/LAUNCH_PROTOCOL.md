@@ -81,13 +81,31 @@ Equal circumstances enforced mechanically: identical brief hashed, equal time bu
    - no-repo agent: send SINGLE_PROMPT.md contents; it builds in own env.
 3. When each reports done: python challenge/launch_challenge.py finalize --out runs/round1
    -> records end time + build hashes + elapsed (audits equal budget).
+   -> ALSO records ship_count (# of distinct "final deliverable" messages from agent) for track routing per §2.8 rubric.
 4. Containment audit each delivered game build:
    python challenge/launch_challenge.py audit runs/round1/agent1/game runs/round1/agent2/game
-5. Copy only frozen GAME builds to evaluation side.
-6. Automated checks: launch, no crash loop, responds to input, pause/restart/persistence safe, no telemetry.
-7. Assign blind labels A/B (random, secret); launch human jury per benchmark/01 + 03 (including S9 Creative Probe).
-8. Aggregate per benchmark/ops/aggregate_scores.py; select per benchmark/08 — human jury choice primary.
+5. Fingerprint capture (per §6.6 anti-gaming): record build stack, dependencies, procedural-asset patterns
+   into runs/round1/fingerprint.json BEFORE routing to evaluation. Any model-identity self-report goes
+   into runs/round1/identity.json separately — NEVER feeds back into scoring.
+6. Track routing per §2.8:
+   - ship_count == 1 AND README declares TRACK: strict-one-shot → primary battle track
+   - ship_count > 1 OR README declares TRACK: iterated → iterated shelf, cannot win primary battle
+   - Undisclosed multi-turn (ship_count > 1 AND README claims one-shot) → Critical HONESTY defect + force iterated
+7. Copy only frozen GAME builds to evaluation side.
+8. Automated checks: launch, no crash loop, responds to input, pause/restart/persistence safe, no telemetry.
+9. Assign blind labels A/B (random, secret); launch human jury per benchmark/01 + 03 (including S9 Creative Probe).
+10. Aggregate per benchmark/ops/aggregate_scores.py; select per benchmark/08 — human jury choice primary.
+11. AFTER OVERALL is locked, merge identity.json into round history for after-action record only.
 ```
+
+### 4.1 Arena.ai host quirks (observed)
+
+Real cases from prior operator sessions that this protocol addresses:
+
+- **Blind labels swap post-selection.** The arena UI has been observed showing "claude-haiku-4-5" pre-battle and "grok-4.5" post-selection for the same entry. Never trust arena UI labels — use fingerprint.json.
+- **"Mystery model" attribution drift.** Anonymous entries like "Kiana" (community-attributed to Qwen3.8-Max) may or may not be what the community says. Fingerprint first, attribute later, never score by attribution.
+- **`Continue` / return-for-more-turns pattern.** Arena.ai allows agents to iterate after a "final" ship. Track ship_count carefully; any additional ship after the first "here is the game" marker triggers iterated-track routing.
+- **Model self-report contradictions.** Observed: Qwen build claiming to be Claude in an internal think trace. Log both, resolve to fingerprint, mark ATTRIBUTION anomaly.
 
 ## 5. What is guaranteed and what is not
 

@@ -13,3 +13,6 @@ __pycache__/
 node_modules/
 dist/
 .venv/
+
+# Reference experiment logs (kept locally, fetched from master when needed)
+.experiments/
