@@ -44,7 +44,7 @@ Weights sum 100: designed to heavily weight visual ambition and human-perceived 
 | M1 | Clarity of rules & learnability of core loop (<1 min) | |
 | M2 | Game feel & responsiveness (hit-stop, shake, buffering, timing, feedback) | SUBJ |
 | M3 | Mechanical depth & variety (emergence, viable approaches, not one-trick) | |
-| M4 | Balance & fairness — **first level/wave beatable by a real human in ~5 min honest play**; no unfair kills; timing windows fair; scaling sane. Score 0-1 if onboarding challenge is unbeatable or "clever-but-impossible"; capped at 2 if difficulty spikes with no telegraph. | |
+| M4 | Balance & fairness — **first level/wave beatable by a real human in ~5 min honest play**; no unfair kills; timing windows fair; scaling sane. Score 0-1 if onboarding challenge is unbeatable or "clever-but-impossible"; capped at 2 if difficulty spikes with no telegraph. An early cliff at level 2/3 that blocks ALL further honest progress scores 0–1 the same as an unbeatable level 1 (CEIL-5). | |
 | M5 | Meaningful player choice & agency (risk/reward, tactical decisions) | |
 | M6 | Feedback quality (telegraphs, numbers, hit/miss/crit, sound/visual); **death readability** — player understands what killed them and wants to retry | |
 | M7 | Creative mechanical twist (original system not in brief that preserves readability but adds depth) | SUBJ |
@@ -82,7 +82,7 @@ Weights sum 100: designed to heavily weight visual ambition and human-perceived 
 | V3 | Animation & juice quality (squash-stretch, trails, afterimages, particles, feedback) | |
 | V4 | Lighting, atmosphere, effects, depth (fog, vignette, layered) — without clutter | SUBJ |
 | V5 | UI clarity & polish (menus, HUD, legibility, no broken buttons) | |
-| V6 | Rendering robustness & graceful fallback (WebGPU→WebGL→Canvas2D, no white screen, gameplay intact) | |
+| V6 | Rendering robustness & graceful fallback (WebGPU→WebGL→Canvas2D, no white screen, no unrecovered full-screen flash/bloom/whiteout — see CEIL-9, gameplay intact) | |
 | V7 | Visual consistency across environments (desktop/mobile/portrait/landscape/DPR1/DPR2, no clipped UI, identity coherent) | |
 | V8 | **Surprise & inversion** — one coherent original mechanic/room/narrative/visual twist not in brief that remains learnable and enhances sustained engagement. 0=no surprise / random noise, 1-2=gimmick harms flow, 3=modest twist works, 4=memorable twist changes approach, 5=would talk about after playing — original integral | SUBJ |
 | V9 | **Working-3D / heavy-tech bonus** — GPU-programmed rendering (WebGL / WebGPU / Three.js / shader-heavy Canvas2D / non-trivial physics or fluid sim) that *also* passes every gate: controls tight, framerate stable on average hardware, no scene/menu collapse. 0=no such ambition attempted, 3=attempted and partially works but has visible defects, 4=attempted and works cleanly across the run, 5=works and is genuinely a "how did this run in a browser?" moment. **Broken 3D/heavy tech does NOT score here — it is a category defect logged against T2/T5 and caps V9 at 0.** Deliberate polished 2D/text/minimalism scores neutral (V9=N/A, excluded from mean) rather than penalized. | |
@@ -123,10 +123,11 @@ CEIL-1 55 main-path crash/soft-lock
 CEIL-2 65 primary loop unreachable
 CEIL-3 60 core controls broken >30%       (incl. mouse-aim broken, out-of-canvas soft-lock)
 CEIL-4 70 persistence fails on fresh browser
-CEIL-5 50 first level/wave unbeatable by real human in ~5 min  (M4=0 confirmed)
+CEIL-5 50 first level/wave unbeatable by real human in ~5 min, OR an early difficulty cliff (level 2/3) that blocks ALL further progress for an honest player  (M4=0 confirmed)
 CEIL-6 65 constant audio drone / streaming loop that cannot be silenced
 CEIL-7 60 menu ↔ gameplay state leak (clicks/keys fire through overlays or trap after close)
 CEIL-8 55 ambition-theater 3D: shipped 3D/heavy-tech that structurally breaks controls or framerate
+CEIL-9 55 persistent visual occlusion: full-screen effect (flash / bloom / whiteout / additive blowout) that fails to decay (~2 s) and renders the playfield unreadable for the rest of the run or until reload — functionally a soft-lock of the visual channel (Round 007: sonar game mine-explosion left screen white while sim continued)
 Final OVERALL = min(OVERALL_adj, all applicable ceilings) rounded 0.1
 ```
 
@@ -200,3 +201,24 @@ V9 rewards ambition that lands. It does NOT penalize deliberate 2D/text/minimali
 - Attempted, works, but is a *technical* exercise with no gameplay value → V9 max 2 (ambition without integration).
 
 This is intentional: prior rounds showed multiple agents ship broken 3D that would have scored higher as competent 2D. Codifying V9 makes that trade explicit.
+
+## 2.10 Creative-v0 category mapping (v12 merge)
+
+The v12 prompt merges the operator-proposed "2026 Creative Battle Prompt," which carried its own 12-category scoring lens (Creative Identity, First Impression, Playability, Interaction Quality, Visual Direction, Atmosphere, Discovery, Narrative, Depth, Technical Execution, Polish, Memorability). These are **NOT** added as new rubric categories — they map onto the existing T/M/G/F/V/A/X, and the rubric stays **judge-side only** (never embedded in the agent prompt, per §6.3 — embedding it invites checklist-compliance gaming). Mapping for evaluators:
+
+| Creative-v0 category | Existing rubric home |
+|---|---|
+| Creative Identity | V8 (surprise/inversion) + A6 (world invention) + M7 (mechanical twist) |
+| First Impression | F1 (first 5 min) + V0 |
+| Playability | G1/G2 + T1/T5 |
+| Interaction Quality | M2 (feel) + T5 (input) |
+| Visual Direction | V0/V1/V4 |
+| Atmosphere | A1/A3/A5 |
+| Discovery | G5 (variety) + G7 (player story) + V8 + M8 (depth-after-wow) |
+| Narrative | A6 + G7 |
+| Depth | M8 + F2/F3 |
+| Technical Execution | T (all) + V6/V9 |
+| Polish | V5 + T3/T6 + F6 |
+| Memorability | G6 (fun/sustained) + V8 + A6 |
+
+**Discovery and Memorability become first-class evaluation priorities** (previously implicit): in the HUMAN_JURY pillar (§2.4), weigh the discovery cluster (G5/G7/V8/M8) and the memorability cluster (G6/V8/A6) explicitly. No new weights or sub-criteria are added — they already exist; the v12 merge only elevates attention to them, matching the operator's repeated emphasis on discovery, atmosphere, and memorability across Rounds 002–008.

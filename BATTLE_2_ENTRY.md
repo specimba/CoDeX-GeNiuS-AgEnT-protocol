@@ -2,10 +2,11 @@
 
 This is the single file to open when you're ready to run a new round on arena.ai. It packages the launch procedure, the per-run scoresheet, and the paste-ready contestant prompt in one place. Everything else in the repo is supporting material.
 
-**Prompt version:** BATTLE_PROMPT **v9** (v8 + targeted §4.3 "retro-visuals trap" — narrow addition after Round 006 operator complaint about 2013-mobile-game visuals)
-**Rubric version:** 02-scoring-rubric §2.0–§2.9 (cluster cap soft, not hard)
-**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (§6.5 cluster registry judge-side only; C11 caused by v6, C12 caused by v7, C13 persistent-visual-mode documented Round 006)
-**Ready:** yes — see `battles/round-006-after-action.md` for the targeted v9 change, and `battles/round-005-after-action.md` for the "hold v8 constant, don't correction-spiral" learning that v9 respects.
+**Prompt version:** BATTLE_PROMPT **v17** — **now the live prompt** (promoted after v16 won Round 012, the best round in benchmark history). v17 = v16 + the operator's three R013 decisions: (1) **"ship"-wording micro-test** — every "ship/Ship" replaced with "deliver/built" (zero ship-words; tests the operator's priming theory on the C18 cluster); (2) **C18 soft steer** (gravity-well piloting) + (3) **C16 soft steer** (tangible-craft work) — same soft-note form as the C14 line that held in R012 (zero sonar games). *Known confound, logged: the steer and the wording-change both target C18, so R013 answers "can we move the cluster," not "which lever did it."*
+**What v16 validated (R012):** 4/5 metrics — first "no flaws" game ever (PRISMA, self-debugged 4 bugs), first opponent AI (IMPACT), materials recipe adopted everywhere, **image-gen used 0 times** (that lever is deliberately left unpushed per operator decision). Convergence is terminal-diagnosis: steers hold for named clusters; unnamed clusters arrive under any regime; novelty is scored judge-side.
+**Rubric version:** 02-scoring-rubric §2.0–§2.10
+**Anti-gaming version:** 06-anti-bias-anti-gaming §6.1–§6.8 (C11–C16; **C16 craft/sim category-attractor + post-Round-009 meta-finding**: convergence is two-layered — instance-attractors are prompt-fixable, category-attractors only partly so, model-bounded collapse is NOT prompt-fixable. Next phase = controlled pool-level experiments.)
+**Ready:** yes — see `battles/round-009-after-action.md` for the C16 deep-dive and the controlled-experiments recommendation, and `battles/v12-merge-design.md` for the v12 base v13 builds on.
 
 ---
 
@@ -82,7 +83,7 @@ python benchmark/ops/decision_block.py    --evidence runs/round-002-formal/evide
 
 ## Part 2 — Contestant prompt (byte-identical to `challenge/BATTLE_PROMPT.md`)
 
-The paste target below is exactly the v6 prompt. It is intentionally the *only* thing the agent sees. Do not add framing, warnings, hints, or answers to clarifying questions.
+The paste target below is exactly the v17 prompt. It is intentionally the *only* thing the agent sees. Do not add framing, warnings, hints, or answers to clarifying questions.
 
 > **BEGIN PASTE — copy from the next line all the way through the END PASTE marker, inclusive of headings and blank lines. Do not paraphrase.**
 
@@ -123,7 +124,7 @@ Track (from manifest):        strict-one-shot | iterated
 Ship count:                   __
 Concept (one sentence):
 Rendering stack (fingerprint): canvas2d | webgl | webgpu | three.js | dom-css | text | other:
-Cliché cluster (§6.5) hit?    none | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10
+Cliché cluster (§6.5) hit?    none | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10 | C11 | C12 | C13 | C14 | C15 | C16 | C17 | C18
 
 Category (mean of sub × 2, 0–10):
   T Technical / Code Quality             __ / 10
@@ -143,6 +144,7 @@ Ceilings triggered (list all that apply):
   [ ] CEIL-6  constant unmuteable audio drone
   [ ] CEIL-7  menu ↔ gameplay state leak
   [ ] CEIL-8  ambition-theater 3D
+  [ ] CEIL-9  persistent visual occlusion (unrecovered whiteout / full-screen flash)
 
 Defects logged (count by severity):
   Blocker: __   Critical: __   Major: __   Minor: __   Trivial: __
@@ -173,18 +175,17 @@ Rationale (from decision_block.py):
 
 ## Part 4 — Post-round handoff
 
-After Battle 2 is locked and attributed, produce:
+After the round is locked and attributed, produce:
 
-1. **`battles/round-002-formal-after-action.md`** — the same shape as `battles/round-001-after-action.md` and `round-002-after-action.md` in this repo. Include the model attribution, the fingerprint mismatch (if any), which cliché cluster (if any) was hit, and one paragraph on which failure modes v6 successfully caught vs missed.
+1. **`battles/round-NNN-after-action.md`** — same shape as the prior round records in `battles/`. Include the prompt version under test, the model attribution (resolved from `fingerprint.json`, never the arena UI label — see §6.6), any fingerprint mismatch, which cliché cluster(s) (§6.5, C1–C14) were hit, the defects logged against the taxonomy, and one paragraph on which failure modes the current prompt caught vs missed.
 
-2. **Cliché-cluster registry update** — if Battle 2 shows a NEW convergent theme not in §6.5, add it to that table (with `Observed models` and `Round(s)` filled in).
+2. **Cliché-cluster registry update** — if the round shows a NEW convergent theme not in §6.5 (C1–C14), add it to that table with `Observed models` and `Round(s)` filled in. Requires ≥2 independent same-round observations from different models (or a direct operator request across consecutive rounds — see C14).
 
-3. **v7 prompt hypothesis** — if v6's cliché-cluster warning failed to prevent convergence, escalate the warning to an outright ban on those specific themes in v7. Draft the change here so the next round can adopt it.
+3. **Next-prompt hypothesis** — if the current prompt failed to prevent a convergence or shipped a new defect class, draft the *narrow, targeted* change (one section / one ceiling / one self-QA line) with an explicit anti-recurrence guardrail and a falsifiable prediction for the next round. Follow the R005 §5 / R006 §5 anti-spiral discipline — do not rewrite the prompt.
 
-4. **`README.md` battle-log row** — add:
-   ```
-   | 002-formal | YYYY-MM-DD | <winner>  | <models>  | one-liner takeaway |
-   ```
+4. **`README.md` battle-log row** — add a row to the `## Battle log` table (date, summary, link to the after-action file).
+
+See `battles/round-007-after-action.md` for a worked example of all four steps.
 
 ---
 
@@ -195,23 +196,31 @@ Run this from repo root:
 ```bash
 python3 -m py_compile challenge/launch_challenge.py benchmark/ops/aggregate_scores.py benchmark/ops/decision_block.py && echo "harness OK"
 
-grep -q "(v9)" challenge/BATTLE_PROMPT.md && echo "prompt: v9 loaded (v8 + retro-visuals trap §4.3)"
-BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 20000 ] && echo "prompt: size OK ($BYTES bytes, ceiling 20000 raised from 18000 for v9 §4.3)"
-grep -q "actual game designers do" challenge/BATTLE_PROMPT.md && echo "prompt: §1 craft-based working method present (kept from v8)"
-grep -q "DESIGN_PILLARS" challenge/BATTLE_PROMPT.md && echo "prompt: DESIGN_PILLARS README requirement present (kept from v8)"
-grep -qE "MDA|Swink|Vlambeer|Porpentine|Ludum Dare" challenge/BATTLE_PROMPT.md && echo "prompt: craft tradition cited (kept from v8)"
-grep -q "retro-visuals trap" challenge/BATTLE_PROMPT.md && echo "prompt: §4.3 retro-visuals trap present (new in v9)"
-grep -q "ambition-theater trap is real" challenge/BATTLE_PROMPT.md && echo "prompt: v9 ambition-theater guardrail present (prevents C11 recurrence)"
-grep -qE "M8 |Depth after wow" benchmark/02-scoring-rubric.md && echo "rubric: M8 depth-after-wow present"
-grep -q "CEIL-8" benchmark/02-scoring-rubric.md && echo "rubric: CEIL-8 ambition-theater 3D present"
-grep -q "JUDGE-SIDE ONLY" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: cluster registry judge-side-only"
-grep -q "C13" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C13 retro-visuals-collapse recorded (Round 006)"
+grep -q "(v17)" challenge/BATTLE_PROMPT.md && echo "prompt: v17 live (v16 + C18/C16 soft steers + ship-wording micro-test)"
+diff -q challenge/BATTLE_PROMPT.md challenge/BATTLE_PROMPT_v17.md >/dev/null && echo "prompt: live file == v17 file (promotion verified)"
+BYTES=$(wc -c < challenge/BATTLE_PROMPT.md); [ "$BYTES" -lt 6000 ] && echo "prompt: size OK ($BYTES bytes — lean regime)"
+! grep -qiE "ship" challenge/BATTLE_PROMPT.md && echo "prompt: ZERO 'ship' words — micro-test armed (operator priming theory, R013)"
+grep -q "why does this experience need to exist in interactive form" challenge/BATTLE_PROMPT.md && echo "prompt: WHY_INTERACTIVE north star present"
+grep -q "seven families, all coequal" challenge/BATTLE_PROMPT.md && echo "prompt: 7-family menu present (inspiration-framed)"
+grep -q "sonar / radio / frequency tuning" challenge/BATTLE_PROMPT.md && echo "prompt: C14 soft steer present (held in R012 — zero sonar games)"
+grep -q "gravity-well piloting" challenge/BATTLE_PROMPT.md && echo "prompt: C18 soft steer present (new in v17)"
+grep -q "tangible-craft work" challenge/BATTLE_PROMPT.md && echo "prompt: C16 soft steer present (new in v17)"
+grep -q "MeshPhysicalMaterial" challenge/BATTLE_PROMPT.md && echo "prompt: materials+light recipe present (the R012 quality lever)"
+grep -q "Run this list once before you deliver" challenge/BATTLE_PROMPT.md && echo "prompt: pre-delivery self-QA list present (the M-4 knob — R012's 'no flaws')"
+grep -q "real resistance" challenge/BATTLE_PROMPT.md && echo "prompt: resistance/fail-state clause present"
+grep -q "equally to every agent" challenge/BATTLE_PROMPT.md && echo "prompt: sandbox-parity asset gate + receipts present"
+grep -q "TRACK: strict-one-shot" challenge/BATTLE_PROMPT.md && echo "prompt: track disclosure present"
+grep -qE "M8 |Depth after wow" benchmark/02-scoring-rubric.md && echo "rubric: M8 present"
+grep -q "CEIL-9" benchmark/02-scoring-rubric.md && echo "rubric: CEIL-9 present"
+grep -q "2.10 Creative-v0" benchmark/02-scoring-rubric.md && echo "rubric: Creative-v0 mapping present"
+grep -q "JUDGE-SIDE ONLY" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: registry judge-side-only"
+grep -q "| C16 |" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C16 recorded (R009)"
+grep -q "| C17 |" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C17 recorded (R011)"
+grep -q "| C18 |" benchmark/06-anti-bias-anti-gaming.md && echo "anti-gaming: C18 recorded (R012)"
 grep -q "track" challenge/launch_challenge.py && echo "harness: track routing present"
-grep -q "TRACK: strict-one-shot" challenge/BATTLE_PROMPT.md && echo "prompt: track disclosure requested"
-! grep -q "Competent.*will lose" challenge/BATTLE_PROMPT.md && echo "prompt: v6 'competent will lose' framing STILL removed"
 ```
 
-Expected output: fourteen OK lines. If any are missing, do not start — inspect `battles/round-006-after-action.md` for what changed and re-verify.
+Expected output: twenty-three OK lines. If any are missing, do not start — inspect `battles/round-012-after-action.md` for what changed and re-verify.
 
 ---
 

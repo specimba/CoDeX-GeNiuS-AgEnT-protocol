@@ -104,6 +104,8 @@ Push toward near-commercial polish across entire run — not just hero title scr
 Menu/game/reward/boss sounds, ambient loop, intensity changes, stingers — or convincing visual-only feedback with modular audio integration.
 Master toggle; safe fallback if autoplay blocked; user-initiated activation from start screen. Audio failure must never block gameplay.
 
+> **Audio is feedback, not a concept.** Do not pick a sound / sonar / frequency / radio / radar game because this section exists — that has been the dominant cross-round convergence. See `challenge/BATTLE_PROMPT.md` §1.4 and §4.4 ("the sensory-modality trap"). Audio is how the player *reads* the verb; it is not the verb.
+
 ## 8. Performance
 
 Target 60 FPS desktop + mobile. Delta-time, pool particles/floating text/projectiles/transients, cap counts, avoid layout thrash, minimize re-renders, Canvas or suitable layer for gameplay, separate UI from high-frequency rendering, handle DPR, reduce resolution on low-power devices, pause rendering/sim when hidden, clean resize/orientation, lightweight debug indicator for development.
