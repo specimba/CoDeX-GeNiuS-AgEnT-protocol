@@ -15,6 +15,8 @@ Agent is **developer**, not player. Nothing here ships inside a game; scores com
 | `07-operational-automated.md` | Operational runbook (weights pinned to the contract; validate + consistency gates) |
 | `08-selection-and-final-decision.md` | Decision rules: which created game human jury would choose |
 | `09-agent-arena-v2-design.md` | **Design**: five-track architecture (A open arena, B fixed-gen, C repair, D optimize, E sim-fidelity), comparison regimes, evidence receipts, S4a/S4b, v19 ablation plan |
+| `prompt-lineage-deep-analysis.md` | **Deep analysis**: section-by-section investigation of v10→v18 and the last experiments (R010–R014) — verdicts, metric reconstruction, cluster forensics → the evidence for v19/v20 |
+| `19-prompt-merge-blueprint.md` | **v19 blueprint**: exact edit list from the deep analysis, the de-recipe'd/game-first prompt draft, M-6 "is it a game" scoring addition, and the 3-arm validation experiment |
 | `contracts/RUBRIC_v2.json` | **Canonical machine rubric contract** — weights, criteria ids, ceilings, penalties (single source of truth; Markdown describes, JSON computes) |
 | `contracts/pairwise_result.schema.json` | Schema for the separate pairwise jury receipt |
 | `contracts/README.md` | Contract doctrine + change protocol |
