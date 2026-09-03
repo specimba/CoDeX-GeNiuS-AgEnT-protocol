@@ -1,0 +1,1435 @@
+# NEXUS Agent Arena review — repository + PR #8 + new game-benchmark literature
+
+I checked the live repository, PR #8, its prompt lineage, rubric, anti-gaming layer, evidence schema, aggregator, launcher, long-session protocol, Round 012 findings, and the new paper set you supplied. The uploaded paper packet matches the current primary-paper records for RLHEV, GameEngineBench, and GameXpert-Bench. 
+
+My conclusion is:
+
+> **The core NEXUS idea is stronger than most current game-agent benchmarks: an open-ended creator arena judged as a finished interactive product. But the project has reached the point where “battle prompt evolution” and “benchmark science” must become two separate layers.**
+
+PR #8 is a major empirical research archive—28 changed files, 1,571 additions, prompt lineage v10→v18, controlled experiments, cluster analysis, and R007–R012 fold-backs.  But I would **not merge it as the final benchmark control plane yet**, because the evaluator machinery has fallen behind the prompt/rubric evolution.
+
+---
+
+# 1. The most serious problem is not the prompt — it is **benchmark control-plane drift**
+
+Your current rubric says:
+
+```text
+T 16
+M 17
+G 17
+F 12
+V 20
+A 12
+X  6
+```
+
+and now contains:
+
+* M1–M8
+* G1–G7
+* V0–V9
+* A1–A6
+* CEIL-1 through CEIL-9
+
+But the actual `aggregate_scores.py` on the PR branch still computes:
+
+```text
+T 20
+M 18
+G 18
+F 14
+V 12
+A 10
+X  8
+```
+
+and only knows:
+
+```text
+M1–M6
+G1–G6
+V0–V5
+A1–A5
+CEIL-1 ... CEIL-4
+```
+
+The operational document independently still embeds that older weighting.
+
+This means a modern v17/v18 game can receive scores for M7/M8, G7, V6–V9, A6 and CEIL-5–9 in the jury report—and the canonical aggregator will silently **ignore them**.
+
+That is a benchmark-invalidating bug.
+
+For example:
+
+```text
+game has:
+CEIL-9 = permanent whiteout
+V9     = broken heavy-tech attempt
+M8     = no depth after minute 5
+
+rubric:
+sees all three
+
+current aggregate_scores.py:
+sees none of them
+```
+
+This is more serious than any remaining prompt-tuning problem.
+
+### Evidence schema is stale too
+
+`evidence_schema.json` still:
+
+* calls itself **“Ashen Descent Arena”**;
+* describes sessions only as S1–S8 although S9 now exists;
+* permits only CEIL-1–4;
+* lacks most of the reproducibility identity we now need;
+* **requires `pairwise_verdict` inside each individual game's evidence object**.
+
+That last point actually violates your own evaluation doctrine.
+
+Your human-jury prompt correctly says:
+
+```text
+score Game A independently
+↓
+freeze A scores
+
+score Game B independently
+↓
+freeze B scores
+
+ONLY THEN
+pairwise comparison
+```
+
+But the schema makes the single-game record contain the pairwise result.
+
+It should be:
+
+```text
+game_A_evidence.json ─┐
+                      ├─ immutable hashes
+game_B_evidence.json ─┘
+          ↓
+pairwise_result.json
+```
+
+not:
+
+```text
+game_A_evidence
+  includes judgment about B
+```
+
+That separation is very NEXUS-like and should be fixed now.
+
+---
+
+# 2. PR #8 should get a **small blocker-repair commit**, not another giant conceptual expansion
+
+The PR is already very large. One automated reviewer explicitly refused it because the diff exceeded its 150,000-character limit. Sonar reported a passing quality gate but **0% coverage on new code**.
+
+I would therefore **not put the entire benchmark-v2 redesign into PR #8**.
+
+Before merge, add only a compact synchronization repair:
+
+```text
+BLOCKER FIX FOR PR #8
+
+1. rubric machine contract
+2. aggregate_scores.py sync
+3. evidence_schema v2 sync
+4. operational protocol sync
+5. regression tests proving all four agree
+```
+
+Then merge the historical/evolution packet.
+
+Start the larger lifecycle architecture in a fresh PR.
+
+---
+
+# 3. Create one machine-authoritative benchmark contract
+
+Right now the same facts are manually repeated in Markdown and Python.
+
+That is why drift happened.
+
+Create:
+
+```text
+benchmark/contracts/
+  RUBRIC_v2.json
+```
+
+with approximately:
+
+```json
+{
+  "id": "NEXUS-ARENA-RUBRIC-2",
+  "weights": {
+    "T": 16,
+    "M": 17,
+    "G": 17,
+    "F": 12,
+    "V": 20,
+    "A": 12,
+    "X": 6
+  },
+  "criteria": {
+    "T": ["T1","T2","T3","T4","T5","T6","T7"],
+    "M": ["M1","M2","M3","M4","M5","M6","M7","M8"],
+    "G": ["G1","G2","G3","G4","G5","G6","G7"],
+    "F": ["F1","F2","F3","F4","F5","F6"],
+    "V": ["V0","V1","V2","V3","V4","V5","V6","V7","V8","V9"],
+    "A": ["A1","A2","A3","A4","A5","A6"],
+    "X": ["X1","X2","X3","X4","X5"]
+  },
+  "ceilings": {
+    "CEIL-1": 55,
+    "CEIL-2": 65,
+    "CEIL-3": 60,
+    "CEIL-4": 70,
+    "CEIL-5": 50,
+    "CEIL-6": 65,
+    "CEIL-7": 60,
+    "CEIL-8": 55,
+    "CEIL-9": 55
+  }
+}
+```
+
+Then:
+
+```text
+RUBRIC_v2.json
+      │
+      ├── aggregate_scores.py
+      ├── evidence validator
+      ├── reporting template
+      └── CI consistency test
+```
+
+Markdown describes the semantics.
+
+JSON defines the executable scoring contract.
+
+That eliminates an entire category of future benchmark drift.
+
+---
+
+# 4. The current benchmark is actually **two different scientific instruments**
+
+This is the biggest structural insight from comparing NEXUS with GameXpert, GameDevBench, GameEngineBench and OpenGame.
+
+Your existing benchmark asks:
+
+> Give two agents the same very open creative brief. Which one creates the better game?
+
+That is excellent for:
+
+```text
+PRODUCT QUALITY
+creative judgment
+authorship
+scope decisions
+taste
+engineering under ambiguity
+```
+
+But it is weak for diagnosing:
+
+```text
+why model X failed
+whether model X understands collision
+whether harness Y improves debugging
+whether model Z preserves regressions
+```
+
+because every agent chooses a different task for itself.
+
+This is an **arena**, not a controlled task benchmark.
+
+And that's fine.
+
+Do not destroy that uniqueness trying to imitate the papers.
+
+Instead make:
+
+```text
+NEXUS AGENT ARENA
+        │
+        ├── ARENA MODE
+        │    open creation
+        │    human preference
+        │    authorship
+        │
+        └── BENCHMARK MODE
+             fixed tasks
+             executable tests
+             lifecycle diagnosis
+```
+
+---
+
+# 5. GameXpert-Bench gives us the missing lifecycle structure
+
+GameXpert-Bench is the most directly useful new work for your repository.
+
+It explicitly splits game-agent capability into:
+
+| Track       | What happens                                        |
+| ----------- | --------------------------------------------------- |
+| **GameGen** | empty workspace → complete game                     |
+| **GameFix** | defects → diagnose + repair                         |
+| **GameOpt** | playable game → six cumulative improvement requests |
+
+It contains 97 generation tasks, 100 repair tasks derived from 50 human-verified game levels with 19–27 injected defects per level, and 17 six-turn optimization chains / 102 requests. GameFix uses Fail-to-Pass and Pass-to-Pass regression gates; GameOpt contains 701 acceptance criteria. ([Kun Chen][1])
+
+The central result is almost exactly what we've observed informally:
+
+> Agents are considerably better at producing plausible/playable foundations than at **discovering defects, verifying runtime behavior, and preserving prior functionality during changes**. ([arXiv][2])
+
+Your Round 012 already hints at this: PRISMA became exceptional partly because the agent caught and repaired four bugs itself.
+
+So make that capability measurable instead of anecdotal.
+
+---
+
+# 6. Proposed **NEXUS Agent Arena 2.0 track architecture**
+
+I would define five independent tracks.
+
+| Track                 | Purpose                                   | Primary evidence                                  |
+| --------------------- | ----------------------------------------- | ------------------------------------------------- |
+| **A — OPEN-CREATIVE** | Current flagship one-shot battle          | Human jury + hard runtime gates                   |
+| **B — FIXED-GEN**     | Same task across agents                   | Hidden behavioral tests + jury                    |
+| **C — REPAIR**        | Find/fix seeded defects                   | Fail-to-Pass + Pass-to-Pass                       |
+| **D — OPTIMIZE**      | Multi-turn enhancement without regression | cumulative acceptance + regression                |
+| **E — SIM-FIDELITY**  | Physics/world/simulation correctness      | engine invariants + repeated-rollout distribution |
+
+Never combine these into one opaque “agent score.”
+
+An agent can be:
+
+```text
+excellent OPEN-CREATIVE
+average FIXED-GEN
+excellent REPAIR
+poor OPTIMIZE
+excellent SIM-FIDELITY
+```
+
+That tells us something useful.
+
+---
+
+# 7. Track B: borrow from GameDevBench and GameEngineBench
+
+**GameDevBench** now has 333 Godot tasks and explicitly evaluates model + harness, including screenshot and runtime-video feedback. Its current repository reports that visual feedback raised GPT-5.4 from 41.1% to 52.0%. ([GitHub][3])
+
+**GameEngineBench** moves this further into UE5/C++: 110 scoped tasks from nine real projects, spanning gameplay, multiplayer, AI/world orchestration, animation, sessions, persistence, serialization, XR and rendering plugins. The strongest evaluated configuration reaches 55.5% pass@1 and 31 tasks remain unsolved across all twelve configurations. ([arXiv][4])
+
+This suggests a new fixed-generation / modification shelf for NEXUS.
+
+Not necessarily Godot or Unreal.
+
+For our browser arena, use browser-native fixed tasks such as:
+
+```text
+implement an articulated crane with real pendulum response
+complete an opponent AI with three behavioral states
+add a deterministic projectile system
+repair a broken WebGPU fallback
+implement a multi-stage state machine
+add a save migration
+add collision + moving-platform behavior
+build a responsive HUD without altering game rules
+```
+
+Now different agents solve **the same engineering problem**.
+
+That gives us diagnostic capability the open creative battle deliberately lacks.
+
+---
+
+# 8. Reproducibility needs to become much stronger
+
+GameDevBench itself recently exposed a useful cautionary example.
+
+A public reproduction found one ground-truth task passing on Godot 4.4.1 and deterministically failing on 4.7.1 because the benchmark said only “Godot 4.x.” ([GitHub][5])
+
+Another current reproducibility issue notes that the task→category mapping underlying published category-level results is not present in the released task artifacts. ([GitHub][6])
+
+We should avoid both from day one.
+
+Your current launcher records:
+
+* prompt/spec/self-QA hashes;
+* start/end;
+* budget;
+* build hashes;
+* ship count;
+* track.
+
+That's a good start, but not enough.
+
+Add a mandatory:
+
+```text
+BenchmarkRunReceipt
+```
+
+with:
+
+```yaml
+benchmark_id:
+benchmark_commit:
+track:
+
+prompt_sha256:
+rubric_sha256:
+aggregator_sha256:
+task_manifest_sha256:
+
+agent:
+  provider:
+  model:
+  model_revision:
+  harness:
+  harness_version:
+  reasoning_effort:
+
+environment:
+  os:
+  browser:
+  browser_version:
+  node_version:
+  gpu:
+  viewport:
+  dpr:
+  network:
+  image_generation_available:
+  browser_automation_available:
+  tool_manifest:
+
+execution:
+  start:
+  end:
+  wall_seconds:
+  tool_calls:
+  tokens_if_available:
+
+artifact:
+  build_hash:
+  file_manifest_hash:
+```
+
+Then the result is:
+
+```text
+MODEL × HARNESS × TOOLS × ENVIRONMENT × PROMPT × TASK
+```
+
+not simply:
+
+```text
+MODEL
+```
+
+That distinction is especially important because GameDevBench already demonstrates meaningful harness/visual-feedback effects. ([GitHub][3])
+
+---
+
+# 9. We should explicitly support **three comparison regimes**
+
+Your current fairness contract says identical prompt + equal time.
+
+That is necessary.
+
+It is not sufficient if tools/harnesses differ.
+
+So label runs:
+
+```text
+SYSTEM_BATTLE
+natural model + native harness + available tools
+
+MODEL_CONTROL
+same harness/tool environment, different model
+
+HARNESS_CONTROL
+same model, different harness
+```
+
+This is extremely valuable for your broader NEXUS research because it can tell us:
+
+```text
+Did Gemini win?
+or
+Did Antigravity win?
+
+Did Claude improve?
+or
+Did runtime-video access improve?
+
+Did GPT fail?
+or
+did its harness never expose the screen?
+```
+
+Do not force every battle into MODEL_CONTROL.
+
+Just stop calling a SYSTEM_BATTLE a pure model comparison.
+
+---
+
+# 10. RLHEV gives us a new **engine-verifier plane**
+
+Your supplied source correctly summarizes the paper's central idea: game engines provide executable checks for collision, physics, navigability and bounded playability, while human acceptance provides a broader semantic signal. 
+
+The primary paper explicitly frames RLHEV as combining dense engine feedback with human acceptance. ([arXiv][7])
+
+This maps beautifully to NEXUS:
+
+```text
+GAME ARTIFACT
+      │
+      ├── deterministic verifier
+      │      collision
+      │      state invariants
+      │      goal reachability
+      │      physics legality
+      │
+      ├── behavioral verifier
+      │      input sequence → expected state
+      │
+      └── HUMAN JURY
+             fun
+             authorship
+             coherence
+             surprise
+```
+
+Neither plane replaces the other.
+
+And this means our current jury should **not be responsible for discovering every machine-checkable fact**.
+
+Humans should judge the things machines cannot reliably prove.
+
+---
+
+# 11. PAWBench adds a dimension our benchmark currently almost entirely misses
+
+PAWBench fixes the starting state and action and repeats the rollout **50 times** to evaluate the model-induced distribution of possible futures. It explicitly reports calibration and support coverage separately rather than collapsing them into one score. ([PAWBench][8])
+
+It also reports readout failures separately and requires at least 20 readable outcomes from 50 rollouts before a scene is scoreable. ([PAWBench][8])
+
+That is exactly what we need for games claiming:
+
+```text
+physics
+fluid simulation
+procedural ecology
+economics
+emergent AI
+stochastic world dynamics
+```
+
+A single pretty run proves almost nothing.
+
+For those entries:
+
+```text
+fixed initial state
+fixed input sequence
+      ↓
+N repeated runs
+      ↓
+outcome distribution
+```
+
+Evaluate separately:
+
+```text
+Invariant pass rate
+Outcome support coverage
+Distribution calibration
+Readout/runtime failure rate
+```
+
+This should be **optional Track E**, not required from a narrative game.
+
+---
+
+# 12. PAWBench also validates keeping VLM judgment secondary
+
+PAWEval uses Gemini 3.5 Flash to classify outcomes, but its human study reports **81.3% agreement** on the clear comparable subset—not 100%. ([PAWBench][8])
+
+That's a good empirical reason to preserve your current doctrine:
+
+> Human jury primary for subjective quality; automated/VLM systems as bounded evidence producers.
+
+Your anti-bias architecture is already strong here.
+
+---
+
+# 13. The current 60-minute evaluation protocol needs one important repair
+
+Your present S4 requires:
+
+> 60 minutes continuous play, no restart,
+
+and high flow scores effectively depend on long play.
+
+This works for roguelikes/endless games.
+
+It is unfair to an intentionally excellent **12-minute complete game**.
+
+A short designed work should not be forced to provide 60 minutes of content.
+
+Split S4:
+
+```text
+S4-RUNTIME-SOAK
+60 minutes
+technical only:
+memory
+jank
+state corruption
+performance
+
+S4-EXPERIENCE-ARC
+complete intended arc
+then repeats / alternate paths
+engagement scoring
+```
+
+For short games:
+
+```text
+12-minute game
+→ full run
+→ 2–3 repeated runs / alternate paths
+→ separate runtime soak
+```
+
+For long games:
+
+```text
+60-minute natural play
+```
+
+This separates:
+
+```text
+runtime longevity
+≠
+designed content duration
+```
+
+and avoids bias toward endless procedural games.
+
+---
+
+# 14. Separate **artifact quality** from **development-process quality**
+
+The repo currently has a conceptual tension.
+
+The evaluator prompt says not to judge the developer's claims/logs.
+
+But the benchmark also wants to score:
+
+* whether the agent iterated;
+* whether it debugged;
+* whether it stopped at first prototype;
+* long-session development execution.
+
+Those aren't properties of the finished game alone.
+
+Make two objects:
+
+```text
+ArtifactQualityReceipt
+```
+
+and:
+
+```text
+DevelopmentProcessReceipt
+```
+
+Artifact quality includes:
+
+```text
+reliability
+mechanics
+flow
+visual quality
+atmosphere
+accessibility
+human preference
+```
+
+Process includes:
+
+```text
+time to first playable
+test runs
+self-discovered defects
+repairs
+regressions introduced
+regressions repaired
+tool use
+iteration count
+wall time
+token/tool cost
+```
+
+Never let process narrative rescue a bad artifact.
+
+But do report it independently.
+
+That gives us a much better creator-agent benchmark.
+
+---
+
+# 15. Your prompt-history work has discovered something the papers largely don't study
+
+This is one of the most interesting parts of your project.
+
+You have empirical evidence that prompt wording changes **concept distribution**:
+
+* explicit avoid-lists produce new anti-clichés;
+
+* positive examples get copied;
+
+* sensory guidance induced modality collapse;
+
+* negative-space wording moved rather than eliminated convergence;
+
+* materials/light teaching dramatically improved execution;
+
+* self-QA visibly increased repair behavior.
+
+That's research-worthy.
+
+But it creates a problem with v17/v18.
+
+---
+
+# 16. v17 currently reintroduces the exact kind of priming your own research warned about
+
+v17 explicitly names:
+
+* sonar/radio/frequency;
+* gravity-well piloting;
+* tangible craft;
+* `MeshPhysicalMaterial`;
+* clearcoat;
+* iridescence;
+* transmission;
+* IOR;
+* sheen;
+* anisotropy;
+* thickness;
+* attenuation.
+
+This was productive—the materials/light section clearly helped Round 012.
+
+But by your own benchmark's empirical logic:
+
+```text
+positive specificity
+→ output-distribution attractor
+```
+
+Even negative mentions can move the distribution.
+
+So I would preserve the **principle** and remove the named implementation recipe.
+
+Instead of:
+
+> MeshPhysicalMaterial / clearcoat / iridescence / transmission...
+
+say:
+
+> If visual depth matters to your concept, use a coherent rendering strategy appropriate to your stack—lighting, materials, textures, animation, composition, atmospheric depth or another technique you choose. Sophistication should serve the game rather than demonstrate a technology.
+
+Same lesson.
+
+Far less priming.
+
+---
+
+# 17. I would also remove the named convergence clusters from the agent prompt
+
+This part of v17 says the field often defaults to particular concept families.
+
+But your own anti-gaming document contains one of the strongest findings in the project:
+
+> keeping the cliché registry agent-side caused new convergence; it was therefore moved judge-side.
+
+I would restore that purity.
+
+Agent sees:
+
+```text
+Do not accept your first obvious concept automatically.
+Before coding, briefly consider alternatives that differ in what the player actually does and why the interaction matters.
+```
+
+Agent does **not** see:
+
+```text
+don't make sonar
+don't make gravity
+don't make glass
+don't make a crane
+```
+
+Keep C1–C18 entirely evaluator-side.
+
+---
+
+# 18. v18's engineering ideas are good—but over-generalized
+
+v18 adds:
+
+* real-domain-number research;
+* fixed module ownership;
+* exact data interface contract;
+* fixed-step simulation;
+* zero top-level side effects;
+* seeded randomness only;
+* durable state ≠ transient event;
+* no hot-loop allocation;
+* presentation cosmetic only.
+
+They came from a thoughtful Claude-of-Tanks analysis.
+
+I strongly support the **engineering philosophy**.
+
+I do not support imposing all six invariants on every open creative game.
+
+A turn-based narrative mystery does not need a 60 Hz simulation.
+
+A CSS spatial puzzle does not necessarily need a simulation/render authority distinction.
+
+A deterministic authored narrative may not need seeded RNG.
+
+A tiny elegant game does not need a module contract.
+
+So make them conditional:
+
+```text
+IF continuous simulation:
+  simulation independent from presentation timing
+
+IF randomness affects outcomes:
+  make runs reproducible or record the seed
+
+IF multiple subsystems exchange state:
+  define their interfaces before integration
+
+IF claiming real-world simulation:
+  ground relevant constants/ranges
+
+FOR EVERY GAME:
+  test the riskiest core rule directly before delivery
+```
+
+This retains the Claude-of-Tanks lesson without converting the benchmark into:
+
+> “who best imitates Claude-of-Tanks architecture?”
+
+---
+
+# 19. Candidate **Battle Prompt v19 CORE**
+
+I would create this as a **held experimental arm**, not overwrite v17/v18 immediately.
+
+Run v17/v18/v19 under a controlled same-model/harness experiment first.
+
+Here is the version I would test:
+
+# BATTLE PROMPT — Build one excellent browser game in one sustained session (v19 CORE candidate)
+
+You have one sustained development session to create a complete, original, playable browser game.
+
+Your goal is not to demonstrate a framework, imitate a genre, maximize feature count, or satisfy a hidden aesthetic formula. Your goal is to make an interactive experience that a real player would choose to keep playing.
+
+Before writing code, answer privately:
+
+**Why does this idea need interaction rather than merely being an animation, illustration, or story?**
+
+Do not automatically build the first concept that comes to mind. Briefly consider a few materially different possibilities, then choose the one with the strongest combination of:
+
+* meaningful player action;
+* room for mastery, discovery, tension, consequence, or expression;
+* a scope you can finish;
+* an identity you can sustain across the entire game.
+
+Do not include those discarded concepts in the deliverable.
+
+## Creative freedom
+
+The format is your decision.
+
+Use the genre, dimensionality, camera, rendering method, visual style, input model, narrative structure, simulation depth, and technical stack that best serve your game.
+
+A sophisticated game does not need to be 3D. A technically complex game does not receive credit merely for being complex. A minimal game can be excellent if the constraint feels deliberate and the execution is unusually strong.
+
+Aim for contemporary craft appropriate to the direction you choose. Default-template presentation, placeholder geometry, generic UI, or spectacle that does not improve the experience will not make the game stronger.
+
+If visual ambition matters to your concept, choose and execute a coherent visual strategy—lighting, materials, texture, animation, composition, atmosphere, typography, effects, procedural detail, authored assets, or another approach appropriate to your stack. Choose the technique yourself.
+
+## Build loop
+
+Do not spend the entire session planning, and do not stop at the first version that runs.
+
+Get the smallest real playable loop working early.
+
+Then repeatedly:
+
+**play → observe → identify the most important weakness → repair or improve it → play again**
+
+Use the actual running game as evidence.
+
+Prioritize defects that affect the player before adding breadth.
+
+If a system is complex enough that integration mistakes are likely, define its important ownership and data boundaries before wiring it together.
+
+If continuous simulation determines gameplay outcomes, keep gameplay state independent from rendering speed.
+
+If randomness materially affects outcomes, make a run reproducible or record the seed.
+
+If your concept claims meaningful real-world behavior, use defensible ranges or data rather than arbitrary numbers where that matters.
+
+Before delivery, directly test at least one of the core rules most likely to be wrong.
+
+## Minimum finished-game contract
+
+The final game must:
+
+1. **Launch cleanly.** A fresh load reaches a coherent playable entry state without a blank screen, fatal missing asset, infinite loading state, or repeating console-error failure.
+
+2. **Contain a real interactive loop.** The player's actions must change what happens. There must be meaningful resistance, consequence, uncertainty, trade-off, discovery, failure, commitment, or another force that prevents the experience from being passive autoplay.
+
+3. **Teach itself through play.** A new player should understand enough to begin without reading the README and should reach a meaningful consequence or progression beat early in the experience.
+
+4. **Have reliable controls and state transitions.** Real mouse, keyboard, and any claimed touch controls must work. Menus must not leak actions into gameplay. Restart must return the game to a valid initial run state.
+
+5. **Pause outcome-affecting gameplay correctly.** Gameplay simulation, timers, spawning, AI, physics, or other outcome-producing state must not continue unintentionally while paused. Cosmetic menu animation may continue if it cannot change game outcomes.
+
+6. **Provide immediate audio control if audio exists.** Muting must become perceptibly effective immediately and must prevent new game audio until unmuted. Audio initialization failure must not make the game unplayable.
+
+7. **Survive ordinary browser boundaries.** Resize, tab blur/focus, visibility changes, repeated input, and malformed local persistence data must not destroy the run where those surfaces apply.
+
+8. **Remain readable.** Visual effects must return the playfield to a usable state after transient flashes, transitions, hits, explosions, or post-processing effects.
+
+9. **Be self-contained.** The delivered player experience must run without runtime telemetry, analytics, hidden reporting, authentication, or required external network services. Bundle the resources needed to play.
+
+10. **Be honest.** Do not ship placeholder interactions, dead controls, unreachable claimed features, a cinematic autoplay presented as gameplay, or documentation that describes functionality the delivered build does not contain.
+
+## Ambition and scope
+
+Ambition is valuable only when it survives actual play.
+
+If an ambitious rendering, simulation, procedural, AI, or physics path is unstable near delivery, simplify it until the finished game is coherent.
+
+A smaller game that is expressive, deep enough for its intended duration, and reliable is stronger than an impressive screenshot attached to a broken game.
+
+The experience should not exhaust its complete idea immediately after the first visual or mechanical surprise. Give the player another meaningful beat: a changed decision, deeper interaction, escalation, new relationship, altered environment, emergent consequence, or other development appropriate to your design.
+
+## Final verification
+
+Before delivering, run the game from a fresh load and verify:
+
+* entry state appears correctly;
+* real controls behave as intended;
+* the main interactive loop works;
+* at least one meaningful adverse/consequence path works;
+* restart fully resets the run;
+* pause does not change gameplay outcomes;
+* mute works if audio exists;
+* resize and blur/focus recover cleanly;
+* no persistent unreadable visual effect remains;
+* the most technically ambitious path you actually ship works end-to-end.
+
+Fix failures you can. Remove or disclose anything you cannot honestly finish.
+
+## Deliverables
+
+Deliver:
+
+* the complete runnable game;
+* source required to run it;
+* a short `README.md`.
+
+The README must begin with either:
+
+`TRACK: strict-one-shot`
+
+or
+
+`TRACK: iterated (N passes)`
+
+Then include:
+
+* how to run;
+* controls;
+* major stack/runtime choices;
+* locally bundled generated or externally sourced assets and their provenance;
+* important features intentionally cut;
+* known limitations;
+* `WHY_INTERACTIVE`;
+* `DESIGN_PILLARS`;
+* `HONEST_SELF_ASSESSMENT`.
+
+Do not include benchmark scores or predictions about how judges will rate the game.
+
+Deliver the strongest complete game you can make within the session.
+
+This keeps almost all of the useful v16–v18 learning while removing the largest prompt attractors.
+
+---
+
+# 20. Do not immediately promote v19
+
+Your benchmark's strongest characteristic is that prompt changes are **empirically tested**.
+
+Continue doing that.
+
+I'd run:
+
+```text
+PROMPT A: v17
+PROMPT B: v18
+PROMPT C: v19 CORE
+```
+
+with the same model+harness class if possible.
+
+Measure:
+
+| Metric                        | Why                      |
+| ----------------------------- | ------------------------ |
+| hard-gate pass rate           | reliability              |
+| Blocker/Critical defects      | engineering              |
+| self-discovered repairs       | self-verification        |
+| time-to-first-playable        | execution efficiency     |
+| human pairwise quality        | product quality          |
+| V0/V8                         | presentation/originality |
+| M8                            | depth                    |
+| concept-cluster entropy       | convergence              |
+| cross-run semantic similarity | prompt-induced collapse  |
+| wall time/tool calls          | efficiency               |
+
+The decision is then empirical:
+
+```text
+v19 wins quality
++ lowers defects
++ does not collapse concept diversity
+→ promote
+
+otherwise
+→ retain v17/v18 finding
+```
+
+---
+
+# 21. Add **GameFix-style** repair battles
+
+This should be the next major benchmark track.
+
+Take strong prior games and inject known reversible defects:
+
+```text
+inverted aim
+broken pause
+lost event subscription
+incorrect collision mask
+state not reset
+wrong damage scaling
+stale save migration
+pointer capture failure
+broken render fallback
+performance leak
+unreachable progression state
+```
+
+Two modes:
+
+```text
+REPORTED
+agent receives a bug report
+
+DISCOVERY
+agent is only told the game contains defects
+```
+
+Then calculate:
+
+```text
+FAIL_TO_PASS
+how many seeded failures fixed?
+
+PASS_TO_PASS
+how many previously-correct behaviors preserved?
+```
+
+This directly addresses the GameXpert finding that defect discovery and regression preservation remain weak. ([Kun Chen][1])
+
+It also converts your very rich defect taxonomy into an actual task generator.
+
+---
+
+# 22. Add **GameOpt-style** six-turn cumulative battles
+
+Start from a complete game.
+
+Then give requests such as:
+
+```text
+Turn 1 — improve onboarding
+Turn 2 — add opponent behavior
+Turn 3 — rebalance early difficulty
+Turn 4 — add mobile controls
+Turn 5 — upgrade visual feedback
+Turn 6 — improve late-run depth
+```
+
+Every turn has acceptance criteria.
+
+After each turn:
+
+```text
+new criteria
++
+ALL PREVIOUS CRITERIA
+```
+
+must pass.
+
+This evaluates something your one-shot creative battle cannot:
+
+> **Can the agent improve software without slowly destroying the system it already built?**
+
+That is extremely relevant to real coding-agent usefulness.
+
+---
+
+# 23. Add a dedicated **Simulation Fidelity track**
+
+This is where RLHEV + PAWBench should enter.
+
+Do not make every creative game prove physics.
+
+For games explicitly claiming simulation, score a separate vector:
+
+```text
+SIM_ENGINE_VALIDITY
+SIM_CAUSAL_VALIDITY
+SIM_LONG_HORIZON_STABILITY
+SIM_DISTRIBUTION_COVERAGE
+SIM_DISTRIBUTION_CALIBRATION
+SIM_FAILURE_RATE
+```
+
+The pipeline:
+
+```text
+artifact frozen
+      ↓
+known initial state
+      ↓
+scripted action sequence
+      ↓
+engine invariants
+      ↓
+repeat K times
+      ↓
+outcome distribution
+      ↓
+human/VLM audit
+```
+
+RLHEV supports the executable-verifier half. ([arXiv][7])
+
+PAWBench supports the repeated-distribution half and, importantly, keeps calibration, support coverage and readout reliability separate. ([PAWBench][8])
+
+Do the same.
+
+---
+
+# 24. Replace the current monolithic scoring story with an **Evidence Vector**
+
+Keep `OVERALL` for the judge-facing battle if you like.
+
+But make the canonical research object:
+
+```yaml
+ArenaResult:
+  qualification:
+    launch:
+    controls:
+    loop:
+    restart:
+    containment:
+
+  artifact_quality:
+    technical:
+    mechanics:
+    gameplay:
+    flow:
+    visual:
+    atmosphere:
+    accessibility:
+
+  process:
+    time_to_first_playable:
+    tests_run:
+    defects_self_detected:
+    defects_repaired:
+    regressions_introduced:
+    regressions_repaired:
+    wall_time:
+    tool_calls:
+
+  jury:
+    pairwise_rating:
+    confidence:
+    inter_rater_agreement:
+
+  simulation:  # optional
+    invariant_pass_rate:
+    causal_checks:
+    distribution_coverage:
+    distribution_tvd:
+    rollout_failure_rate:
+
+  provenance:
+    prompt_hash:
+    rubric_hash:
+    task_hash:
+    model:
+    harness:
+    tool_manifest:
+    environment_hash:
+    artifact_hash:
+```
+
+This is much harder to Goodhart than one 0–100 score.
+
+---
+
+# 25. Fix another subtle issue: **the game evidence should not know the pairwise result**
+
+I would make these schemas:
+
+```text
+GameEvidenceReceipt
+ProcessReceipt
+VerifierReceipt
+PairwiseJuryReceipt
+BenchmarkRunReceipt
+```
+
+Then:
+
+```text
+PairwiseJuryReceipt:
+  game_a_evidence_hash
+  game_b_evidence_hash
+  evaluator
+  ordering
+  winner
+  confidence
+  rationale
+```
+
+Pairwise comparison happens only after both game receipts are immutable.
+
+That makes your bias-control doctrine structurally enforceable rather than merely instructional.
+
+---
+
+# 26. Turn the long-session protocol into adaptive testing
+
+Replace:
+
+```text
+EVERY GAME
+→ 60 continuous minutes
+```
+
+with:
+
+```text
+TECHNICAL SOAK
+fixed 60 min where feasible
+
+EXPERIENCE COVERAGE
+full intended arc
++ repeat runs
++ late-state probe
+```
+
+This protects deliberately short games.
+
+Keep:
+
+* S1 launch;
+* S2 reset;
+* S3 intended-arc play;
+* S5 exploratory;
+* S6 boundaries;
+* S7 accessibility;
+* S8 repeats;
+* S9 creative probe.
+
+Split S4 into:
+
+```text
+S4a Runtime Soak
+S4b Experience Endurance
+```
+
+That's a cleaner scientific design.
+
+---
+
+# 27. One more thing: your containment rule conflicts slightly with your “rubric public-safe” doctrine
+
+`challenge/README.md` says agents do **not** receive the rubric.
+
+`06-anti-bias-anti-gaming.md` says the benchmark should be safe even if agents know it.
+
+Those are compatible as defense-in-depth, but document them explicitly:
+
+```text
+NORMAL CONDITION
+rubric hidden
+
+SECURITY REQUIREMENT
+benchmark must remain useful even if rubric leaks
+
+NEVER RELY ON
+rubric secrecy as sole anti-gaming control
+```
+
+That's a stronger statement than either document currently makes alone.
+
+---
+
+# 28. Recommended repository shape after PR #8
+
+```text
+challenge/
+  BATTLE_PROMPT.md
+  BATTLE_PROMPT_v17.md
+  BATTLE_PROMPT_v18.md
+  BATTLE_PROMPT_v19_CORE.md
+  DEVELOPER_SELF_QA.md
+
+benchmark/
+  contracts/
+    RUBRIC_v2.json
+    evidence.schema.json
+    run_manifest.schema.json
+    pairwise.schema.json
+
+  tracks/
+    open_creative/
+    fixed_generation/
+    repair/
+    optimization/
+    simulation_fidelity/
+
+  evaluator/
+    human_jury.md
+    runtime_gates.md
+    simulation_gates.md
+
+  ops/
+    aggregate_scores.py
+    validate_contract.py
+    validate_evidence.py
+
+  tasks/
+    manifest.jsonl
+
+  research/
+    prompt_convergence/
+    lifecycle/
+    simulation/
+
+battles/
+  existing historical records
+```
+
+Keep all the wonderful battle history.
+
+Stop letting the battle history directly mutate executable benchmark semantics without a machine-contract reconciliation step.
+
+---
+
+# 29. Immediate sequence I recommend
+
+The next work should happen in this order:
+
+1. **Do not expand PR #8 further conceptually.**
+2. Repair the scorer/schema/rubric desynchronization.
+3. Add CI tests that fail if criteria, weights or ceilings drift.
+4. Merge PR #8 as the historical v10→v18 evolution packet.
+5. Open a new **Agent Arena 2.0** PR.
+6. Add v19 as a **held experimental prompt**, not live.
+7. Run v17/v18/v19 controlled prompt ablation.
+8. Add Repair track.
+9. Add Optimization track.
+10. Add Simulation Fidelity as an optional specialized track.
+
+The new papers support this division strongly: GameXpert says lifecycle matters, GameDevBench/GameEngineBench show executable engine tasks expose agent weaknesses, RLHEV shows engine verification can become dense trajectory evidence, PAWBench shows one attractive rollout is not a world model, and OpenGame shows whole-game generation needs both runtime health and intent/visual assessment. ([arXiv][2])
+
+### My final assessment
+
+The unique thing worth protecting is **not the current 0–100 rubric**.
+
+It is this:
+
+> **NEXUS Agent Arena studies an AI developer under creative freedom, records how prompt/harness conditions shape what it chooses to build, then subjects the resulting executable artifact to independent product, engineering, regression, and eventually simulation evidence.**
+
+That is substantially more interesting than another coding leaderboard.
+
+The next version should therefore become:
+
+```text
+OPEN CREATIVE ARENA
+        +
+FIXED EXECUTABLE TASKS
+        +
+REPAIR
+        +
+MULTI-TURN REGRESSION
+        +
+SIMULATION FIDELITY
+        +
+MODEL × HARNESS PROVENANCE
+```
+
+while keeping each evidence plane separate rather than hiding everything inside one score.
+
+I would treat **scorer/schema synchronization as the immediate blocker**, and **v19 + lifecycle tracks as the next research epoch**.
+
+[1]: https://kwen-chen.github.io/GameXpert-Bench/ "https://kwen-chen.github.io/GameXpert-Bench/"
+[2]: https://arxiv.org/abs/2608.21833 "https://arxiv.org/abs/2608.21833"
+[3]: https://github.com/waynchi/gamedevbench "https://github.com/waynchi/gamedevbench"
+[4]: https://arxiv.org/abs/2607.03525 "https://arxiv.org/abs/2607.03525"
+[5]: https://github.com/waynchi/gamedevbench/issues/7 "https://github.com/waynchi/gamedevbench/issues/7"
+[6]: https://github.com/waynchi/gamedevbench/issues/9 "https://github.com/waynchi/gamedevbench/issues/9"
+[7]: https://arxiv.org/abs/2608.25518 "https://arxiv.org/abs/2608.25518"
+[8]: https://pawbench.github.io/ "https://pawbench.github.io/"

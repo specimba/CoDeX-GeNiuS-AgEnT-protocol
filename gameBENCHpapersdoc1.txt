@@ -1,0 +1,381 @@
+https://huggingface.co/papers/2608.25518
+"
+Hugging Face's logo
+Hugging Face
+Models
+Datasets
+Spaces
+Buckets
+new
+Docs
+Enterprise
+Pricing
+
+
+Papers
+arxiv:2608.25518
+
+Copy markdown
+
+Agentic Game Development as a Verifiable Trajectory Data Engine for Scaling World Models
+Published on Aug 26
+·
+Submitted by
+Pengfei Zhou
+on Aug 28
+#1 Paper of the day
+·
+NationalUniversityofSingapore
+National University of Singapore
+Authors:
+Pengfei Zhou
+,
+Hexin Wang
+,
+Zhengfeiyang Zhang
+,
+Yixing Ma
+,
+Zhenglin Wan
+,
+Kaipeng Zhang
+,
+Wangbo Zhao
+,
+Yang You
+Abstract
+Game engines provide executable verification and long-horizon trajectories for reinforcement learning post-training of spatial world models, motivating a human-engine verification paradigm.
+
+A common strategy for scaling world models is to train on more crawled video with more compute. We argue that this strategy is inefficient: scaling world models also requires a recursive data engine that offers grounded reward signals. The success of code agents illustrates why this matters. As code is executable, compilers and runtimes can provide high-quality rewards for Reinforcement Learning (RL) post-training of LLMs. By contrast, spatial generation still relies largely on fuzzy proxies such as CLIP scores. These signals are fuzzy and biased, making them hard to support RL post-training. Compared with these, game development provides a missing reward environment for spatial world models. A scene encoded by a game engine is an executable world specification: the engine can efficiently check collision, physics, navigability and bounded playability, while the developer provides the global verification signal by judging whether the scene should be accepted. Game development also provides real-world long-horizon trajectory data for RL post-training. We therefore propose Reinforcement Learning with Human-Engine Verification (RLHEV), a post-training paradigm that combines dense engine signals with implicit human acceptance feedback from the development process.
+
+Community
+IntJudge
+Paper submitter
+2 days ago
+•
+edited 1 day ago
+
+Thanks for all contributors.
+
+Reply
+librarian-bot
+1 day ago
+
+This is an automated message from the Librarian Bot. I found the following papers similar to this paper.
+
+The following papers were recommended by the Semantic Scholar API
+
+GameXpert-Bench: How Far Are Coding Agents from Expert Game Development? (2026)
+Plan Right, Then Plan Tight: Symbolic RL for Efficient Embodied Reasoning (2026)
+GameEngineBench: Evaluating Coding Agents on Real C++ Runtime Environments (2026)
+EmbodiedGen V2: An Agentic, Simulation-Ready 3D World Engine for Embodied AI (2026)
+From Solver Feedback to Faithful Plans: Multi-Role Reinforcement Learning for Symbolic Planning (2026)
+Scaling Scientific Discovery Environments for Turn-Level Agentic RL (2026)
+GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation (2026)
+Please give a thumbs up to this comment if you found it helpful!
+
+If you want recommendations for any Paper on Hugging Face checkout this Space
+
+You can directly ask Librarian Bot for paper recommendations by tagging it in a comment: @librarian-bot recommend
+
+Reply
+O96a
+about 16 hours ago
+
+Crash-free is a low bar. A game that compiles and runs isn't coherent past level one, and RL on a "didn't crash" reward will happily optimize for bland, safe scenes — the agent finds the path of least resistance, not the path of most meaning.
+
+The real question is whether this signal buys spatial consistency or just trades CLIP fuzz for crash-fuzz. I'd want to see the generated trajectories hold up under a human playthrough, not just a runtime check.
+
+Reply
+
+Upload images, audio, and videos by dragging in the text input, pasting, or clicking here.
+
+
+
+
+
+
+
+
+
+
+
+
+
+hf papers read 2608.25518
+
+Models citing this paper
+0
+No model linking this paper
+
+Cite arxiv.org/abs/2608.25518 in a model README.md to link it from this page.
+Datasets citing this paper
+0
+No dataset linking this paper
+
+Cite arxiv.org/abs/2608.25518 in a dataset README.md to link it from this page.
+Spaces citing this paper
+0
+No Space linking this paper
+
+Cite arxiv.org/abs/2608.25518 in a Space README.md to link it from this page.
+Collections including this paper
+3
+World model
+Collection
+56 items
+•
+Updated about 17 hours ago
+•
+7
+Finance
+Collection
+17 items
+•
+Updated 1 day ago
+•
+1
+interesting
+Collection
+4 items
+•
+Updated 1 day ago
+Dark theme
+TOS
+Privacy
+About
+Careers
+Models
+Datasets
+Spaces
+Pricing
+Docs
+"
+
+https://huggingface.co/papers/2607.03525
+"
+Hugging Face's logo
+Hugging Face
+Models
+Datasets
+Spaces
+Buckets
+new
+Docs
+Enterprise
+Pricing
+
+
+Papers
+arxiv:2607.03525
+GameEngineBench: Evaluating Coding Agents on Real C++ Runtime Environments
+Published on Jul 15
+Authors:
+Brian La
+,
+Sejoon Chang
+,
+Ben Kim
+,
+Junyoung Bae
+,
+Aamish Ahmad Beg
+,
+Sei Chang
+,
+Gonzalo Gonzalez-Pumariega
+,
+Kanav Goyal
+Abstract
+Game engines provide real-time simulation, rendering, physics, interaction, networking, and asset pipelines, making them valuable not only for games but also for 3D applications in healthcare, robotics, architecture, manufacturing, and related domains. Because game development is where these systems are most mature and publicly available, it offers a practical testbed for evaluating coding agents that must modify C++ code within stateful, interactive, real-time systems. We present GameEngineBench, a benchmark for evaluating coding agents on scoped C++ implementation tasks inside Unreal Engine 5 projects, built from nine real-world game repositories. The evaluation set consists of 110 tasks spanning gameplay mechanics, multiplayer behavior, AI and world orchestration, animation and movement, UI and session code, loading behavior, online-service integration, persistence, data serialization, XR behavior, and rendering-oriented plugins. These tasks require models to make native C++ changes that compile and satisfy behavioral tests within executable Unreal Engine projects. Across twelve evaluated configurations, the strongest model reaches 55.5\% pass@1, while 31 tasks remain unsolved by every configuration. Our results demonstrate that frontier coding agents continue to struggle with deeply integrated C++ development for real-time interactive software, highlighting game-engine benchmarks as a valuable complement to existing software engineering evaluations.
+
+Community
+
+Upload images, audio, and videos by dragging in the text input, pasting, or clicking here.
+
+Models citing this paper
+0
+No model linking this paper
+
+Cite arxiv.org/abs/2607.03525 in a model README.md to link it from this page.
+Datasets citing this paper
+0
+No dataset linking this paper
+
+Cite arxiv.org/abs/2607.03525 in a dataset README.md to link it from this page.
+Spaces citing this paper
+0
+No Space linking this paper
+
+Cite arxiv.org/abs/2607.03525 in a Space README.md to link it from this page.
+Collections including this paper
+0
+No Collection including this paper
+
+Add this paper to a collection to link it from this page.
+Dark theme
+TOS
+Privacy
+About
+Careers
+Models
+Datasets
+Spaces
+Pricing
+Docs
+
+"
+
+https://huggingface.co/papers/2608.21833
+"
+Hugging Face's logo
+Hugging Face
+Models
+Datasets
+Spaces
+Buckets
+new
+Docs
+Enterprise
+Pricing
+
+
+Papers
+arxiv:2608.21833
+
+Copy markdown
+
+GameXpert-Bench: How Far Are Coding Agents from Expert Game Development?
+Published on Aug 22
+·
+Submitted by
+taesiri
+on Aug 25
+·
+Tencent-Hunyuan
+Tencent Hunyuan
+Authors:
+Kun Chen
+,
+Haorong Hong
+,
+Peizhong Gao
+,
+Jianfeng Lin
+,
+Tongxu Luo
+,
+Yuxuan Xie
+,
+Chenxu Liu
+,
+Jieling He
+,
+Zhongyuan Liu
+,
+Zeno Zeng
+Abstract
+GameXpert-Bench evaluates coding agents across three game development stages—generation, repair, and optimization—using interactive and behavioral tests to reveal strengths in building playable foundations and weaknesses in defect discovery and regression preservation.
+
+Recent large language models (LLMs) can operate as coding agents that build complete games from natural language requests. Game development is especially demanding because program logic, visual and audio content, interfaces, interaction and playability must function together in one executable artifact. Measuring this capability therefore requires evaluation of both game product and the development process. Existing benchmarks often assess the game development capabilities of LLMs by evaluating the final artifact or an isolated development stage. Our analysis of complete human-agent development trajectories identifies three stages that together span the lifecycle of game development with a coding agent: initial game generation, bug diagnosis and repair, and optimization over multiple turns. Therefore, we introduce GameXpert-Bench, which operationalizes the three lifecycle stages as three complementary benchmark tracks. GameGen evaluates complete game creation from a single request in an empty workspace. GameFix evaluates diagnosis and repair when defects are reported or left for the agent to discover. GameOpt evaluates cumulative optimization through request chains seeded by real development trajectories between users and agents. We evaluate each track using live game interaction, deterministic behavioral tests, or final product criteria with regression checks. The suite contains 97 generation tasks across 11 genres; 100 repair tasks from 50 game levels verified by humans, each with 19-27 injected bugs; and 17 optimization chains with six turns and 102 requests. Across the three tracks, current agents are more reliable at producing playable foundations and implementing explicit requirements than at discovering defects, verifying runtime behavior, and preserving functionality across changes.
+
+
+Community
+librarian-bot
+4 days ago
+
+This is an automated message from the Librarian Bot. I found the following papers similar to this paper.
+
+The following papers were recommended by the Semantic Scholar API
+
+GameEngineBench: Evaluating Coding Agents on Real C++ Runtime Environments (2026)
+SWE-Together: Evaluating Coding Agents in Interactive User Sessions (2026)
+ICAE-Bench: Evaluating Coding Agents as Interactive Project Builders (2026)
+SWE-INTERACT: Reimagining SWE Benchmarks as User-Driven Long-Horizon Coding Sessions (2026)
+OmniaBench: Benchmarking General AI Agents Across Diverse Scenarios (2026)
+DeepSWE: Measuring Frontier Coding Agents on Original, Long-Horizon Engineering Tasks (2026)
+MM-ToolSandBox: A Unified Framework for Evaluating Visual Tool-Calling Agents (2026)
+Please give a thumbs up to this comment if you found it helpful!
+
+If you want recommendations for any Paper on Hugging Face checkout this Space
+
+You can directly ask Librarian Bot for paper recommendations by tagging it in a comment: @librarian-bot recommend
+
+Reply
+
+Upload images, audio, and videos by dragging in the text input, pasting, or clicking here.
+
+
+
+
+
+
+
+
+
+
+
+
+
+hf papers read 2608.21833
+
+Models citing this paper
+0
+No model linking this paper
+
+Cite arxiv.org/abs/2608.21833 in a model README.md to link it from this page.
+Datasets citing this paper
+0
+No dataset linking this paper
+
+Cite arxiv.org/abs/2608.21833 in a dataset README.md to link it from this page.
+Spaces citing this paper
+0
+No Space linking this paper
+
+Cite arxiv.org/abs/2608.21833 in a Space README.md to link it from this page.
+Collections including this paper
+1
+paper-reading
+Collection
+87 items
+•
+Updated 4 days ago
+•
+2
+Dark theme
+TOS
+Privacy
+About
+Careers
+Models
+Datasets
+Spaces
+Pricing
+Docs
+
+"
+
+https://arxiv.org/abs/2609.01481
+"
+
+Search
+Submit
+Donate
+Log in
+Computer Science > Artificial Intelligence
+[Submitted on 1 Sep 2026]
+Harness-of-Harness: Multi-Day Autonomous Software Development with Continual Improvement
+Haoyang Yan, Min-le Su, Hangfan Zhang, Zhanhao Li, Chen Zhang, Shao Zhang, Yang Chen, Lei Bai, Shuyue Hu
+This paper studies autonomous software development, in which LLM-based coding agents transform high-level requirements into complete, functional, and usable software systems without human intervention. We introduce Harness-of-Harness (HoH), a framework that enables coding agents to continually improve software during autonomous development. HoH operates on existing coding-agent harnesses, and organizes their executions into iterative planning-coding-testing loops. To sustain improvement across loops, HoH balances repair with capability growth, scopes development into small and verifiable increments, separates implementation-time testing from independent evaluation, and constrains verifiable outputs rather than prescribing agent workflows. It progressively exposes deliverables, role-specific tools, and skills, encourages reuse rather than recreation, and maintains versioned project histories. On GameCraft-Bench, FrontierSWE, and ProgramBench, three harness-model pairs (Codex with GPT-5.5, OpenCode with DeepSeek-V4-Pro, and Pi with MiniMax-M3), HoH consistently outperforms the corresponding standalone harnesses, achieving an average relative gain of 52.25 percent and a maximum gain of 82.86 percent after three iterations. In a multi-day deployment with more than 70 iterations, HoH autonomously develops a first-person-shooter game, featuring a coherent storyline, fully implemented core mechanics, human-playable experience, polished visuals and integrated audio. Github: this https URL Project Page: this https URL
+Comments:	Github: this https URL Project Page: this https URL
+Subjects:	Artificial Intelligence (cs.AI)
+Cite as:	arXiv:2609.01481 [cs.AI]
+ 	(or arXiv:2609.01481v1 [cs.AI] for this version)
+ 
+https://doi.org/10.48550/arXiv.2609.01481
+Focus to learn more
+Submission history
+From: Hangfan Zhang [view email]
+[v1] Tue, 1 Sep 2026 16:17:18 UTC (13,310 KB)
+"
