@@ -88,6 +88,8 @@ Ship v9. One round of observational data. Look for:
 
 If Round 7 shows C14 recurrence, the correction is to strengthen the ambition-theater warning (not remove §4.3 — the warning is the wrong knob, not the technique list). If Round 7 still shows retro-collapse across all pool tiers, then v9 is not the lever and the honest finding stands from R5: *"On the current arena.ai model pool, some qualities of a finished modern game may be pool-bounded, not prompt-tunable."*
 
+> **Forward note (added Round 007):** the C14 = "broken shader work" predicted above did **not** materialize — the v9 ambition-theater guardrail held. Instead Round 007 surfaced a *different* convergence — **sound/sonar/frequency/radio/radar/wave-themed games** — which was assigned the C14 slot in the §6.5 registry. See `battles/round-007-after-action.md` and v10 §4.4 "the sensory-modality trap."
+
 ## 7. Honest read of what shipped in Round 6 that WAS good
 
 **LONGSHORE (opus5-max)** is the strongest one-shot game observed across all six rounds. It has:

@@ -1,4 +1,4 @@
-# BATTLE PROMPT — Build one good browser game, in one session (v17)
+# BATTLE PROMPT — Build one good browser game, in one session (v18)
 
 You have one sustained session to build a complete, original, playable browser game. Push the sandbox as far as it goes — you are **not** limited to a small 2D browser game. Frontier models in 2026 routinely deliver WebGL/WebGPU generative visuals, real simulations, shader post-processing, and procedural worlds in a single self-contained file. **That capability is in your hands — use it.** Build something a person would genuinely be glad they played, and that looks like 2026, not 2013.
 
@@ -9,6 +9,19 @@ Answer one question before you write any code: **why does this experience need t
 **Where the modern look actually comes from: materials + light, not polygons.** If your sandbox provides image generation, use it as your **art director and source-asset generator** — surface language, environment concepts, pattern and mask sources, micro-detail references — then *condition* what it gives you (tileable crops, derived masks, color-space tagging) and drive it through a **real material pipeline** (the MeshPhysicalMaterial class of properties: clearcoat, iridescence, transmission, IOR, sheen, anisotropy, thickness, attenuation). If your sandbox has no image generation, the same discipline applies to procedural sources: noise-derived materials with real physical parameters, not flat fills. Either way the renderer decides what is physically meaningful — the look comes from light on material, not from more geometry.
 
 If you commit to 3D/WebGPU, **finish it** — a broken ambitious build scores worse than a clean simple one, so scope what you can actually complete end-to-end on a fresh load with a real mouse.
+
+**Build it like an engineer, not a scripter.** Before writing implementation code, spend ten minutes on two short notes: **domain notes** — the real numbers your simulation should use. Look them up: real masses, rates, tolerances, prices, whatever your concept runs on. Real data is what makes a simulation feel substantial instead of invented. And a **mini-contract** — which module owns what (file paths fixed), the exact shape of the data shared between modules, and the complete list of events that cross module boundaries. Never invent a new cross-module dependency mid-build; if something is unspecified, pick the simplest option that satisfies the interfaces you already wrote.
+
+Then hold six invariants while you build:
+
+1. **Fixed-step simulation, decoupled from rendering.** The sim advances in fixed steps and never reads the frame clock. The renderer visualizes the sim — it may not create game state.
+2. **Zero top-level side effects.** Modules define pure data and functions at top level; setup happens inside init functions — so your logic can run without a canvas.
+3. **Seeded randomness only.** No `Math.random()` and no wall-clock time inside simulation code. Randomness arrives as a seed; time arrives as a parameter.
+4. **Durable state is not a one-shot event.** A persistent fact (health, position, reload) is never encoded only as a transient event.
+5. **No per-frame allocation in hot loops.** Reuse scratch objects.
+6. **Presentation is cosmetic.** Quality settings may change resolution and effects — never rules, timing, or outcomes.
+
+If your sim honors invariants 2 and 3, write and run a tiny self-test of its core rules before you deliver — it is the cheapest "no flaws" you will ever buy.
 
 **The only hard rules (reliability + fairness — everything else is your call):**
 

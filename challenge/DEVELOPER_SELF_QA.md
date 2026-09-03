@@ -20,11 +20,13 @@ This checklist is not the scoring rubric. It's a discipline aid.
 - [ ] No page-scroll on game keys (Space / arrows prevented).
 - [ ] Input buffering: quick press while busy is not silently dropped.
 - [ ] Controls feel the same at different frame rates (delta-time simulation).
+- [ ] **Axes not accidentally inverted** — up is up, aim points where it should, Y not flipped. Verify with a real mouse.
 - [ ] Touch (if supported): buttons large & thumb-reachable, no accidental scroll / zoom / selection, visible press states.
 
 ## Complete loop
 - [ ] Full run: start → gameplay → reward / progression → end condition → restart, all without a page refresh.
 - [ ] **First level / wave / room is beatable** by a real human in ~5 min honest play. Onboarding difficulty is calibrated, not "clever-but-impossible."
+- [ ] **Every level / room you ship is beatable** by honest play, not just the first one — a difficulty cliff at level 2 or 3 that no real player can pass is the same failure as an unbeatable level 1.
 - [ ] **There is a reason to still be playing at minute 5.** Difficulty scales, or a new mechanic unlocks, or a new environment enters, or the world reveals a second layer — something that changes.
 - [ ] Death / fail states are readable — the player understands *what killed them* and wants to retry.
 - [ ] No permanently stuck states, no impossible placements, no unreachable win conditions.
@@ -56,6 +58,7 @@ This checklist is not the scoring rubric. It's a discipline aid.
 ## Visual identity
 - [ ] Visual identity is sustained across menu, gameplay, death, restart — not just the title screen.
 - [ ] Rich visuals do not hurt readability of hazards / player / actions.
+- [ ] **No full-screen flash / bloom / whiteout that fails to decay.** After any big effect (explosion, hit, transition) the playfield returns to readable within ~1 s. An explosion that leaves the screen white while the game keeps running is a ship-blocker, not a polish nit.
 - [ ] If you shipped 3D / WebGL / WebGPU / heavy physics: controls are as tight as any 2D game equivalent, framerate is stable, menu isolates from scene. Broken 3D reads worse than competent 2D — cut if it can't ship at quality.
 - [ ] Deliberate minimalism is fine, but it must read as *chosen* — the polish inside the constraint is what makes it work.
 
