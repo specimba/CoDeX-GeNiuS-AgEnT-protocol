@@ -100,10 +100,14 @@ Rewarded for recognizing weak early approach and revising it. Long-session quali
 | `benchmark/06-anti-bias-anti-gaming.md` | Anti-bias strategy for human jury |
 | `benchmark/07-operational-automated.md` | Operational runbook |
 | `benchmark/08-selection-and-final-decision.md` | How to select better game from jury + technical signals |
+| `benchmark/09-agent-arena-v2-design.md` | Post-v18 architecture design: five tracks (A open arena · B fixed-gen · C repair · D optimize · E sim-fidelity), comparison regimes, evidence receipts |
+| `benchmark/contracts/` | **Canonical machine rubric contract** (weights/criteria/ceilings JSON) + pairwise receipt schema — the executable scoring facts live here |
+| `benchmark/literature/` | Verified briefs on the 2026 game-agent literature (RLHEV, GameEngineBench, GameXpert-Bench, Harness-of-Harness) + synthesis of NEXUS actions |
 | `benchmark/deploy/` | Deployable evaluator prompt + guide |
 | `reference_arch/` | Reference rendering fallbacks (WebGPU→WebGL→Canvas2D) — inspiration, not mandate |
 | `expert_team/` | Consensus docs on render pipeline, React/Canvas separation |
-| `benchmark/ops/` | Evidence schema, aggregator, decision block generator |
+| `benchmark/ops/` | Evidence schema (v2), contract-driven aggregator, decision block generator, evidence validator, consistency gate |
+| `benchmark/tests/` | Regression suite (consistency gate + demo stability + math + negative tests) |
 
 ## Battle log
 
@@ -132,8 +136,8 @@ Every round produces an after-action record in `battles/`. Concrete defects foun
 2. Freeze builds (no edits), run containment audit, record hashes + time budget
 3. Assign blind labels Game A / Game B (random, secret)
 4. Automated checks: launch, no crash loop, responds to input, pause/restart/persistence safe, contains no telemetry/score-embedding
-5. Human jury reviews finished games per `benchmark/01-one-shot-arena-prompt.md` + `02` + `03`, recording evidence in `ops/evidence_schema.json`
-6. Aggregate per `aggregate_scores.py`, select per `08`
+5. Human jury reviews finished games per `benchmark/01-one-shot-arena-prompt.md` + `02` + `03`, recording **one evidence record per game** (`ops/evidence_schema.json` v2 — no pairwise inside) and a separate `pairwise_result.json` receipt
+6. Validate (`ops/validate_evidence.py`), aggregate (`ops/aggregate_scores.py`, contract-driven), select per `08`
 
 ## Guiding principles
 
