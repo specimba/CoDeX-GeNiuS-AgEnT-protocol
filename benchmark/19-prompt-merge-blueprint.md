@@ -146,3 +146,36 @@ into the hard rules). Either failure is informative.
 3. `benchmark/06-anti-bias-anti-gaming.md` — register C19/C20 (judge-side notes).
 4. Rubric/`02` — formalize M-6 gate wording (G2/M5/F6 anchors) if approved.
 5. `README.md` battle-log row: R015 plan (3-arm v17/v18/v19).
+
+---
+
+## G. v20 package decision record (operator questionnaire, 2026-09-06)
+
+Field evidence through R015 (`battles/round-015-v19core-field-analysis.md`) plus the
+arena-sandbox engine audit (`battles/arena-sandbox-engine-capability-audit.md`) opened the
+next edition. Built with the optional-selection questionnaire method (as used for v16):
+operator answers, verbatim decisions:
+
+1. **Edition scope — Full package:** new prompt edition **plus** an agent-facing how-to so
+   contestants can try the methods and the engine (Blender-CLI/0-GPU studio path).
+2. **Capabilities placement — Embedded section:** the conditional headless-tooling
+   guidance lives **inside the prompt** (`BATTLE_PROMPT_v20.md` §"Headless tooling, engines
+   & the asset pipeline") with the full verified recipes in the companion
+   `SANDBOX_CAPABILITIES_GUIDE.md` handed to both agents in package runs.
+3. **Hedonics edits (held v19.1 proposals from the C21 root cause) — all three applied:**
+   (a) post-gate sentence: a game also needs a reason to be enjoyed — name what the player
+   will *like*, not only what can stop them; (b) invariant 7: "decides, risks, or feels" →
+   "decides, **cares about**, or feels"; (c) stop-you palette widened with non-crisis
+   tension (a rival, a deadline, a mystery, an appetite).
+4. **Promotion gate — after one field test of the package:** live `BATTLE_PROMPT.md` stays
+   v17; R016 runs the v20 package (prompt + companion, identical for both agents); promotion
+   follows its verdict.
+
+Open watch items for the R016 v20-package field test:
+- **Method-convergence risk (new):** tooling guidance can itself become a cluster (everyone
+  ships bpy glTF props). Track as a judge-side count (engine-asset usage + whether the
+  tooling shaped the *concept*). The prompt's "never the concept" line is the steer; do not
+  name any tool in the families note.
+- C21 fire/crisis share (did the hedonics counter-weight move the concept field?),
+- M-1 visuals under the engine path (first real chance for bundled 3D assets in rounds),
+- time-budget behavior (tooling setup vs loop completeness; drop-if-unavailable rule).
