@@ -179,3 +179,20 @@ Open watch items for the R016 v20-package field test:
 - C21 fire/crisis share (did the hedonics counter-weight move the concept field?),
 - M-1 visuals under the engine path (first real chance for bundled 3D assets in rounds),
 - time-budget behavior (tooling setup vs loop completeness; drop-if-unavailable rule).
+
+---
+
+## H. v21 single-prompt revision decision record (operator directive + logs 15/16, 2026-09-07)
+
+Operator directive (verbatim intent): the whole coverage must live inside the battle prompt in **one single copy-paste instruction** — no file transfer, no patchwork hand-additions. Plus: "0 success in using the engine or properly blender assets... the prompt is still not creating enough creative and impactful graphical tries... Fable 5.1 cardboard... we right now need proper revisions and improvements."
+
+Evidence base: log15 (R016, v20) and log16 (R017, v20) — 23 sessions, 12 operator comments. Logs decoded in `battles/log15-16-v21-revision-notes.md`.
+
+Decisions (questionnaire attempted, skipped by operator in favor of a new upload; decisions below are evidence-based, correction welcome):
+
+1. **Single file, self-contained.** `BATTLE_PROMPT_v21.md` replaces the prompt+companion package: routes, recipes, look checklist, originality rule, fun contract, probe rule — all inline. No file handoff, no external references. (Log16's zero tooling use is partly attributable to the companion never being inside the paste.)
+2. **Environment-class routing + required ENV report** (E1 shell / E2 npm-only / E3 file-edits, with a route per class incl. condensed bpy + npm-three + image recipes). Answers "are the sandbox conditions different?": yes — battle agents are E2/E3 and browser-less (agents' own words quoted in the notes doc), the verified E1 bpy pipeline belongs to the analyst sandbox class. The prompt now adapts to the class instead of assuming it, and demands a one-line blocker report so per-session sandbox truth is collected.
+3. **Anti-cardboard look block with blind-visuals handling.** Concrete checklist (light/shadow, responding materials, palette tokens, depth, motion, finished frame) + the rule that a browser-less agent's only eyes are the image tool — put the see-able identity in charge of first impressions.
+4. **Second-idea originality rule + expanded agent-visible repeat-families note** (adds wildfire/ember, energy-grid, growth/mycelium, lighthouse/beacon + the operations-crisis umbrella). C15 relocation cost accepted — operator fatigue after 4 consecutive comment sets on fire/grid is the binding constraint; C22/C23 registered judge-side.
+5. **Fun contract + completeness teeth.** Minute-1/minute-10 fun statement (FUN_LINE in README), close-the-loop rule ("ship complete; building to infinity is the worst outcome"), pacing clause (no first-minute cliff), audio-defaults clause (ear-blasting complaints), autopilot playability probe for browser-less sandboxes (hard rule 8 reworded: play or probe).
+6. **Promotion unchanged:** live stays v17 until the operator verdict on v21 (R018).
