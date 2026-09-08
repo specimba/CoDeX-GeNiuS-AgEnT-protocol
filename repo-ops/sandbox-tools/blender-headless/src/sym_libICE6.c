@@ -1,0 +1,19 @@
+/* stub surface for libICE.so.6 */
+void* IceOpenConnection(void){ return 0; }
+void* IceCloseConnection(void){ return 0; }
+void* IceGetConnectionContext(void){ return 0; }
+void* IceListenForConnections(void){ return 0; }
+void* IceAcceptConnection(void){ return 0; }
+void* IceSetConnectionStatus(void){ return 0; }
+void* IceAddConnectionWatch(void){ return 0; }
+void* IceRemoveConnectionWatch(void){ return 0; }
+void* IceProcessMessages(void){ return 0; }
+void* IceFlush(void){ return 0; }
+void* IceConnectionNumber(void){ return 0; }
+void* IceSetShutdownNegotiation(void){ return 0; }
+void* IceProtocolVersion(void){ return 0; }
+void* IceProtocolSetup(void){ return 0; }
+void* IceRegisterForShutdown(void){ return 0; }
+void* IceGetListenContext(void){ return 0; }
+void* IceCheckListenConnection(void){ return 0; }
+void* IceFreeListenContext(void){ return 0; }
